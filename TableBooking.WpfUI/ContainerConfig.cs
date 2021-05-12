@@ -24,6 +24,7 @@ namespace TableBooking.UI
             {
                 var optionsBuilder = new DbContextOptionsBuilder<TableBookingContext>();
                 optionsBuilder.UseInMemoryDatabase("Wpf");
+                //optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["Database"].ConnectionString);
                 return new TableBookingContext(optionsBuilder.Options);
             }).As<DbContext>().SingleInstance();
 

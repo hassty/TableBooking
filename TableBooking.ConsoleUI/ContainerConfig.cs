@@ -20,6 +20,7 @@ namespace TableBooking.ConsoleUI
             {
                 var optionsBuilder = new DbContextOptionsBuilder<TableBookingContext>();
                 optionsBuilder.UseInMemoryDatabase("Console");
+
                 return new TableBookingContext(optionsBuilder.Options);
             }).As<DbContext>().SingleInstance();
 
