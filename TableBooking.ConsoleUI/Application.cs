@@ -1,6 +1,4 @@
-﻿using Core.Contracts;
-using Core.Entities;
-using Core.Entities.Users;
+﻿using Core.Entities;
 using Core.UseCases;
 using System;
 
@@ -8,13 +6,11 @@ namespace TableBooking.ConsoleUI
 {
     public class Application : IApplication
     {
-        private readonly OrdersInteractor _ordersInteractor;
         private readonly RestaurantsInteractor _restaurantsInteractor;
         private readonly UserAuthorizationInteractor _userAuthorizationInteractor;
 
-        public Application(OrdersInteractor ordersInteractor, RestaurantsInteractor restaurantsInteractor, UserAuthorizationInteractor userAuthorizationInteractor)
+        public Application(RestaurantsInteractor restaurantsInteractor, UserAuthorizationInteractor userAuthorizationInteractor)
         {
-            _ordersInteractor = ordersInteractor;
             _restaurantsInteractor = restaurantsInteractor;
             _userAuthorizationInteractor = userAuthorizationInteractor;
         }
