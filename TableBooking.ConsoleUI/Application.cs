@@ -27,16 +27,18 @@ namespace TableBooking.ConsoleUI
             {
                 Console.WriteLine($"{item.Name} {item.OpenedFrom}-{item.OpenedTill}");
             }
-            _restaurantsInteractor.AddRestaurant(new RestaurantEntity
-            {
-                Name = "dom s prikolom",
-                Address = "prikolni address",
-                City = "gorod prikolov",
-                OpenedFrom = new TimeSpan(4, 20, 0),
-                OpenedTill = new TimeSpan(22, 8, 0)
-            });
+            _restaurantsInteractor.AddRestaurant(
+                new RestaurantEntity
+                {
+                    Name = "dom s prikolom",
+                    Address = "prikolni address",
+                    City = "gorod prikolov",
+                    OpenedFrom = new TimeSpan(4, 20, 0),
+                    OpenedTill = new TimeSpan(22, 8, 0)
+                }
+            );
 
-            Console.WriteLine("\nnovi restaran atkilsa((\n");
+            Console.WriteLine("\nnovi restaran atkrilsa((\n");
 
             restaurants = _restaurantsInteractor.GetAllRestaurants();
             foreach (var item in restaurants)

@@ -11,10 +11,5 @@ namespace Core.Entities.Users
         {
             Orders = new List<OrderEntity>();
         }
-
-        public void AddOrder(OrderEntity order)
-        {
-            Orders.Add(order);
-        }
     }
 }

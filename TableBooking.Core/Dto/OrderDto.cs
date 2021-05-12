@@ -1,6 +1,8 @@
-﻿using Core.Entities;
+﻿using Core.Dto.Menu;
+using Core.Entities;
 using Core.Entities.Users;
 using System;
+using System.Collections.Generic;
 
 namespace Core.Dto
 {
@@ -8,7 +10,11 @@ namespace Core.Dto
     {
         public CustomerEntity Customer { get; set; }
         public int Id { get; set; }
+        public IList<MenuItemDto> MenuItems { get; set; }
         public DateTime OrderDate { get; set; }
-        public RestaurantEntity Restaurant { get; set; }
+        public DateTime ReservationDate { get; set; }
+        public TimeSpan ReservationDuration { get; set; }
+        public RestaurantDto Restaurant { get; set; }
+        public TableDto Table { get; set; }
     }
 }
