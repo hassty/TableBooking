@@ -40,18 +40,31 @@ namespace Core.UseCases
 
         public bool Register(string username, string password)
         {
+            if (String.IsNullOrWhiteSpace(username) || String.IsNullOrWhiteSpace(password))
+            {
+                return false;
+            }
+
             if (_userRepository.GetUserWithUsername(username) == null)
             {
                 var rng = new Random();
                 var salt = rng.Next();
                 var saltedPassword = $"{salt}{password}";
                 var hashedPassword = HashPassword(saltedPassword);
-                _userRepository.Add(new UserEntity { Username = username, PasswordHash = hashedPassword, Salt = salt });
+                _userRepository.Add(
+                    new UserEntity
+                    {
+                        Username = username,
+                        PasswordHash = hashedPassword,
+                        Salt = salt
+                    }
+                );
                 _userRepository.SaveChanges();
                 return true;
             }
 
             return false;
         }
+
     }
 }

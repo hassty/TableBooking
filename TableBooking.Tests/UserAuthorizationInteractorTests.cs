@@ -47,6 +47,15 @@ namespace Core.Tests
         }
 
         [Fact]
+        public void CheckLoginCredentials_ShouldReturnFalseIfEnteredInvalidCredentials()
+        {
+            _userAuthorizationInteractor.Register("correct", "password");
+
+            Assert.False(_userAuthorizationInteractor.CheckLoginCredentials("incorrect", "password"));
+            Assert.False(_userAuthorizationInteractor.CheckLoginCredentials("correct", "1234"));
+        }
+
+        [Fact]
         public void Register_ShouldAddNewUser()
         {
             var username = "kila";
@@ -58,6 +67,18 @@ namespace Core.Tests
 
             Assert.True(allUsers.Count == initialCount + 1);
             Assert.True(_userAuthorizationInteractor.CheckLoginCredentials(username, password));
+        }
+
+        [Theory]
+        [InlineData("sho", "")]
+        [InlineData("", "")]
+        [InlineData(null, "")]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        [InlineData(null, "shok")]
+        public void Register_ShouldFailAddingUsersWithInvalidCredentials(string username, string password)
+        {
+            Assert.False(_userAuthorizationInteractor.Register(username, password));
         }
 
         [Fact]
