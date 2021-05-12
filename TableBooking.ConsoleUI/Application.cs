@@ -1,27 +1,47 @@
 ﻿using Core.Contracts;
+using Core.Entities;
 using Core.Entities.Users;
+using Core.UseCases;
 using System;
 
 namespace TableBooking.ConsoleUI
 {
     public class Application : IApplication
     {
-        private IRestaurantRepository _restaurantRepository;
-        private IUserRepository _userRepository;
+        private readonly OrdersInteractor _ordersInteractor;
+        private readonly RestaurantsInteractor _restaurantsInteractor;
+        private readonly UserAuthorizationInteractor _userAuthorizationInteractor;
 
-        public Application(IUserRepository userRepository, IRestaurantRepository restaurantRepository)
+        public Application(OrdersInteractor ordersInteractor, RestaurantsInteractor restaurantsInteractor, UserAuthorizationInteractor userAuthorizationInteractor)
         {
-            _userRepository = userRepository;
-            _restaurantRepository = restaurantRepository;
+            _ordersInteractor = ordersInteractor;
+            _restaurantsInteractor = restaurantsInteractor;
+            _userAuthorizationInteractor = userAuthorizationInteractor;
         }
 
         public void Run()
         {
-            var admin = new AdminEntity { Username = "gp", PasswordHash = "1488" };
-            var restaurants = _restaurantRepository.GetAll();
+            _userAuthorizationInteractor.Register("gp", "1488");
+            var restaurants = _restaurantsInteractor.GetAllRestaurants();
             foreach (var item in restaurants)
             {
-                Console.WriteLine(item.Name);
+                Console.WriteLine($"{item.Name} {item.OpenedFrom}-{item.OpenedTill}");
+            }
+            _restaurantsInteractor.AddRestaurant(new RestaurantEntity
+            {
+                Name = "dom s prikolom",
+                Address = "prikolni address",
+                City = "gorod prikolov",
+                OpenedFrom = new TimeSpan(4, 20, 0),
+                OpenedTill = new TimeSpan(22, 8, 0)
+            });
+
+            Console.WriteLine("\nnovi restaran atkilsa((\n");
+
+            restaurants = _restaurantsInteractor.GetAllRestaurants();
+            foreach (var item in restaurants)
+            {
+                Console.WriteLine($"{item.Name} {item.OpenedFrom}-{item.OpenedTill}");
             }
         }
     }

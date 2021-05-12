@@ -29,6 +29,9 @@ namespace TableBooking.ConsoleUI
             builder.RegisterType<RestaurantsInteractor>().AsSelf();
             builder.RegisterType<RestaurantRepository>().As<IRestaurantRepository>().SingleInstance();
 
+            builder.RegisterType<OrdersInteractor>().AsSelf();
+            builder.RegisterType<OrderRepository>().As<IOrderRepository>().SingleInstance();
+
             builder.Register(context => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<DataAccessMappingProfile>();
