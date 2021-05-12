@@ -10,5 +10,10 @@ namespace Core.Entities.Users
         {
             UnconfirmedOrders = new List<OrderEntity>();
         }
+
+        public void AddUnconfirmedOrder(OrderEntity order)
+        {
+            UnconfirmedOrders.Add(order);
+        }
     }
 }
