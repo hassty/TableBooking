@@ -15,7 +15,6 @@ namespace DataAccess.Entities
             : base(options)
         {
             Database.EnsureCreated();
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,6 +22,17 @@ namespace DataAccess.Entities
             var user = modelBuilder.Entity<UserDto>();
             user.HasAlternateKey(u => u.Username);
             user.Property(u => u.PasswordHash).HasMaxLength(44);
+
+            user.HasData(new[]
+            {
+                new UserDto
+                {
+                    Id = 1,
+                    Username = "root",
+                    PasswordHash = "1488",
+                    Salt = 42
+                }
+            });
 
             var restaurant = modelBuilder.Entity<RestaurantDto>()
                 .HasData(new[] {

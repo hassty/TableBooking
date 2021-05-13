@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Contracts;
+using Core.Entities;
 using Core.Entities.Users;
 using DataAccess;
 using DataAccess.Database;
@@ -45,6 +46,7 @@ namespace Core.Tests
 
             var allUsers = _userRepository.GetAll() as List<UserEntity>;
             Assert.True(allUsers.Count == initialCount + 1);
+            Assert.Contains(user, allUsers);
         }
 
         [Fact]
@@ -77,6 +79,10 @@ namespace Core.Tests
 
             var allUsers = _userRepository.GetAll() as List<UserEntity>;
             Assert.True(allUsers.Count == initialCount + 4);
+            Assert.Contains(user1, allUsers);
+            Assert.Contains(user2, allUsers);
+            Assert.Contains(user3, allUsers);
+            Assert.Contains(user4, allUsers);
         }
 
         [Fact]
@@ -96,19 +102,25 @@ namespace Core.Tests
             Assert.Equal(user2, _userRepository.GetUserWithUsername(user2.Username));
         }
 
-        [Fact(Skip = "UserEntity doesn't have Id")]
+        [Fact]
+        public void Get_ShouldReturnNullIfUsernameNotFound()
+        {
+            Assert.Null(_userRepository.Get(1488));
+        }
+
+        [Fact]
         public void Get_ShouldReturnUserWithId()
         {
-            var user = new UserEntity { Username = "id test" };
+            var user = new UserEntity { Username = "root", PasswordHash = "1488", Salt = 42 };
 
             _userRepository.Add(user);
             _userRepository.SaveChanges();
 
-            Assert.Equal(user, _userRepository.Get(10));
+            Assert.Equal(user, _userRepository.Get(1));
         }
 
         [Fact]
-        public void GetUserWithUserName_ShoudReturnNullIfThereIsNoSuchUsername()
+        public void GetUserWithUserName_ShoudReturnNullIfUsernameNotFound()
         {
             var username = "falshiuka";
 
@@ -127,10 +139,24 @@ namespace Core.Tests
             Assert.Equal(user, _userRepository.GetUserWithUsername(username));
         }
 
-        [Fact(Skip = "Ef Core instance can not be tracked")]
+        [Fact]
+        public void Remove_ShouldNotRemoveUserIfUsernameNotFound()
+        {
+            var user = new UserEntity { Username = "fake" };
+            var initialCount = (_userRepository.GetAll() as List<UserEntity>).Count;
+
+            _userRepository.Remove(user);
+            _userRepository.SaveChanges();
+
+            var allUsers = _userRepository.GetAll() as List<UserEntity>;
+            Assert.True(allUsers.Count == initialCount);
+            Assert.DoesNotContain(user, allUsers);
+        }
+
+        [Fact]
         public void Remove_ShouldRemoveSingleUser()
         {
-            var user = new UserEntity { Username = "remove" };
+            var user = new UserEntity { Username = "delet this" };
             var initialCount = (_userRepository.GetAll() as List<UserEntity>).Count;
 
             _userRepository.Add(user);
@@ -140,13 +166,32 @@ namespace Core.Tests
 
             var allUsers = _userRepository.GetAll() as List<UserEntity>;
             Assert.True(allUsers.Count == initialCount);
+            Assert.DoesNotContain(user, allUsers);
         }
 
-        [Fact(Skip = "Ef Core instance can not be tracked")]
+        [Fact]
+        public void RemoveRange_ShoudNotRemoveUserIfUsernameNotFound()
+        {
+            var user1 = new UserEntity { Username = "remove1" };
+            var user2 = new UserEntity { Username = "remove2" };
+            var initialCount = (_userRepository.GetAll() as List<UserEntity>).Count;
+
+            _userRepository.Add(user1);
+            _userRepository.SaveChanges();
+            _userRepository.RemoveRange(new List<UserEntity> { user1, user2 });
+            _userRepository.SaveChanges();
+
+            var allUsers = _userRepository.GetAll() as List<UserEntity>;
+            Assert.True(allUsers.Count == initialCount);
+            Assert.DoesNotContain(user1, allUsers);
+            Assert.DoesNotContain(user2, allUsers);
+        }
+
+        [Fact]
         public void RemoveRange_ShouldRemoveMultipleUsers()
         {
-            var user1 = new UserEntity { Username = "removing1" };
-            var user2 = new UserEntity { Username = "removing2" };
+            var user1 = new UserEntity { Username = "remove1" };
+            var user2 = new UserEntity { Username = "remove2" };
             var initialCount = (_userRepository.GetAll() as List<UserEntity>).Count;
 
             _userRepository.AddRange(new List<UserEntity> { user1, user2 });
@@ -156,6 +201,8 @@ namespace Core.Tests
 
             var allUsers = _userRepository.GetAll() as List<UserEntity>;
             Assert.True(allUsers.Count == initialCount);
+            Assert.DoesNotContain(user1, allUsers);
+            Assert.DoesNotContain(user2, allUsers);
         }
     }
 }

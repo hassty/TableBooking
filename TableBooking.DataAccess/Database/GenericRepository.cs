@@ -3,6 +3,7 @@ using Core.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -31,12 +32,6 @@ namespace DataAccess.Database
             _context.Set<DtoEntity>().AddRange(dbEntitiesList);
         }
 
-        public IEnumerable<Entity> Find(Expression<Func<Entity, bool>> predicate)
-        {
-            //return _context.Set<DtoEntity>().Where(predicate);
-            throw new NotImplementedException("GenericRepository Find");
-        }
-
         public Entity Get(int id)
         {
             var entity = _context.Set<DtoEntity>().Find(id);
@@ -55,7 +50,7 @@ namespace DataAccess.Database
             _context.Set<DtoEntity>().Remove(dbEntity);
         }
 
-        public void RemoveRange(IEnumerable<Entity> entities)
+        public virtual void RemoveRange(IEnumerable<Entity> entities)
         {
             var dbEntitiesList = entities.Select(e => _mapper.Map<DtoEntity>(e)).ToList();
             _context.Set<DtoEntity>().RemoveRange(dbEntitiesList);

@@ -15,8 +15,6 @@ namespace Core.Contracts
 
         void AddRange(IEnumerable<Entity> entities);
 
-        IEnumerable<Entity> Find(Expression<Func<Entity, bool>> predicate);
-
         Entity Get(int id);
 
         IEnumerable<Entity> GetAll();

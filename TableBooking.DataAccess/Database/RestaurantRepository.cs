@@ -26,7 +26,7 @@ namespace DataAccess.Database
         public override void Remove(RestaurantEntity entity)
         {
             var dbEntity = _tableBookingContext.Restaurants.Where(r => r.Name.Equals(entity.Name)).FirstOrDefault();
-            _tableBookingContext.Set<RestaurantDto>().Remove(dbEntity);
+            _tableBookingContext.Restaurants.Remove(dbEntity);
         }
     }
 }
