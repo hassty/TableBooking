@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Core.Entities.Users
 {
@@ -14,6 +15,19 @@ namespace Core.Entities.Users
         public void AddUnconfirmedOrder(OrderEntity order)
         {
             UnconfirmedOrders.Add(order);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is AdminEntity entity &&
+                   PasswordHash == entity.PasswordHash &&
+                   Salt == entity.Salt &&
+                   Username == entity.Username;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(PasswordHash, Salt, Username, UnconfirmedOrders);
         }
     }
 }

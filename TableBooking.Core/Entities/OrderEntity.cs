@@ -2,6 +2,7 @@
 using Core.Entities.Users;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Entities
 {
@@ -19,6 +20,16 @@ namespace Core.Entities
         public OrderEntity()
         {
             MenuItems = new List<MenuItemEntity>();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is OrderEntity entity && Id == entity.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Customer, Id, MenuItems, OrderDate, ReservationDate, ReservationDuration, Restaurant, Table);
         }
     }
 }

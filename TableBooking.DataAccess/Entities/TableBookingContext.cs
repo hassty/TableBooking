@@ -8,6 +8,7 @@ namespace DataAccess.Entities
 {
     public class TableBookingContext : DbContext
     {
+        public DbSet<AdminDto> Admins { get; set; }
         public DbSet<RestaurantDto> Restaurants { get; set; }
         public DbSet<UserDto> Users { get; set; }
 

@@ -12,5 +12,16 @@ namespace Core.Entities.Menu
         {
             Categories = new List<MenuCategoryEntity>();
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is MenuEntity entity &&
+                   Categories.Equals(entity.Categories);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Categories);
+        }
     }
 }

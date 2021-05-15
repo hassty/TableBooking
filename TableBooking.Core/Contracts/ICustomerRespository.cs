@@ -1,6 +1,8 @@
-﻿namespace Core.Contracts
+﻿using Core.Entities.Users;
+
+namespace Core.Contracts
 {
-    public interface ICustomerRespository : IUserRepository
+    public interface ICustomerRespository : IRepository<CustomerEntity>
     {
     }
 }

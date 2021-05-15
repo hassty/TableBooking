@@ -2,13 +2,14 @@
 using Core.Entities;
 using Core.Entities.Users;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.UseCases
 {
     public class CustomerServiceInteractor
     {
-        private readonly ICustomerRespository _customerRespository;
         private readonly IAdminRepository _adminRepository;
+        private readonly ICustomerRespository _customerRespository;
 
         public CustomerServiceInteractor(ICustomerRespository customerRespository, IAdminRepository adminRepository)
         {
@@ -19,6 +20,10 @@ namespace Core.UseCases
         public void AddOrder(CustomerEntity customer, OrderEntity order)
         {
             customer.AddOrder(order);
+            var admins = _adminRepository.GetAllAdmins().ToList();
+            admins.ForEach(a => a.AddUnconfirmedOrder(order));
+
+            _adminRepository.SaveChanges();
         }
     }
 }
