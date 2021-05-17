@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Core.Dto.Menu
+﻿namespace Core.Dto.Menu
 {
     public class MenuItemDto
     {

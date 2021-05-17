@@ -4,6 +4,7 @@ using Core.Dto;
 using Core.Entities;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DataAccess.Database

@@ -19,7 +19,10 @@ namespace Core.Tests
 
         public UserAuthorizationInteractorTests()
         {
-            var configuration = new MapperConfiguration(cfg => cfg.AddProfile<DataAccessMappingProfile>());
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<DataAccessMappingProfile>();
+            });
             _mapper = new Mapper(configuration);
 
             _userRepository = GetInMemoryRepository();
@@ -36,6 +39,15 @@ namespace Core.Tests
             return new UserRepository(context, _mapper);
         }
 
+        [Fact]
+        public void CheckLoginCredentials_ShouldReturnFalseIfEnteredInvalidCredentials()
+        {
+            _userAuthorizationInteractor.Register("correct", "password");
+
+            Assert.False(_userAuthorizationInteractor.CheckLoginCredentials("incorrect", "password"));
+            Assert.False(_userAuthorizationInteractor.CheckLoginCredentials("correct", "1234"));
+        }
+
         [Theory]
         [InlineData("kila", "shkila")]
         [InlineData("gp", "1488")]
@@ -44,15 +56,6 @@ namespace Core.Tests
             _userAuthorizationInteractor.Register(username, password);
 
             Assert.True(_userAuthorizationInteractor.CheckLoginCredentials(username, password));
-        }
-
-        [Fact]
-        public void CheckLoginCredentials_ShouldReturnFalseIfEnteredInvalidCredentials()
-        {
-            _userAuthorizationInteractor.Register("correct", "password");
-
-            Assert.False(_userAuthorizationInteractor.CheckLoginCredentials("incorrect", "password"));
-            Assert.False(_userAuthorizationInteractor.CheckLoginCredentials("correct", "1234"));
         }
 
         [Fact]

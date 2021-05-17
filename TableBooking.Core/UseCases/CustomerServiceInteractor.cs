@@ -1,7 +1,6 @@
 ﻿using Core.Contracts;
 using Core.Entities;
 using Core.Entities.Users;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Core.UseCases
@@ -21,7 +20,11 @@ namespace Core.UseCases
         {
             customer.AddOrder(order);
             var admins = _adminRepository.GetAllAdmins().ToList();
-            admins.ForEach(a => a.AddUnconfirmedOrder(order));
+            admins.ForEach(a =>
+            {
+                a.AddUnconfirmedOrder(order);
+                _adminRepository.Update(a);
+            });
 
             _adminRepository.SaveChanges();
         }

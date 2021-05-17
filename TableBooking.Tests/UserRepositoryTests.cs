@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Core.Contracts;
-using Core.Entities;
 using Core.Entities.Users;
 using DataAccess;
 using DataAccess.Database;
@@ -8,6 +7,7 @@ using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Core.Tests
@@ -19,7 +19,10 @@ namespace Core.Tests
 
         public UserRepositoryTests()
         {
-            var configuration = new MapperConfiguration(cfg => cfg.AddProfile<DataAccessMappingProfile>());
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<DataAccessMappingProfile>();
+            });
             _mapper = new Mapper(configuration);
 
             _userRepository = GetInMemoryRepository();
@@ -109,17 +112,6 @@ namespace Core.Tests
         }
 
         [Fact]
-        public void Get_ShouldReturnUserWithId()
-        {
-            var user = new UserEntity { Username = "root", PasswordHash = "1488", Salt = 42 };
-
-            _userRepository.Add(user);
-            _userRepository.SaveChanges();
-
-            Assert.Equal(user, _userRepository.Get(1));
-        }
-
-        [Fact]
         public void GetUserWithUserName_ShoudReturnNullIfUsernameNotFound()
         {
             var username = "falshiuka";
@@ -167,6 +159,15 @@ namespace Core.Tests
             var allUsers = _userRepository.GetAll() as List<UserEntity>;
             Assert.True(allUsers.Count == initialCount);
             Assert.DoesNotContain(user, allUsers);
+        }
+
+        [Fact]
+        public void RemoveAll_ShouldRemoveAllUsers()
+        {
+            _userRepository.RemoveAll();
+            _userRepository.SaveChanges();
+
+            Assert.Empty(_userRepository.GetAll());
         }
 
         [Fact]

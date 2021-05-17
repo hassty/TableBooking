@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Core.Dto
+﻿namespace Core.Dto
 {
     public class TableDto
     {

@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using Core.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace DataAccess.Database
 {
@@ -20,7 +17,7 @@ namespace DataAccess.Database
             _mapper = mapper;
         }
 
-        public void Add(Entity entity)
+        public virtual void Add(Entity entity)
         {
             var dbEntity = _mapper.Map<DtoEntity>(entity);
             _context.Set<DtoEntity>().Add(dbEntity);
@@ -28,7 +25,7 @@ namespace DataAccess.Database
 
         public void AddRange(IEnumerable<Entity> entities)
         {
-            var dbEntitiesList = entities.Select(e => _mapper.Map<DtoEntity>(e)).ToList();
+            var dbEntitiesList = entities.Select(e => _mapper.Map<DtoEntity>(e)).AsEnumerable();
             _context.Set<DtoEntity>().AddRange(dbEntitiesList);
         }
 
@@ -40,7 +37,7 @@ namespace DataAccess.Database
 
         public IEnumerable<Entity> GetAll()
         {
-            var dbEntitiesList = _context.Set<DtoEntity>().ToList();
+            var dbEntitiesList = _context.Set<DtoEntity>().AsEnumerable();
             return dbEntitiesList.Select(e => _mapper.Map<Entity>(e)).ToList();
         }
 
@@ -50,15 +47,26 @@ namespace DataAccess.Database
             _context.Set<DtoEntity>().Remove(dbEntity);
         }
 
+        public void RemoveAll()
+        {
+            _context.Set<DtoEntity>().RemoveRange(_context.Set<DtoEntity>());
+        }
+
         public virtual void RemoveRange(IEnumerable<Entity> entities)
         {
-            var dbEntitiesList = entities.Select(e => _mapper.Map<DtoEntity>(e)).ToList();
+            var dbEntitiesList = entities.Select(e => _mapper.Map<DtoEntity>(e)).AsEnumerable();
             _context.Set<DtoEntity>().RemoveRange(dbEntitiesList);
         }
 
         public void SaveChanges()
         {
             _context.SaveChanges();
+        }
+
+        public virtual void Update(Entity entity)
+        {
+            var dbEntity = _mapper.Map<DtoEntity>(entity);
+            _context.Set<DtoEntity>().Update(dbEntity);
         }
     }
 }

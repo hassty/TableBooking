@@ -1,5 +1,4 @@
 ﻿using Core.Dto;
-using Core.Dto.Menu;
 using Core.Dto.Users;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +8,11 @@ namespace DataAccess.Entities
     public class TableBookingContext : DbContext
     {
         public DbSet<AdminDto> Admins { get; set; }
+        public DbSet<CustomerDto> Customers { get; set; }
+        public DbSet<OrderDto> Orders { get; set; }
+
         public DbSet<RestaurantDto> Restaurants { get; set; }
+
         public DbSet<UserDto> Users { get; set; }
 
         public TableBookingContext(DbContextOptions<TableBookingContext> options)

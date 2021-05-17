@@ -4,9 +4,8 @@ using Core.Dto.Users;
 using Core.Entities.Users;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace DataAccess.Database
 {

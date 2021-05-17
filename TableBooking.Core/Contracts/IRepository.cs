@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
 
 namespace Core.Contracts
 {
@@ -21,6 +19,10 @@ namespace Core.Contracts
 
         void Remove(Entity entity);
 
+        void RemoveAll();
+
         void RemoveRange(IEnumerable<Entity> entities);
+
+        void Update(Entity entity);
     }
 }

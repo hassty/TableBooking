@@ -30,7 +30,6 @@ namespace TableBooking.ConsoleUI
             builder.RegisterType<RestaurantsInteractor>().AsSelf();
             builder.RegisterType<RestaurantRepository>().As<IRestaurantRepository>().SingleInstance();
 
-
             builder.Register(context => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<DataAccessMappingProfile>();
@@ -39,6 +38,7 @@ namespace TableBooking.ConsoleUI
             {
                 var context = c.Resolve<IComponentContext>();
                 var config = context.Resolve<MapperConfiguration>();
+                config.AssertConfigurationIsValid();
                 return config.CreateMapper(context.Resolve);
             }).As<IMapper>().InstancePerLifetimeScope();
 

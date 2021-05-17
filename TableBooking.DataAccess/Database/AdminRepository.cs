@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Core.Contracts;
+using Core.Dto;
 using Core.Dto.Users;
 using Core.Entities.Users;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,19 +21,41 @@ namespace DataAccess.Database
 
         public IEnumerable<AdminEntity> GetAllAdmins()
         {
-            var dbAdmins = _tableBookingContext.Admins.ToList();
-            return _mapper.Map<List<AdminEntity>>(dbAdmins);
+            var existingAdmins = _tableBookingContext.Admins.AsEnumerable();
+            return _mapper.Map<IEnumerable<AdminEntity>>(existingAdmins);
         }
 
-        public override void Remove(AdminEntity entity)
+        public override void Remove(AdminEntity admin)
         {
-            var dbEntity = _tableBookingContext.Admins.Where(r => r.Username.Equals(entity.Username)).FirstOrDefault();
-            if (dbEntity == null)
+            var existingAdmin = _tableBookingContext.Admins.FirstOrDefault(a => a.Username.Equals(admin.Username));
+            if (existingAdmin == null)
             {
                 return;
             }
 
-            _tableBookingContext.Admins.Remove(dbEntity);
+            _tableBookingContext.Admins.Remove(existingAdmin);
+        }
+
+        public override void Update(AdminEntity admin)
+        {
+            var existingAdmin = _tableBookingContext.Admins.FirstOrDefault(a => a.Username.Equals(admin.Username));
+            _mapper.Map(admin, existingAdmin);
+
+            foreach (var order in admin.UnconfirmedOrders)
+            {
+                var existingOrder = existingAdmin.UnconfirmedOrders.FirstOrDefault(o => o.Id == order.Id);
+
+                if (existingOrder == null)
+                {
+                    var newOrder = _mapper.Map<OrderDto>(order);
+                    _tableBookingContext.Add(newOrder);
+                    existingAdmin.UnconfirmedOrders.Add(newOrder);
+                }
+                else
+                {
+                    _mapper.Map(order, existingAdmin.UnconfirmedOrders.FirstOrDefault(o => o.Id == order.Id));
+                }
+            }
         }
     }
 }

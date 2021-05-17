@@ -38,6 +38,7 @@ namespace TableBooking.UI
             {
                 var context = c.Resolve<IComponentContext>();
                 var config = context.Resolve<MapperConfiguration>();
+                config.AssertConfigurationIsValid();
                 return config.CreateMapper(context.Resolve);
             }).As<IMapper>().InstancePerLifetimeScope();
 
