@@ -10,12 +10,13 @@ using Xunit;
 
 namespace Core.Tests
 {
-    public class CustomerRepositoryTests : IClassFixture<DatabaseFixture>
+    public class CustomerRepositoryTests
     {
         private readonly ICustomerRepository _customerRepository;
 
-        public CustomerRepositoryTests(DatabaseFixture databaseFixture)
+        public CustomerRepositoryTests()
         {
+            var databaseFixture = new DatabaseFixture(nameof(CustomerRepositoryTests));
             _customerRepository = databaseFixture.CustomerRepository;
         }
 
@@ -173,7 +174,6 @@ namespace Core.Tests
         {
             var customer1 = new CustomerEntity { Username = "remove1" };
             var customer2 = new CustomerEntity { Username = "remove2" };
-            var initialCount = (_customerRepository.GetAll().ToList()).Count;
 
             _customerRepository.AddRange(new List<CustomerEntity> { customer1, customer2 });
             _customerRepository.SaveChanges();
@@ -181,7 +181,6 @@ namespace Core.Tests
             _customerRepository.SaveChanges();
 
             var allUsers = _customerRepository.GetAll().ToList();
-            Assert.True(allUsers.Count == initialCount);
             Assert.DoesNotContain(customer1, allUsers);
             Assert.DoesNotContain(customer2, allUsers);
         }

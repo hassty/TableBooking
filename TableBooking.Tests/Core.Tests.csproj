@@ -24,5 +24,6 @@
   <ItemGroup>
     <ProjectReference Include="..\TableBooking.Core\Core.csproj" />
     <ProjectReference Include="..\TableBooking.DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\TableBooking.WpfUI\WpfUI.csproj" />
   </ItemGroup>
 </Project>

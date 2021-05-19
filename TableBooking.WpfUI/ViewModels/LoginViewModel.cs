@@ -11,7 +11,7 @@ namespace TableBooking.ViewModels
     {
         private readonly UserAuthorizationInteractor _userAuthorization;
         private DelegateCommand _loginCommand;
-        private UserModel _user;
+        private CustomerModel _user;
         public ICommand LoginCommand => _loginCommand ??= new DelegateCommand(Login);
 
         public string Username
@@ -30,7 +30,7 @@ namespace TableBooking.ViewModels
         public LoginViewModel(UserAuthorizationInteractor userAuthorizationInteractor)
         {
             _userAuthorization = userAuthorizationInteractor;
-            _user = new UserModel();
+            _user = new CustomerModel();
         }
 
         private void Login(object obj)

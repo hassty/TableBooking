@@ -9,18 +9,21 @@ using Xunit;
 
 namespace Core.Tests
 {
-    public class OrdersInteractorTests : IClassFixture<DatabaseFixture>
+    public class OrdersInteractorTests
     {
         private readonly ICustomerRepository _customerRespository;
         private readonly IOrderRepository _orderRepository;
         private readonly OrdersInteractor _ordersInteractor;
         private readonly IAdminRepository _adminRepository;
 
-        public OrdersInteractorTests(DatabaseFixture databaseFixture)
+        public OrdersInteractorTests()
         {
+            var databaseFixture = new DatabaseFixture(nameof(OrdersInteractorTests));
+
             _customerRespository = databaseFixture.CustomerRepository;
             _orderRepository = databaseFixture.OrderRepository;
             _adminRepository = databaseFixture.AdminRepository;
+
             _ordersInteractor = new OrdersInteractor(_orderRepository);
         }
 
@@ -35,9 +38,9 @@ namespace Core.Tests
             };
 
             _customerRespository.Add(customer);
-            //_customerRespository.SaveChanges();
+            _customerRespository.SaveChanges();
             _adminRepository.Add(admin);
-            //_adminRepository.SaveChanges();
+            _adminRepository.SaveChanges();
             _ordersInteractor.AddOrder(order);
 
             Assert.Contains(order, _orderRepository.GetAll());

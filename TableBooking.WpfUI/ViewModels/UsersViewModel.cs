@@ -17,7 +17,7 @@ namespace WpfUI.ViewModels
 
         public ICommand LoadAllUsersCommand => loadAllUsersCommand ??= new DelegateCommand(LoadAllUsers);
 
-        public ObservableCollection<UserModel> Users { get; set; }
+        public ObservableCollection<CustomerModel> Users { get; set; }
 
         public UsersViewModel(ICustomerRepository customerRepository, IMapper mapper)
         {
@@ -27,7 +27,7 @@ namespace WpfUI.ViewModels
 
         private void LoadAllUsers(object obj)
         {
-            Users = new ObservableCollection<UserModel>(_customerRepository.GetAll().Select(u => _mapper.Map<UserModel>(u)));
+            Users = new ObservableCollection<CustomerModel>(_customerRepository.GetAll().Select(u => _mapper.Map<CustomerModel>(u)));
             OnPropertyChanged(nameof(Users));
         }
     }
