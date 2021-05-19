@@ -2,7 +2,10 @@
 
 namespace Core.Exceptions
 {
-    public class InvalidCredentialsException : Exception
+    public class InvalidCredentialsException : ApplicationException
     {
+        public InvalidCredentialsException(string message) : base(message)
+        {
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Core.Contracts;
+﻿using Core.Contracts.DataAccess;
 using Core.Entities.Users;
 using System;
 using System.Security.Cryptography;
@@ -8,11 +8,11 @@ namespace Core.UseCases
 {
     public class UserAuthorizationInteractor
     {
-        private readonly IUserRepository _userRepository;
+        private readonly ICustomerRepository _customerRespository;
 
-        public UserAuthorizationInteractor(IUserRepository userRepository)
+        public UserAuthorizationInteractor(ICustomerRepository customerRespository)
         {
-            _userRepository = userRepository;
+            _customerRespository = customerRespository;
         }
 
         private string HashPassword(string password)
@@ -27,7 +27,7 @@ namespace Core.UseCases
 
         public bool CheckLoginCredentials(string username, string password)
         {
-            var registeredUser = _userRepository.GetUserWithUsername(username);
+            var registeredUser = _customerRespository.GetCustomerWithUsername(username);
             if (registeredUser != null)
             {
                 var saltedPassword = $"{registeredUser.Salt}{password}";
@@ -45,21 +45,21 @@ namespace Core.UseCases
                 return false;
             }
 
-            if (_userRepository.GetUserWithUsername(username) == null)
+            if (_customerRespository.GetCustomerWithUsername(username) == null)
             {
                 var rng = new Random();
                 var salt = rng.Next();
                 var saltedPassword = $"{salt}{password}";
                 var hashedPassword = HashPassword(saltedPassword);
-                _userRepository.Add(
-                    new UserEntity
+                _customerRespository.Add(
+                    new CustomerEntity
                     {
                         Username = username,
                         PasswordHash = hashedPassword,
                         Salt = salt
                     }
                 );
-                _userRepository.SaveChanges();
+                _customerRespository.SaveChanges();
                 return true;
             }
 

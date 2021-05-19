@@ -1,6 +1,6 @@
 ﻿using Core.Entities;
 
-namespace Core.Contracts
+namespace Core.Contracts.DataAccess
 {
     public interface IRestaurantRepository : IRepository<RestaurantEntity>
     {

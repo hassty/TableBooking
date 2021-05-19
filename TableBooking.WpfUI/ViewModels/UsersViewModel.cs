@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.Contracts;
+using Core.Contracts.DataAccess;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -12,22 +12,22 @@ namespace WpfUI.ViewModels
     public class UsersViewModel : BaseViewModel
     {
         private readonly IMapper _mapper;
-        private readonly IUserRepository _userRepository;
+        private readonly ICustomerRepository _customerRepository;
         private DelegateCommand loadAllUsersCommand;
 
         public ICommand LoadAllUsersCommand => loadAllUsersCommand ??= new DelegateCommand(LoadAllUsers);
 
         public ObservableCollection<UserModel> Users { get; set; }
 
-        public UsersViewModel(IUserRepository userRepository, IMapper mapper)
+        public UsersViewModel(ICustomerRepository customerRepository, IMapper mapper)
         {
-            _userRepository = userRepository;
+            _customerRepository = customerRepository;
             _mapper = mapper;
         }
 
         private void LoadAllUsers(object obj)
         {
-            Users = new ObservableCollection<UserModel>(_userRepository.GetAll().Select(u => _mapper.Map<UserModel>(u)));
+            Users = new ObservableCollection<UserModel>(_customerRepository.GetAll().Select(u => _mapper.Map<UserModel>(u)));
             OnPropertyChanged(nameof(Users));
         }
     }

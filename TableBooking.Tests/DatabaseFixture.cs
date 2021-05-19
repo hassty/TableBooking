@@ -1,0 +1,34 @@
+﻿using Core.Contracts.DataAccess;
+using DataAccess.Database;
+using DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Core.Tests
+{
+    public class DatabaseFixture : IDisposable
+    {
+        public DbContext Context { get; private set; }
+        public ICustomerRepository CustomerRepository { get; private set; }
+        public IOrderRepository OrderRepository { get; private set; }
+        public IAdminRepository AdminRepository { get; private set; }
+        public DatabaseFixture()
+        {
+            var options = new DbContextOptionsBuilder<TableBookingContext>()
+                .UseInMemoryDatabase("Tests")
+                .Options;
+
+            Context = new TableBookingContext(options);
+
+            CustomerRepository = new CustomerRepository(Context);
+            OrderRepository = new OrderRepository(Context);
+            AdminRepository = new AdminRepository(Context);
+        }
+        public void Dispose()
+        {
+            Context.Dispose();
+        }
+    }
+}

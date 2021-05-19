@@ -1,4 +1,4 @@
-﻿using Core.Contracts;
+﻿using Core.Contracts.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;

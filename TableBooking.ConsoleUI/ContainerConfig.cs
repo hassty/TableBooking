@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
-using Core.Contracts;
+using Core.Contracts.DataAccess;
 using Core.UseCases;
 using DataAccess.Database;
 using DataAccess.Entities;
@@ -24,7 +24,6 @@ namespace TableBooking.ConsoleUI
             }).As<DbContext>().SingleInstance();
 
             builder.RegisterType<UserAuthorizationInteractor>().AsSelf();
-            builder.RegisterType<UserRepository>().As<IUserRepository>().SingleInstance();
 
             builder.RegisterType<RestaurantsInteractor>().AsSelf();
             builder.RegisterType<RestaurantRepository>().As<IRestaurantRepository>().SingleInstance();
