@@ -1,19 +1,18 @@
-﻿using Core.Dto;
-using Core.Dto.Users;
+﻿using Core.Entities;
+using Core.Entities.Users;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace DataAccess.Entities
 {
     public class TableBookingContext : DbContext
     {
-        public DbSet<AdminDto> Admins { get; set; }
-        public DbSet<CustomerDto> Customers { get; set; }
-        public DbSet<OrderDto> Orders { get; set; }
+        public DbSet<AdminEntity> Admins { get; set; }
+        public DbSet<CustomerEntity> Customers { get; set; }
+        public DbSet<OrderEntity> Orders { get; set; }
 
-        public DbSet<RestaurantDto> Restaurants { get; set; }
+        public DbSet<RestaurantEntity> Restaurants { get; set; }
 
-        public DbSet<UserDto> Users { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
 
         public TableBookingContext(DbContextOptions<TableBookingContext> options)
             : base(options)
@@ -23,42 +22,13 @@ namespace DataAccess.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var user = modelBuilder.Entity<UserDto>();
+            var user = modelBuilder.Entity<UserEntity>();
+            var admin = modelBuilder.Entity<AdminEntity>();
+
             user.HasAlternateKey(u => u.Username);
             user.Property(u => u.PasswordHash).HasMaxLength(44);
 
-            user.HasData(new[]
-            {
-                new UserDto
-                {
-                    Id = 1,
-                    Username = "root",
-                    PasswordHash = "1488",
-                    Salt = 42
-                }
-            });
-
-            var restaurant = modelBuilder.Entity<RestaurantDto>()
-                .HasData(new[] {
-                    new RestaurantDto
-                    {
-                        Id = 1,
-                        Name = "makdak",
-                        Address = "ulica pushkina, dom kukushkina",
-                        City = "minsk",
-                        OpenedFrom = new TimeSpan(7, 0, 0),
-                        OpenedTill = new TimeSpan(22, 30, 0)
-                    },
-                    new RestaurantDto
-                    {
-                        Id = 2,
-                        Name = "buerkinh",
-                        Address = "kosmonavtov 54/1",
-                        City = "minsk",
-                        OpenedFrom = new TimeSpan(9, 0, 0),
-                        OpenedTill = new TimeSpan(21, 0, 0)
-                    }
-                });
+            admin.Ignore(a => a.UnconfirmedOrders);
 
             base.OnModelCreating(modelBuilder);
         }

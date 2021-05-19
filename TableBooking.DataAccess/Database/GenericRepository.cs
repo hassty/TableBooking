@@ -1,61 +1,64 @@
-﻿using AutoMapper;
-using Core.Contracts;
+﻿using Core.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace DataAccess.Database
 {
-    public class GenericRepository<Entity, DtoEntity> : IRepository<Entity> where Entity : class where DtoEntity : class
+    public abstract class GenericRepository<Entity> : IRepository<Entity> where Entity : class
     {
-        protected readonly IMapper _mapper;
         protected DbContext _context;
 
-        public GenericRepository(DbContext context, IMapper mapper)
+        private bool ContainsEntity(Entity entity)
         {
-            _context = context;
-            _mapper = mapper;
+            return _context.Set<Entity>().Contains(entity);
         }
 
-        public virtual void Add(Entity entity)
+        public GenericRepository(DbContext context)
         {
-            var dbEntity = _mapper.Map<DtoEntity>(entity);
-            _context.Set<DtoEntity>().Add(dbEntity);
+            _context = context;
+        }
+
+        public void Add(Entity entity)
+        {
+            _context.Set<Entity>().Add(entity);
         }
 
         public void AddRange(IEnumerable<Entity> entities)
         {
-            var dbEntitiesList = entities.Select(e => _mapper.Map<DtoEntity>(e)).AsEnumerable();
-            _context.Set<DtoEntity>().AddRange(dbEntitiesList);
+            _context.Set<Entity>().AddRange(entities);
         }
 
         public Entity Get(int id)
         {
-            var entity = _context.Set<DtoEntity>().Find(id);
-            return _mapper.Map<Entity>(entity);
+            return _context.Set<Entity>().Find(id);
         }
 
         public IEnumerable<Entity> GetAll()
         {
-            var dbEntitiesList = _context.Set<DtoEntity>().AsEnumerable();
-            return dbEntitiesList.Select(e => _mapper.Map<Entity>(e)).ToList();
+            return _context.Set<Entity>().ToList();
         }
 
-        public virtual void Remove(Entity entity)
+        public void Remove(Entity entity)
         {
-            var dbEntity = _mapper.Map<DtoEntity>(entity);
-            _context.Set<DtoEntity>().Remove(dbEntity);
+            if (!ContainsEntity(entity))
+            {
+                return;
+            }
+            _context.Set<Entity>().Remove(entity);
         }
 
         public void RemoveAll()
         {
-            _context.Set<DtoEntity>().RemoveRange(_context.Set<DtoEntity>());
+            _context.Set<Entity>().RemoveRange(_context.Set<Entity>());
         }
 
-        public virtual void RemoveRange(IEnumerable<Entity> entities)
+        public void RemoveRange(IEnumerable<Entity> entities)
         {
-            var dbEntitiesList = entities.Select(e => _mapper.Map<DtoEntity>(e)).AsEnumerable();
-            _context.Set<DtoEntity>().RemoveRange(dbEntitiesList);
+            var entitiesToDelete = entities.ToList();
+            entitiesToDelete.RemoveAll(e => !ContainsEntity(e));
+
+            _context.Set<Entity>().RemoveRange(entitiesToDelete);
         }
 
         public void SaveChanges()
@@ -63,10 +66,11 @@ namespace DataAccess.Database
             _context.SaveChanges();
         }
 
-        public virtual void Update(Entity entity)
+        public void Update(Entity entity)
         {
-            var dbEntity = _mapper.Map<DtoEntity>(entity);
-            _context.Set<DtoEntity>().Update(dbEntity);
+            _context.Set<Entity>().Update(entity);
         }
+
+
     }
 }

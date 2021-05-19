@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using Core.Contracts;
+﻿using Core.Contracts;
 using Core.Entities.Users;
 using Core.UseCases;
-using DataAccess;
 using DataAccess.Database;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -13,18 +11,11 @@ namespace Core.Tests
 {
     public class UserAuthorizationInteractorTests
     {
-        private readonly IMapper _mapper;
         private readonly UserAuthorizationInteractor _userAuthorizationInteractor;
         private readonly IUserRepository _userRepository;
 
         public UserAuthorizationInteractorTests()
         {
-            var configuration = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<DataAccessMappingProfile>();
-            });
-            _mapper = new Mapper(configuration);
-
             _userRepository = GetInMemoryRepository();
             _userAuthorizationInteractor = new UserAuthorizationInteractor(_userRepository);
         }
@@ -36,7 +27,7 @@ namespace Core.Tests
                 .Options;
 
             var context = new TableBookingContext(options);
-            return new UserRepository(context, _mapper);
+            return new UserRepository(context);
         }
 
         [Fact]

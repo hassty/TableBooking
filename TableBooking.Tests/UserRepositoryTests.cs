@@ -1,30 +1,20 @@
-﻿using AutoMapper;
-using Core.Contracts;
+﻿using Core.Contracts;
 using Core.Entities.Users;
-using DataAccess;
 using DataAccess.Database;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Core.Tests
 {
     public class UserRepositoryTests
     {
-        private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
 
         public UserRepositoryTests()
         {
-            var configuration = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<DataAccessMappingProfile>();
-            });
-            _mapper = new Mapper(configuration);
-
             _userRepository = GetInMemoryRepository();
         }
 
@@ -35,7 +25,7 @@ namespace Core.Tests
                 .Options;
 
             var context = new TableBookingContext(options);
-            return new UserRepository(context, _mapper);
+            return new UserRepository(context);
         }
 
         [Fact]

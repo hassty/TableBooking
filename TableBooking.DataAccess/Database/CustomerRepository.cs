@@ -1,20 +1,16 @@
-﻿using AutoMapper;
-using Core.Contracts;
-using Core.Dto.Users;
+﻿using Core.Contracts;
 using Core.Entities.Users;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DataAccess.Database
 {
-    public class CustomerRepository : GenericRepository<CustomerEntity, CustomerDto>, ICustomerRespository
+    public class CustomerRepository : GenericRepository<CustomerEntity>, ICustomerRespository
     {
         private TableBookingContext _tableBookingContext => _context as TableBookingContext;
 
-        public CustomerRepository(DbContext context, IMapper mapper)
-            : base(context, mapper)
+        public CustomerRepository(DbContext context)
+            : base(context)
         {
         }
     }

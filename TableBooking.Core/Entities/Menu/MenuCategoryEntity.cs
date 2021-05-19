@@ -6,6 +6,7 @@ namespace Core.Entities.Menu
     public class MenuCategoryEntity
     {
         public MenuEntity Menu { get; set; }
+        public int Id { get; set; }
         public IList<MenuItemEntity> MenuItems { get; private set; }
         public string Name { get; set; }
 
@@ -17,14 +18,13 @@ namespace Core.Entities.Menu
         public override bool Equals(object obj)
         {
             return obj is MenuCategoryEntity entity &&
-                   Menu.Equals(entity.Menu) &&
-                   MenuItems.Equals(entity.MenuItems) &&
+                   Id == entity.Id &&
                    Name == entity.Name;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Menu, MenuItems, Name);
+            return HashCode.Combine(Id, Name);
         }
     }
 }

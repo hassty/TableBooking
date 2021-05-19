@@ -1,36 +1,30 @@
-﻿using AutoMapper;
-using Core.Contracts;
-using Core.Dto;
+﻿using Core.Contracts;
 using Core.Entities;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DataAccess.Database
 {
-    public class OrderRepository : GenericRepository<OrderEntity, OrderDto>, IOrderRepository
+    public class OrderRepository : GenericRepository<OrderEntity>, IOrderRepository
     {
         private TableBookingContext _tableBookingContext => _context as TableBookingContext;
 
-        public OrderRepository(DbContext context, IMapper mapper)
-            : base(context, mapper)
+        public OrderRepository(DbContext context)
+            : base(context)
         {
         }
 
-        public override void Add(OrderEntity order)
-        {
-            var newOrder = new OrderDto();
-            _mapper.Map(order, newOrder);
-            _tableBookingContext.Orders.Add(newOrder);
-        }
 
         public IEnumerable<OrderEntity> GetAllOrdersOfCustomer(string username)
         {
-            var existsingOrders = _tableBookingContext.Orders.Where(o => o.Customer.Username.Equals(username)).AsEnumerable();
-            return _mapper.Map<IEnumerable<OrderEntity>>(existsingOrders);
+            return _tableBookingContext.Orders.Where(o => o.Customer.Username.Equals(username)).AsEnumerable();
+        }
+
+        public IEnumerable<OrderEntity> GetAllUnconfirmedOrders()
+        {
+            return _tableBookingContext.Orders.Where(o => o.ConfirmedByAdmin == false).AsEnumerable();
         }
     }
 }

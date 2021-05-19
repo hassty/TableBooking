@@ -2,7 +2,6 @@
 using AutoMapper;
 using Core.Contracts;
 using Core.UseCases;
-using DataAccess;
 using DataAccess.Database;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +31,7 @@ namespace TableBooking.ConsoleUI
 
             builder.Register(context => new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile<DataAccessMappingProfile>();
+                //cfg.AddProfile<DataAccessMappingProfile>();
             })).AsSelf().SingleInstance();
             builder.Register(c =>
             {

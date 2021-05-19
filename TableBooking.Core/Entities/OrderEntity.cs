@@ -10,6 +10,7 @@ namespace Core.Entities
         public CustomerEntity Customer { get; set; }
         public int Id { get; set; }
         public IList<MenuItemEntity> MenuItems { get; set; }
+        public bool ConfirmedByAdmin { get; set; }
         public DateTime OrderDate { get; private set; }
         public DateTime ReservationDate { get; set; }
         public TimeSpan ReservationDuration { get; set; }
@@ -24,12 +25,16 @@ namespace Core.Entities
 
         public override bool Equals(object obj)
         {
-            return obj is OrderEntity entity && Id == entity.Id;
+            return obj is OrderEntity entity &&
+                   EqualityComparer<CustomerEntity>.Default.Equals(Customer, entity.Customer) &&
+                   Id == entity.Id &&
+                   OrderDate == entity.OrderDate &&
+                   EqualityComparer<TableEntity>.Default.Equals(Table, entity.Table);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Customer, Id, MenuItems, OrderDate, ReservationDate, ReservationDuration, Restaurant, Table);
+            return HashCode.Combine(Customer, Id, OrderDate, Table);
         }
     }
 }

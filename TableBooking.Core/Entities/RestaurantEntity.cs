@@ -5,6 +5,7 @@ namespace Core.Entities
     public class RestaurantEntity
     {
         public string Address { get; set; }
+        public int Id { get; set; }
         public string City { get; set; }
         public string Name { get; set; }
         public TimeSpan OpenedFrom { get; set; }
@@ -14,15 +15,14 @@ namespace Core.Entities
         {
             return obj is RestaurantEntity entity &&
                    Address == entity.Address &&
+                   Id == entity.Id &&
                    City == entity.City &&
-                   Name == entity.Name &&
-                   OpenedFrom.Equals(entity.OpenedFrom) &&
-                   OpenedTill.Equals(entity.OpenedTill);
+                   Name == entity.Name;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Address, City, Name, OpenedFrom, OpenedTill);
+            return HashCode.Combine(Address, Id, City, Name);
         }
     }
 }

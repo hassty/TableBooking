@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Core.Entities
 {
@@ -11,7 +12,9 @@ namespace Core.Entities
         public override bool Equals(object obj)
         {
             return obj is TableEntity entity &&
-                   Id == entity.Id;
+                   Capacity == entity.Capacity &&
+                   Id == entity.Id &&
+                   EqualityComparer<RestaurantEntity>.Default.Equals(Restaurant, entity.Restaurant);
         }
 
         public override int GetHashCode()

@@ -1,13 +1,10 @@
 ﻿using Autofac;
-using AutoMapper;
 using Core.Contracts;
 using Core.UseCases;
-using DataAccess;
 using DataAccess.Database;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using TableBooking.ViewModels;
-using WpfUI;
 using WpfUI.ViewModels;
 using WpfUI.Views;
 
@@ -29,18 +26,18 @@ namespace TableBooking.UI
             }).As<DbContext>().SingleInstance();
 
             // AutoMapper
-            builder.Register(context => new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<DataAccessMappingProfile>();
-                cfg.AddProfile<WpfMappingProfile>();
-            })).AsSelf().SingleInstance();
-            builder.Register(c =>
-            {
-                var context = c.Resolve<IComponentContext>();
-                var config = context.Resolve<MapperConfiguration>();
-                config.AssertConfigurationIsValid();
-                return config.CreateMapper(context.Resolve);
-            }).As<IMapper>().InstancePerLifetimeScope();
+            //builder.Register(context => new MapperConfiguration(cfg =>
+            //{
+            //    cfg.AddProfile<DataAccessMappingProfile>();
+            //    cfg.AddProfile<WpfMappingProfile>();
+            //})).AsSelf().SingleInstance();
+            //builder.Register(c =>
+            //{
+            //    var context = c.Resolve<IComponentContext>();
+            //    var config = context.Resolve<MapperConfiguration>();
+            //    config.AssertConfigurationIsValid();
+            //    return config.CreateMapper(context.Resolve);
+            //}).As<IMapper>().InstancePerLifetimeScope();
 
             // Use Cases
             builder.RegisterType<UserAuthorizationInteractor>().AsSelf();

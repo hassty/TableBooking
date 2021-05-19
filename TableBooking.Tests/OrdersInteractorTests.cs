@@ -1,15 +1,10 @@
-﻿using AutoMapper;
-using Core.Contracts;
+﻿using Core.Contracts;
 using Core.Entities;
 using Core.Entities.Users;
 using Core.UseCases;
-using DataAccess;
 using DataAccess.Database;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace Core.Tests
@@ -17,19 +12,11 @@ namespace Core.Tests
     public class OrdersInteractorTests
     {
         private readonly ICustomerRespository _customerRespository;
-        private readonly IMapper _mapper;
         private readonly IOrderRepository _orderRepository;
         private readonly OrdersInteractor _ordersInteractor;
 
         public OrdersInteractorTests()
         {
-            var configuration = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<DataAccessMappingProfile>();
-            });
-            configuration.AssertConfigurationIsValid();
-            _mapper = new Mapper(configuration);
-
             (_orderRepository, _customerRespository) = GetInMemoryRepositories();
             _ordersInteractor = new OrdersInteractor(_orderRepository);
         }
@@ -42,7 +29,7 @@ namespace Core.Tests
                 .Options;
 
             var context = new TableBookingContext(options);
-            return (new OrderRepository(context, _mapper), new CustomerRepository(context, _mapper));
+            return (new OrderRepository(context), new CustomerRepository(context));
         }
 
         [Fact]
