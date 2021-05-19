@@ -27,7 +27,7 @@ namespace Core.UseCases
 
         public bool CheckLoginCredentials(string username, string password)
         {
-            var registeredUser = _customerRespository.GetCustomerWithUsername(username);
+            var registeredUser = _customerRespository.GetUserWithUsername(username);
             if (registeredUser != null)
             {
                 var saltedPassword = $"{registeredUser.Salt}{password}";
@@ -45,7 +45,7 @@ namespace Core.UseCases
                 return false;
             }
 
-            if (_customerRespository.GetCustomerWithUsername(username) == null)
+            if (_customerRespository.GetUserWithUsername(username) == null)
             {
                 var rng = new Random();
                 var salt = rng.Next();

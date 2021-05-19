@@ -14,10 +14,10 @@ namespace Core.Tests
         public ICustomerRepository CustomerRepository { get; private set; }
         public IOrderRepository OrderRepository { get; private set; }
         public IAdminRepository AdminRepository { get; private set; }
-        public DatabaseFixture()
+        public DatabaseFixture(string databaseName)
         {
             var options = new DbContextOptionsBuilder<TableBookingContext>()
-                .UseInMemoryDatabase("Tests")
+                .UseInMemoryDatabase(databaseName)
                 .Options;
 
             Context = new TableBookingContext(options);

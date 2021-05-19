@@ -12,7 +12,7 @@ namespace WpfUI.ViewModels
     {
         private readonly UserAuthorizationInteractor _userAuthorization;
         private DelegateCommand _registerCommand;
-        private UserModel _user;
+        private CustomerModel _user;
         public ICommand RegisterCommand => _registerCommand ??= new DelegateCommand(Register);
 
         public string Username
@@ -31,7 +31,7 @@ namespace WpfUI.ViewModels
         public RegisterViewModel(UserAuthorizationInteractor userAuthorization)
         {
             _userAuthorization = userAuthorization;
-            _user = new UserModel();
+            _user = new CustomerModel();
         }
 
         private void Register(object obj)

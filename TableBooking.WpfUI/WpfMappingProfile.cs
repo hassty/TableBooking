@@ -10,9 +10,7 @@ namespace WpfUI
     {
         public WpfMappingProfile()
         {
-            CreateMap<UserEntity, UserModel>()
-                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash))
-                .ReverseMap();
+
             CreateMap<RestaurantEntity, RestaurantModel>().ReverseMap();
         }
     }
