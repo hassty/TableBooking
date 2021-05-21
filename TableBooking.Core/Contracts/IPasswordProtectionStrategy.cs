@@ -6,6 +6,6 @@ namespace Core.Contracts
 {
     public interface IPasswordProtectionStrategy
     {
-        (int, string) HashAndSaltPassword(string password);
+        string GetProtectedPassword(string password);
     }
 }

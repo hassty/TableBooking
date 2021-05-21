@@ -1,4 +1,5 @@
-﻿using Core.UseCases;
+﻿using Core.Exceptions;
+using Core.UseCases;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,33 +10,44 @@ namespace TableBooking.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
+        private readonly LoginUser _loginUser;
         private DelegateCommand _loginCommand;
-        private CustomerModel _user;
+        private CustomerModel _customer;
         public ICommand LoginCommand => _loginCommand ??= new DelegateCommand(Login);
 
         public string Username
         {
-            get => _user.Username;
+            get => _customer.Username;
             set
             {
-                if (_user.Username != value)
+                if (_customer.Username != value)
                 {
-                    _user.Username = value;
+                    _customer.Username = value;
                     OnPropertyChanged(nameof(Username));
                 }
             }
         }
 
-        public LoginViewModel()
+        public LoginViewModel(LoginUser loginUser)
         {
-            _user = new CustomerModel();
+            _loginUser = loginUser;
+            _customer = new CustomerModel();
         }
 
         private void Login(object obj)
         {
             if (obj is PasswordBox passwordBox)
             {
-                _user.Password = passwordBox.Password;
+                _customer.Password = passwordBox.Password;
+                try
+                {
+                    var user = _loginUser.Login(_customer.Username, _customer.Password);
+                    MessageBox.Show("success");
+                }
+                catch (InvalidCredentialsException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
     }
