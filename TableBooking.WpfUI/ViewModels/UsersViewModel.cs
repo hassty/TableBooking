@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using TableBooking.Commands;
-using TableBooking.Models;
 using TableBooking.ViewModels;
+using WpfUI.Models;
 
 namespace WpfUI.ViewModels
 {

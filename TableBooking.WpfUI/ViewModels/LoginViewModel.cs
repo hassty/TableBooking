@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TableBooking.Commands;
-using TableBooking.Models;
+using WpfUI.Models;
 
 namespace TableBooking.ViewModels
 {
