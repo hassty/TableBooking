@@ -3,8 +3,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TableBooking.Commands;
-using TableBooking.Models;
 using TableBooking.ViewModels;
+using WpfUI.Models;
 
 namespace WpfUI.ViewModels
 {
