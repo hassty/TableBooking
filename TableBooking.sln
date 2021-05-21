@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfUI", "TableBooking.WpfUI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Tests", "TableBooking.Tests\Core.Tests.csproj", "{E0F270C0-5AB6-499A-906F-DFBC5D57C4EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleUI", "TableBooking.ConsoleUI\ConsoleUI.csproj", "{42C73342-58AE-4B44-A532-8F0470A0634C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "TableBooking.Core\Core.csproj", "{E675E768-CE44-4E6E-BB38-7BEAAA0FC179}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "TableBooking.DataAccess\DataAccess.csproj", "{9EE37F47-8E9C-449F-8BDB-728CBB605FAD}"
@@ -27,10 +25,6 @@ Global
 		{E0F270C0-5AB6-499A-906F-DFBC5D57C4EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0F270C0-5AB6-499A-906F-DFBC5D57C4EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0F270C0-5AB6-499A-906F-DFBC5D57C4EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42C73342-58AE-4B44-A532-8F0470A0634C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42C73342-58AE-4B44-A532-8F0470A0634C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42C73342-58AE-4B44-A532-8F0470A0634C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42C73342-58AE-4B44-A532-8F0470A0634C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E675E768-CE44-4E6E-BB38-7BEAAA0FC179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E675E768-CE44-4E6E-BB38-7BEAAA0FC179}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E675E768-CE44-4E6E-BB38-7BEAAA0FC179}.Release|Any CPU.ActiveCfg = Release|Any CPU

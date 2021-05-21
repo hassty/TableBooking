@@ -9,7 +9,6 @@ namespace TableBooking.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        private readonly UserAuthorizationInteractor _userAuthorization;
         private DelegateCommand _loginCommand;
         private CustomerModel _user;
         public ICommand LoginCommand => _loginCommand ??= new DelegateCommand(Login);
@@ -27,9 +26,8 @@ namespace TableBooking.ViewModels
             }
         }
 
-        public LoginViewModel(UserAuthorizationInteractor userAuthorizationInteractor)
+        public LoginViewModel()
         {
-            _userAuthorization = userAuthorizationInteractor;
             _user = new CustomerModel();
         }
 
@@ -38,15 +36,6 @@ namespace TableBooking.ViewModels
             if (obj is PasswordBox passwordBox)
             {
                 _user.Password = passwordBox.Password;
-                var successfullyLoggedIn = _userAuthorization.CheckLoginCredentials(_user.Username, _user.Password);
-                if (successfullyLoggedIn)
-                {
-                    MessageBox.Show("success");
-                }
-                else
-                {
-                    MessageBox.Show("invalid credentials");
-                }
             }
         }
     }
