@@ -6,6 +6,7 @@ using Core.UseCases;
 using DataAccess.Database;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using TableBooking.ViewModels;
 using WpfUI;
 using WpfUI.ViewModels;
@@ -33,6 +34,7 @@ namespace TableBooking.UI
             {
                 cfg.AddProfile<WpfMappingProfile>();
             })).AsSelf().SingleInstance();
+
             builder.Register(c =>
             {
                 var context = c.Resolve<IComponentContext>();
@@ -42,28 +44,26 @@ namespace TableBooking.UI
             }).As<IMapper>().InstancePerLifetimeScope();
 
             // Repositories
-            builder.RegisterType<CustomerRepository>().As<ICustomerRepository>();
-            builder.RegisterType<AdminRepository>().As<IAdminRepository>();
-            builder.RegisterType<RestaurantRepository>().As<IRestaurantRepository>().SingleInstance();
+            builder.RegisterAssemblyTypes(Assembly.Load(nameof(DataAccess)))
+                .Where(t => t.Namespace.Contains("Database") && t.Name.EndsWith("Repository"))
+                .AsImplementedInterfaces();
 
             // Use Cases
             builder.RegisterType<Sha256HashPasswordStrategy>().As<IPasswordProtectionStrategy>();
-            builder.RegisterType<RegisterCustomer>().AsSelf();
-            builder.RegisterType<RestaurantsInteractor>().AsSelf();
-            builder.RegisterType<LoginUser>().AsSelf();
+            builder.RegisterAssemblyTypes(Assembly.Load(nameof(Core)))
+                .Where(t => t.Namespace.Contains("UseCases"))
+                .AsSelf();
 
             // Mvvm
-            builder.RegisterType<MainWindow>().AsSelf();
-            builder.RegisterType<MainWindowViewModel>().AsSelf();
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+                .Where(t => t.Namespace.Contains("Views"))
+                .AsSelf();
 
-            builder.RegisterType<LoginView>().AsSelf();
-            builder.RegisterType<LoginViewModel>().AsSelf();
-            builder.RegisterType<RegisterView>().AsSelf();
-            builder.RegisterType<RegisterViewModel>().AsSelf();
-            builder.RegisterType<RestaurantsView>().AsSelf();
-            builder.RegisterType<RestaurantsViewModel>().AsSelf();
-            builder.RegisterType<UsersView>().AsSelf().InstancePerDependency();
-            builder.RegisterType<UsersViewModel>().AsSelf().InstancePerDependency();
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+                .Where(t => t.Namespace.Contains("ViewModels"))
+                .AsSelf();
+
+            builder.RegisterType<MainWindow>().AsSelf();
 
             builder.RegisterType<ViewFactory>().As<IViewFactory>();
 
