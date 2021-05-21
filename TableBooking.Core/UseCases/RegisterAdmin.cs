@@ -21,6 +21,16 @@ namespace Core.UseCases
             _adminRepository = adminRepository;
             _passwordProtectionStrategy = passwordProtectionStrategy;
         }
+        public (int, string) HashAndSaltPassword(string password)
+        {
+            var rng = new Random();
+            var salt = rng.Next();
+            var saltedPassword = $"{salt}{password}";
+
+            var passwordHash = _passwordProtectionStrategy.GetProtectedPassword(saltedPassword);
+
+            return (salt, passwordHash);
+        }
 
         /// <exception cref="UserAlreadyExistsException"></exception>
         public void Register(IAdminDto admin)
@@ -31,7 +41,7 @@ namespace Core.UseCases
             }
 
             var newAdmin = admin.ToEntity();
-            (newAdmin.Salt, newAdmin.PasswordHash) = _passwordProtectionStrategy.HashAndSaltPassword(admin.Password);
+            (newAdmin.Salt, newAdmin.PasswordHash) = HashAndSaltPassword(admin.Password);
 
             _adminRepository.Add(newAdmin);
             _adminRepository.SaveChanges();

@@ -20,6 +20,16 @@ namespace Core.UseCases
             _customerRepository = customerRespository;
             _passwordProtectionStrategy = passwordProtectionStrategy;
         }
+        public (int, string) HashAndSaltPassword(string password)
+        {
+            var rng = new Random();
+            var salt = rng.Next();
+            var saltedPassword = $"{salt}{password}";
+
+            var passwordHash = _passwordProtectionStrategy.GetProtectedPassword(saltedPassword);
+
+            return (salt, passwordHash);
+        }
 
         /// <exception cref="UserAlreadyExistsException"></exception>
         public void Register(ICustomerDto customer)
@@ -30,8 +40,7 @@ namespace Core.UseCases
             }
 
             var newCustomer = customer.ToEntity();
-            (newCustomer.Salt, newCustomer.PasswordHash) =
-                _passwordProtectionStrategy.HashAndSaltPassword(customer.Password);
+            (newCustomer.Salt, newCustomer.PasswordHash) = HashAndSaltPassword(customer.Password);
 
             _customerRepository.Add(newCustomer);
             _customerRepository.SaveChanges();
