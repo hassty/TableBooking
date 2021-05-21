@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 namespace Core.Contracts.DataAccess
 {
-    public interface IAdminRepository : IRepository<AdminEntity>
+    public interface IAdminRepository : IUserRepository<AdminEntity>
     {
-        public IEnumerable<AdminEntity> GetAllAdmins();
     }
 }

@@ -9,7 +9,7 @@ namespace Core.UseCases
 {
     public class RegisterCustomer
     {
-        private readonly ICustomerRepository _customerRespository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IPasswordProtectionStrategy _passwordProtectionStrategy;
 
         public RegisterCustomer(
@@ -17,32 +17,24 @@ namespace Core.UseCases
             IPasswordProtectionStrategy passwordProtectionStrategy
         )
         {
-            _customerRespository = customerRespository;
+            _customerRepository = customerRespository;
             _passwordProtectionStrategy = passwordProtectionStrategy;
-        }
-
-        private (int, string) HashAndSaltPassword(string password)
-        {
-            var rng = new Random();
-            var salt = rng.Next();
-            var saltedPassword = $"{salt}{password}";
-
-            return (salt, _passwordProtectionStrategy.GetProtectedPassword(saltedPassword));
         }
 
         /// <exception cref="UserAlreadyExistsException"></exception>
         public void Register(ICustomerDto customer)
         {
-            if (_customerRespository.ContainsCustomerWithUsername(customer.Username))
+            if (_customerRepository.ContainsUserWithUsername(customer.Username))
             {
                 throw new UserAlreadyExistsException("User with this username already exists");
             }
 
             var newCustomer = customer.ToEntity();
-            (newCustomer.Salt, newCustomer.PasswordHash) = HashAndSaltPassword(customer.Password);
+            (newCustomer.Salt, newCustomer.PasswordHash) =
+                _passwordProtectionStrategy.HashAndSaltPassword(customer.Password);
 
-            _customerRespository.Add(newCustomer);
-            _customerRespository.SaveChanges();
+            _customerRepository.Add(newCustomer);
+            _customerRepository.SaveChanges();
         }
     }
 }

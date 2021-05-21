@@ -8,7 +8,7 @@ namespace Core.UseCases
 {
     public class Sha256HashPasswordStrategy : IPasswordProtectionStrategy
     {
-        public string GetProtectedPassword(string password)
+        private string GetProtectedPassword(string password)
         {
             using var sha = SHA256.Create();
 
@@ -16,6 +16,15 @@ namespace Core.UseCases
             var hashed = sha.ComputeHash(asBytes);
 
             return Convert.ToBase64String(hashed);
+        }
+
+        public (int, string) HashAndSaltPassword(string password)
+        {
+            var rng = new Random();
+            var salt = rng.Next();
+            var saltedPassword = $"{salt}{password}";
+
+            return (salt, GetProtectedPassword(saltedPassword));
         }
     }
 }

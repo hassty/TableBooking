@@ -16,10 +16,8 @@ namespace Core.Contracts.Dto
             };
         }
     }
-    public interface ICustomerDto
+    public interface ICustomerDto : IUserDto
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
         public string Email { get; set; }
 
     }

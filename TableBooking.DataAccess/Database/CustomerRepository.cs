@@ -15,12 +15,12 @@ namespace DataAccess.Database
         {
         }
 
-        public bool ContainsCustomerWithUsername(string username)
+        public bool ContainsUserWithUsername(string username)
         {
-            return GetCustomerWithUsername(username) != null;
+            return GetUserWithUsername(username) != null;
         }
 
-        public CustomerEntity GetCustomerWithUsername(string username)
+        public CustomerEntity GetUserWithUsername(string username)
         {
             return _tableBookingContext.Customers.FirstOrDefault(c => c.Username == username);
         }

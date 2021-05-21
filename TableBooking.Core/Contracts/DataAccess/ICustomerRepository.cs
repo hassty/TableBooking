@@ -2,9 +2,7 @@
 
 namespace Core.Contracts.DataAccess
 {
-    public interface ICustomerRepository : IRepository<CustomerEntity>
+    public interface ICustomerRepository : IUserRepository<CustomerEntity>
     {
-        bool ContainsCustomerWithUsername(string username);
-        CustomerEntity GetCustomerWithUsername(string username);
     }
 }
