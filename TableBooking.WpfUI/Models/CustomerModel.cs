@@ -1,6 +1,6 @@
 ﻿using Core.Contracts.Dto;
 
-namespace WpfUI.odels
+namespace WpfUI.Models
 {
     public class CustomerModel : ICustomerDto
     {

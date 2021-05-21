@@ -97,7 +97,7 @@ namespace Core.Tests
         {
             var customername = "falshiuka";
 
-            Assert.Null(_customerRepository.GetCustomerWithUsername(customername));
+            Assert.Null(_customerRepository.GetUserWithUsername(customername));
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace Core.Tests
             _customerRepository.Add(customer);
             _customerRepository.SaveChanges();
 
-            Assert.Equal(customer, _customerRepository.GetCustomerWithUsername(customername));
+            Assert.Equal(customer, _customerRepository.GetUserWithUsername(customername));
         }
 
         [Fact]

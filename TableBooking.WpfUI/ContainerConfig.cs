@@ -1,10 +1,13 @@
 ﻿using Autofac;
+using AutoMapper;
+using Core.Contracts;
 using Core.Contracts.DataAccess;
 using Core.UseCases;
 using DataAccess.Database;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using TableBooking.ViewModels;
+using WpfUI;
 using WpfUI.ViewModels;
 using WpfUI.Views;
 
@@ -26,23 +29,26 @@ namespace TableBooking.UI
             }).As<DbContext>().SingleInstance();
 
             // AutoMapper
-            //builder.Register(context => new MapperConfiguration(cfg =>
-            //{
-            //    cfg.AddProfile<DataAccessMappingProfile>();
-            //    cfg.AddProfile<WpfMappingProfile>();
-            //})).AsSelf().SingleInstance();
-            //builder.Register(c =>
-            //{
-            //    var context = c.Resolve<IComponentContext>();
-            //    var config = context.Resolve<MapperConfiguration>();
-            //    config.AssertConfigurationIsValid();
-            //    return config.CreateMapper(context.Resolve);
-            //}).As<IMapper>().InstancePerLifetimeScope();
+            builder.Register(context => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<WpfMappingProfile>();
+            })).AsSelf().SingleInstance();
+            builder.Register(c =>
+            {
+                var context = c.Resolve<IComponentContext>();
+                var config = context.Resolve<MapperConfiguration>();
+                //config.AssertConfigurationIsValid();
+                return config.CreateMapper(context.Resolve);
+            }).As<IMapper>().InstancePerLifetimeScope();
+
+            // Repositories
+            builder.RegisterType<CustomerRepository>().As<ICustomerRepository>();
+            builder.RegisterType<RestaurantRepository>().As<IRestaurantRepository>().SingleInstance();
 
             // Use Cases
-            builder.RegisterType<UserAuthorizationInteractor>().AsSelf();
+            builder.RegisterType<Sha256HashPasswordStrategy>().As<IPasswordProtectionStrategy>();
+            builder.RegisterType<RegisterCustomer>().AsSelf();
             builder.RegisterType<RestaurantsInteractor>().AsSelf();
-            builder.RegisterType<RestaurantRepository>().As<IRestaurantRepository>().SingleInstance();
 
             // Mvvm
             builder.RegisterType<MainWindow>().AsSelf();

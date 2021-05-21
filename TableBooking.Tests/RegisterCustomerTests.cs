@@ -1,10 +1,9 @@
 ﻿using Core.Contracts;
 using Core.Contracts.DataAccess;
+using Core.Exceptions;
 using Core.UseCases;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using TableBooking.Models;
+using System.Linq;
+using WpfUI.Models;
 using Xunit;
 
 namespace Core.Tests
@@ -36,7 +35,33 @@ namespace Core.Tests
             };
 
             _registerCustomer.Register(customer);
-            Assert.True(_customerRepository.ContainsCustomerWithUsername(customer.Username));
+            Assert.True(_customerRepository.ContainsUserWithUsername(customer.Username));
+        }
+
+        [Fact]
+        public void Register_ShouldThrowExceptionIfUsernameAlreadyExists()
+        {
+            var customer1 = new CustomerModel
+            {
+                Username = "existing username",
+                Password = "1337"
+            };
+            var customer2 = new CustomerModel
+            {
+                Username = "existing username",
+                Password = "420"
+            };
+            var initialCount = _customerRepository.GetAll().ToList().Count;
+
+            Assert.Throws<UserAlreadyExistsException>(() =>
+            {
+                _registerCustomer.Register(customer1);
+                _registerCustomer.Register(customer2);
+            });
+
+            var allCustomers = _customerRepository.GetAll().ToList();
+            Assert.True(_customerRepository.ContainsUserWithUsername(customer1.Username));
+            Assert.True(allCustomers.Count == initialCount + 1);
         }
     }
 }

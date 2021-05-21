@@ -2,6 +2,7 @@
 using Core.Entities.Users;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,9 +17,14 @@ namespace DataAccess.Database
         {
         }
 
-        public IEnumerable<AdminEntity> GetAllAdmins()
+        public AdminEntity GetUserWithUsername(string username)
         {
-            return _tableBookingContext.Admins.AsEnumerable();
+            return _tableBookingContext.Admins.FirstOrDefault(a => a.Username == username);
+        }
+
+        public bool ContainsUserWithUsername(string username)
+        {
+            return GetUserWithUsername(username) != null;
         }
     }
 }
