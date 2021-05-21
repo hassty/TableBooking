@@ -43,12 +43,14 @@ namespace TableBooking.UI
 
             // Repositories
             builder.RegisterType<CustomerRepository>().As<ICustomerRepository>();
+            builder.RegisterType<AdminRepository>().As<IAdminRepository>();
             builder.RegisterType<RestaurantRepository>().As<IRestaurantRepository>().SingleInstance();
 
             // Use Cases
             builder.RegisterType<Sha256HashPasswordStrategy>().As<IPasswordProtectionStrategy>();
             builder.RegisterType<RegisterCustomer>().AsSelf();
             builder.RegisterType<RestaurantsInteractor>().AsSelf();
+            builder.RegisterType<LoginUser>().AsSelf();
 
             // Mvvm
             builder.RegisterType<MainWindow>().AsSelf();
