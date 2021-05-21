@@ -12,8 +12,6 @@ namespace DataAccess.Entities
 
         public DbSet<RestaurantEntity> Restaurants { get; set; }
 
-        public DbSet<UserEntity> Users { get; set; }
-
         public TableBookingContext(DbContextOptions<TableBookingContext> options)
             : base(options)
         {

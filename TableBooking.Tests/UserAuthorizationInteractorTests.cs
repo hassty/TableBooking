@@ -1,10 +1,11 @@
-﻿using Core.Contracts;
+﻿using Core.Contracts.DataAccess;
 using Core.Entities.Users;
 using Core.UseCases;
 using DataAccess.Database;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Core.Tests
@@ -12,22 +13,22 @@ namespace Core.Tests
     public class UserAuthorizationInteractorTests
     {
         private readonly UserAuthorizationInteractor _userAuthorizationInteractor;
-        private readonly IUserRepository _userRepository;
+        private readonly ICustomerRepository _customerRespository;
 
         public UserAuthorizationInteractorTests()
         {
-            _userRepository = GetInMemoryRepository();
-            _userAuthorizationInteractor = new UserAuthorizationInteractor(_userRepository);
+            _customerRespository = GetInMemoryRepository();
+            _userAuthorizationInteractor = new UserAuthorizationInteractor(_customerRespository);
         }
 
-        private IUserRepository GetInMemoryRepository()
+        private ICustomerRepository GetInMemoryRepository()
         {
             var options = new DbContextOptionsBuilder<TableBookingContext>()
                 .UseInMemoryDatabase(nameof(UserAuthorizationInteractorTests))
                 .Options;
 
             var context = new TableBookingContext(options);
-            return new UserRepository(context);
+            return new CustomerRepository(context);
         }
 
         [Fact]
@@ -54,10 +55,10 @@ namespace Core.Tests
         {
             var username = "kila";
             var password = "shkila";
-            var initialCount = (_userRepository.GetAll() as List<UserEntity>).Count;
+            var initialCount = (_customerRespository.GetAll().ToList()).Count;
 
             _userAuthorizationInteractor.Register(username, password);
-            var allUsers = _userRepository.GetAll() as List<UserEntity>;
+            var allUsers = _customerRespository.GetAll().ToList();
 
             Assert.True(allUsers.Count == initialCount + 1);
             Assert.True(_userAuthorizationInteractor.CheckLoginCredentials(username, password));
@@ -81,12 +82,12 @@ namespace Core.Tests
             var username = "same name";
             var password1 = "password1";
             var password2 = "password2";
-            var initialCount = (_userRepository.GetAll() as List<UserEntity>).Count;
+            var initialCount = (_customerRespository.GetAll().ToList()).Count;
 
             Assert.True(_userAuthorizationInteractor.Register(username, password1));
             Assert.False(_userAuthorizationInteractor.Register(username, password2));
 
-            var allUsers = _userRepository.GetAll() as List<UserEntity>;
+            var allUsers = _customerRespository.GetAll().ToList();
             Assert.True(allUsers.Count == initialCount + 1);
             Assert.True(_userAuthorizationInteractor.CheckLoginCredentials(username, password1));
         }

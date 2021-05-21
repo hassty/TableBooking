@@ -1,7 +1,7 @@
 ﻿using Core.Entities;
 using System.Collections.Generic;
 
-namespace Core.Contracts
+namespace Core.Contracts.DataAccess
 {
     public interface IOrderRepository : IRepository<OrderEntity>
     {
