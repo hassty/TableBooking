@@ -3,7 +3,7 @@ using Core.Contracts.DataAccess;
 using Core.Exceptions;
 using Core.UseCases;
 using System.Linq;
-using TableBooking.Models;
+using WpfUI.Models;
 using Xunit;
 
 namespace Core.Tests

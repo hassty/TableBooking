@@ -1,6 +1,6 @@
 ﻿using Core.Contracts.Dto;
 
-namespace TableBooking.Models
+namespace WpfUI.Models
 {
     public class CustomerModel : ICustomerDto
     {

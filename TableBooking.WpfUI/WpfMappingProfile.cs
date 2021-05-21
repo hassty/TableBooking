@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Core.Entities;
-using Core.Entities.Users;
-using TableBooking.Models;
 using WpfUI.Models;
 
 namespace WpfUI
