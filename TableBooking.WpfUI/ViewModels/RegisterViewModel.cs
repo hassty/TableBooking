@@ -1,4 +1,5 @@
-﻿using Core.UseCases;
+﻿using Core.Exceptions;
+using Core.UseCases;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,7 +11,7 @@ namespace WpfUI.ViewModels
 {
     public class RegisterViewModel : BaseViewModel
     {
-        private readonly UserAuthorizationInteractor _userAuthorization;
+        private readonly RegisterCustomer _registerCustomer;
         private DelegateCommand _registerCommand;
         private CustomerModel _user;
         public ICommand RegisterCommand => _registerCommand ??= new DelegateCommand(Register);
@@ -28,9 +29,9 @@ namespace WpfUI.ViewModels
             }
         }
 
-        public RegisterViewModel(UserAuthorizationInteractor userAuthorization)
+        public RegisterViewModel(RegisterCustomer registerCustomer)
         {
-            _userAuthorization = userAuthorization;
+            _registerCustomer = registerCustomer;
             _user = new CustomerModel();
         }
 
@@ -39,14 +40,16 @@ namespace WpfUI.ViewModels
             if (obj is PasswordBox passwordBox)
             {
                 _user.Password = passwordBox.Password;
-                var successfullyRegistered = _userAuthorization.Register(_user.Username, _user.Password);
-                if (successfullyRegistered)
+                try
                 {
+
+                    _registerCustomer.Register(_user);
                     MessageBox.Show("success");
                 }
-                else
+                catch (UserAlreadyExistsException ex)
                 {
-                    MessageBox.Show("username already exists");
+
+                    MessageBox.Show(ex.Message);
                 }
             }
         }
