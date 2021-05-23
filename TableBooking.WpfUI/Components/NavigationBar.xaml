@@ -34,6 +34,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <Grid MaxWidth="1000" Margin="20,10">
         <Grid.ColumnDefinitions>
@@ -53,11 +54,13 @@
         <Button
             Grid.Column="2"
             Command="{Binding NavigateLoginCommand}"
-            Content="Login" />
+            Content="Login"
+            Visibility="{Binding IsLoggedOut, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <Button
             Grid.Column="3"
             Command="{Binding NavigateRegisterCommand}"
-            Content="Register" />
+            Content="Register"
+            Visibility="{Binding IsLoggedOut, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <Button
             Grid.Column="4"
             Command="{Binding NavigateAccountCommand}"
@@ -65,6 +68,7 @@
         <Button
             Grid.Column="5"
             Command="{Binding LogoutCommand}"
-            Content="Logout" />
+            Content="Logout"
+            Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

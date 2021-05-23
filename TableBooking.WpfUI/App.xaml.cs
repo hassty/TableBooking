@@ -55,11 +55,13 @@ namespace TableBooking
             services.AddTransient(s => new LoginViewModel(
                 s.GetRequiredService<CurrentUserStore>(),
                 CreateAccountNavigationService(s),
+                CreateRegisterNavigationService(s),
                 s.GetRequiredService<IMapper>(),
                 s.GetRequiredService<LoginUser>()));
             services.AddTransient(s => new RegisterViewModel(
                 s.GetRequiredService<CurrentUserStore>(),
                 CreateHomeNavigationService(s),
+                CreateLoginNavigationService(s),
                 s.GetRequiredService<RegisterCustomer>()));
             services.AddTransient(CreateNavigationBarViewModel);
             services.AddSingleton<MainViewModel>();
@@ -90,10 +92,9 @@ namespace TableBooking
 
         private INavigationService CreateLoginNavigationService(IServiceProvider serviceProvider)
         {
-            return new LayoutNavigationService<LoginViewModel>(
+            return new NavigationService<LoginViewModel>(
                 serviceProvider.GetRequiredService<NavigationStore>(),
-                () => serviceProvider.GetRequiredService<LoginViewModel>(),
-                () => serviceProvider.GetRequiredService<NavigationBarViewModel>());
+                () => serviceProvider.GetRequiredService<LoginViewModel>());
         }
 
         private NavigationBarViewModel CreateNavigationBarViewModel(IServiceProvider serviceProvider)
@@ -107,10 +108,9 @@ namespace TableBooking
 
         private INavigationService CreateRegisterNavigationService(IServiceProvider serviceProvider)
         {
-            return new LayoutNavigationService<RegisterViewModel>(
+            return new NavigationService<RegisterViewModel>(
                 serviceProvider.GetRequiredService<NavigationStore>(),
-                () => serviceProvider.GetRequiredService<RegisterViewModel>(),
-                () => serviceProvider.GetRequiredService<NavigationBarViewModel>());
+                () => serviceProvider.GetRequiredService<RegisterViewModel>());
         }
 
         protected override void OnStartup(StartupEventArgs e)

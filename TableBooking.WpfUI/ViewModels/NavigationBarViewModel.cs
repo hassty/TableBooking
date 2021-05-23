@@ -12,6 +12,7 @@ namespace WpfUI.ViewModels
     {
         private readonly CurrentUserStore _accountStore;
         public bool IsLoggedIn => _accountStore.IsLoggedIn;
+        public bool IsLoggedOut => !IsLoggedIn;
         public ICommand LogoutCommand { get; }
         public ICommand NavigateAccountCommand { get; }
         public ICommand NavigateHomeCommand { get; }

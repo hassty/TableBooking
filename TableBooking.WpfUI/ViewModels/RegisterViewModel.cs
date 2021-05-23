@@ -15,6 +15,7 @@ namespace WpfUI.ViewModels
     {
         private readonly CurrentUserStore _accountStore;
         private readonly INavigationService _homeNavigationService;
+        private readonly INavigationService _loginNavigationService;
         private readonly RegisterCustomer _registerCustomer;
         private string _confirmPassword;
         private string _password;
@@ -32,6 +33,8 @@ namespace WpfUI.ViewModels
                 }
             }
         }
+
+        public ICommand GoToLoginCommand { get; }
 
         public string Password
         {
@@ -64,14 +67,17 @@ namespace WpfUI.ViewModels
         public RegisterViewModel(
             CurrentUserStore accountStore,
             INavigationService homeNavigationService,
+            INavigationService loginNavigationService,
             RegisterCustomer registerCustomer
         )
         {
             _accountStore = accountStore;
             _homeNavigationService = homeNavigationService;
+            _loginNavigationService = loginNavigationService;
             _registerCustomer = registerCustomer;
 
             RegisterCommand = new DelegateCommand(Register, CanRegister);
+            GoToLoginCommand = new DelegateCommand(GoToLogin);
         }
 
         private bool CanRegister(object arg)
@@ -79,6 +85,11 @@ namespace WpfUI.ViewModels
             return !String.IsNullOrWhiteSpace(_username)
                 && !String.IsNullOrWhiteSpace(_password) && !String.IsNullOrWhiteSpace(_confirmPassword)
                 && _password == _confirmPassword;
+        }
+
+        private void GoToLogin(object parameter)
+        {
+            _loginNavigationService.Navigate();
         }
 
         private void Register(object obj)

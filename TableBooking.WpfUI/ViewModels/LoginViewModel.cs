@@ -19,8 +19,10 @@ namespace WpfUI.ViewModels
         private readonly INavigationService _loginNavigationService;
         private readonly LoginUser _loginUser;
         private readonly IMapper _mapper;
+        private readonly INavigationService _registerNavigationService;
         private string _password;
         private string _username;
+        public ICommand GoToRegisterCommand { get; }
         public ICommand LoginCommand { get; }
 
         public string Password
@@ -52,20 +54,29 @@ namespace WpfUI.ViewModels
         public LoginViewModel(
             CurrentUserStore accountStore,
             INavigationService loginNavigationService,
+            INavigationService registerNavigationService,
             IMapper mapper,
             LoginUser loginUser
         )
         {
             _accountStore = accountStore;
             _loginNavigationService = loginNavigationService;
+            _registerNavigationService = registerNavigationService;
             _mapper = mapper;
             _loginUser = loginUser;
+
             LoginCommand = new DelegateCommand(Login, CanLogin);
+            GoToRegisterCommand = new DelegateCommand(GoToRegister);
         }
 
         private bool CanLogin(object parameter)
         {
             return !String.IsNullOrWhiteSpace(_username) && !String.IsNullOrWhiteSpace(_password);
+        }
+
+        private void GoToRegister(object parameter)
+        {
+            _registerNavigationService.Navigate();
         }
 
         private void Login(object parameter)
