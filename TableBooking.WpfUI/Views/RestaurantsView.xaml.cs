@@ -6,7 +6,7 @@ namespace WpfUI.Views
     /// <summary>
     /// Interaction logic for RestaurantsView.xaml
     /// </summary>
-    public partial class RestaurantsView : UserControl, IView
+    public partial class RestaurantsView : UserControl
     {
         public RestaurantsView()
         {
