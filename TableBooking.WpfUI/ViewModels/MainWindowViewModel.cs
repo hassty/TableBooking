@@ -1,8 +1,8 @@
 ﻿using System.Windows.Input;
-using TableBooking.Commands;
+using WpfUI.Commands;
 using WpfUI.Views;
 
-namespace TableBooking.ViewModels
+namespace WpfUI.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {

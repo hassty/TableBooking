@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace TableBooking.Commands
+namespace WpfUI.Commands
 {
     public class DelegateCommand : ICommand
     {

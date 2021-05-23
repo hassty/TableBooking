@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace TableBooking.ViewModels
+namespace WpfUI.ViewModels
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {

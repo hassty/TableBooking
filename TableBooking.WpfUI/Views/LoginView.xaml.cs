@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using TableBooking.ViewModels;
+using WpfUI.ViewModels;
 
 namespace WpfUI.Views
 {

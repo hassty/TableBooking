@@ -7,7 +7,6 @@ using DataAccess.Database;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using TableBooking.ViewModels;
 using WpfUI;
 using WpfUI.ViewModels;
 using WpfUI.Views;

@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using TableBooking.ViewModels;
+using WpfUI.ViewModels;
 
 namespace TableBooking
 {

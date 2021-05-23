@@ -3,16 +3,16 @@ using Core.UseCases;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using TableBooking.Commands;
+using WpfUI.Commands;
 using WpfUI.Models;
 
-namespace TableBooking.ViewModels
+namespace WpfUI.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
         private readonly LoginUser _loginUser;
-        private DelegateCommand _loginCommand;
         private CustomerModel _customer;
+        private DelegateCommand _loginCommand;
         public ICommand LoginCommand => _loginCommand ??= new DelegateCommand(Login);
 
         public string Username
