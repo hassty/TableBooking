@@ -1,4 +1,5 @@
-﻿using Core.Contracts;
+﻿using AutoMapper;
+using Core.Contracts;
 using Core.Contracts.DataAccess;
 using Core.UseCases;
 using DataAccess.Database;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
+using WpfUI;
 using WpfUI.Services;
 using WpfUI.Stores;
 using WpfUI.ViewModels;
@@ -28,9 +30,21 @@ namespace TableBooking
             services.AddSingleton<NavigationStore>();
 
             services.AddSingleton<RegisterCustomer>();
+            services.AddSingleton<LoginUser>();
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
+            services.AddSingleton<IAdminRepository, AdminRepository>();
             services.AddSingleton<IPasswordProtectionStrategy, Sha256HashPasswordStrategy>();
             services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf"));
+            services.AddSingleton(s => new MapperConfiguration(cfg =>
+              {
+                  cfg.AddProfile<WpfMappingProfile>();
+              }));
+            services.AddSingleton(s =>
+            {
+                var config = s.GetRequiredService<MapperConfiguration>();
+                config.AssertConfigurationIsValid();
+                return config.CreateMapper();
+            });
 
             services.AddSingleton(s => CreateHomeNavigationService(s));
 
@@ -40,7 +54,9 @@ namespace TableBooking
                 CreateHomeNavigationService(s)));
             services.AddTransient(s => new LoginViewModel(
                 s.GetRequiredService<CurrentUserStore>(),
-                CreateAccountNavigationService(s)));
+                CreateAccountNavigationService(s),
+                s.GetRequiredService<IMapper>(),
+                s.GetRequiredService<LoginUser>()));
             services.AddTransient(s => new RegisterViewModel(
                 s.GetRequiredService<CurrentUserStore>(),
                 CreateHomeNavigationService(s),

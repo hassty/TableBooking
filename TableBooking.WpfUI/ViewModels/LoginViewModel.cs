@@ -1,4 +1,5 @@
-﻿using Core.Exceptions;
+﻿using AutoMapper;
+using Core.Exceptions;
 using Core.UseCases;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,9 +44,14 @@ namespace WpfUI.ViewModels
             }
         }
 
-        public LoginViewModel(CurrentUserStore accountStore, INavigationService loginNavigationService)
+        public LoginViewModel(
+            CurrentUserStore accountStore,
+            INavigationService loginNavigationService,
+            IMapper mapper,
+            LoginUser loginUser
+        )
         {
-            LoginCommand = new LoginCommand(this, accountStore, loginNavigationService);
+            LoginCommand = new LoginCommand(this, accountStore, loginNavigationService, mapper, loginUser);
         }
     }
 }
