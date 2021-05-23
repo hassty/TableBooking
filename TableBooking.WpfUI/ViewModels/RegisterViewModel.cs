@@ -3,13 +3,12 @@ using Core.UseCases;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using TableBooking.Commands;
-using TableBooking.ViewModels;
+using WpfUI.Commands;
 using WpfUI.Models;
 
 namespace WpfUI.ViewModels
 {
-    public class RegisterViewModel : BaseViewModel
+    public class RegisterViewModel : ViewModelBase
     {
         private readonly RegisterCustomer _registerCustomer;
         private DelegateCommand _registerCommand;

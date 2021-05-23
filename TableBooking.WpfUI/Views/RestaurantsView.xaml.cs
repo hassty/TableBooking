@@ -8,10 +8,9 @@ namespace WpfUI.Views
     /// </summary>
     public partial class RestaurantsView : UserControl, IView
     {
-        public RestaurantsView(RestaurantsViewModel restaurantsViewModel)
+        public RestaurantsView()
         {
             InitializeComponent();
-            DataContext = restaurantsViewModel;
         }
     }
 }

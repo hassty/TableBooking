@@ -218,3 +218,7 @@ dotnet_naming_style.begins_with__.required_prefix = _
 dotnet_naming_style.begins_with__.required_suffix = 
 dotnet_naming_style.begins_with__.word_separator = 
 dotnet_naming_style.begins_with__.capitalization = camel_case
+
+# Guidelines
+guidelines = 120
+guidelines_style = 2px solid 40ffffff

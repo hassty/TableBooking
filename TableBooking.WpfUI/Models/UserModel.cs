@@ -1,21 +1,14 @@
-﻿using Core.Exceptions;
-using Core.UseCases;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using WpfUI.Commands;
-using WpfUI.Models;
-using WpfUI.Services;
-using WpfUI.Stores;
+﻿using Core.Contracts.Dto;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace WpfUI.ViewModels
+namespace WpfUI.Models
 {
-    public class LoginViewModel : ViewModelBase
+    public class UserModel : ModelBase, IUserDto
     {
         private string _password;
         private string _username;
-
-        public ICommand LoginCommand { get; }
 
         public string Password
         {
@@ -41,11 +34,6 @@ namespace WpfUI.ViewModels
                     OnPropertyChanged(nameof(Username));
                 }
             }
-        }
-
-        public LoginViewModel(AccountStore accountStore, INavigationService loginNavigationService)
-        {
-            LoginCommand = new LoginCommand(this, accountStore, loginNavigationService);
         }
     }
 }

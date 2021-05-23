@@ -8,10 +8,9 @@ namespace WpfUI.Views
     /// </summary>
     public partial class UsersView : UserControl, IView
     {
-        public UsersView(UsersViewModel usersViewModel)
+        public UsersView()
         {
             InitializeComponent();
-            DataContext = usersViewModel;
         }
     }
 }
