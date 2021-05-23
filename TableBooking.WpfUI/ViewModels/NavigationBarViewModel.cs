@@ -28,7 +28,7 @@ namespace WpfUI.ViewModels
             NavigateHomeCommand = new NavigateCommand(homeNavigationService);
             NavigateAccountCommand = new NavigateCommand(accountNavigationService);
             NavigateLoginCommand = new NavigateCommand(loginNavigationService);
-            LogoutCommand = new LogoutCommand(_accountStore);
+            LogoutCommand = new LogoutCommand(_accountStore, homeNavigationService);
 
             _accountStore.CurrentAccountChanged += OnCurrentAccountChanged;
         }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
-using TableBooking.UI;
 using WpfUI.Services;
 using WpfUI.Stores;
 using WpfUI.ViewModels;
@@ -21,20 +20,20 @@ namespace TableBooking
 
             services.AddSingleton<AccountStore>();
             services.AddSingleton<NavigationStore>();
-            services.AddSingleton<ModalNavigationStore>();
 
-            services.AddSingleton<INavigationService>(s => CreateHomeNavigationService(s));
-            services.AddSingleton<CloseModalNavigationService>();
+            services.AddSingleton(s => CreateHomeNavigationService(s));
 
-            services.AddTransient<HomeViewModel>(s => new HomeViewModel(CreateLoginNavigationService(s)));
-            services.AddTransient<AccountViewModel>(s => new AccountViewModel(
+            services.AddTransient(s => new HomeViewModel(CreateLoginNavigationService(s)));
+            services.AddTransient(s => new AccountViewModel(
                 s.GetRequiredService<AccountStore>(),
                 CreateHomeNavigationService(s)));
-            services.AddTransient<LoginViewModel>(CreateLoginViewModel);
-            services.AddTransient<NavigationBarViewModel>(CreateNavigationBarViewModel);
+            services.AddTransient(s => new LoginViewModel(
+                s.GetRequiredService<AccountStore>(),
+                CreateAccountNavigationService(s)));
+            services.AddTransient(CreateNavigationBarViewModel);
             services.AddSingleton<MainViewModel>();
 
-            services.AddSingleton<MainWindow>(s => new MainWindow()
+            services.AddSingleton(s => new MainWindow()
             {
                 DataContext = s.GetRequiredService<MainViewModel>()
             });
@@ -60,20 +59,10 @@ namespace TableBooking
 
         private INavigationService CreateLoginNavigationService(IServiceProvider serviceProvider)
         {
-            return new ModalNavigationService<LoginViewModel>(
-                serviceProvider.GetRequiredService<ModalNavigationStore>(),
-                () => serviceProvider.GetRequiredService<LoginViewModel>());
-        }
-
-        private LoginViewModel CreateLoginViewModel(IServiceProvider serviceProvider)
-        {
-            var navigationService = new CompositeNavigationService(
-                serviceProvider.GetRequiredService<CloseModalNavigationService>(),
-                CreateAccountNavigationService(serviceProvider));
-
-            return new LoginViewModel(
-                serviceProvider.GetRequiredService<AccountStore>(),
-                navigationService);
+            return new LayoutNavigationService<LoginViewModel>(
+                serviceProvider.GetRequiredService<NavigationStore>(),
+                () => serviceProvider.GetRequiredService<LoginViewModel>(),
+                () => serviceProvider.GetRequiredService<NavigationBarViewModel>());
         }
 
         private NavigationBarViewModel CreateNavigationBarViewModel(IServiceProvider serviceProvider)
