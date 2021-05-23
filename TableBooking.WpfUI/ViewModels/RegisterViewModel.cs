@@ -5,52 +5,65 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using WpfUI.Commands;
 using WpfUI.Models;
+using WpfUI.Services;
+using WpfUI.Stores;
 
 namespace WpfUI.ViewModels
 {
     public class RegisterViewModel : ViewModelBase
     {
-        private readonly RegisterCustomer _registerCustomer;
-        private DelegateCommand _registerCommand;
-        private CustomerModel _user;
-        public ICommand RegisterCommand => _registerCommand ??= new DelegateCommand(Register);
+        private string _confirmPassword;
+        private string _password;
+        private string _username;
+
+        public string ConfirmPassword
+        {
+            get => _confirmPassword;
+            set
+            {
+                if (_confirmPassword != value)
+                {
+                    _confirmPassword = value;
+                    OnPropertyChanged(nameof(ConfirmPassword));
+                }
+            }
+        }
+
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                if (_password != value)
+                {
+                    _password = value;
+                    OnPropertyChanged(nameof(Password));
+                }
+            }
+        }
+
+        public ICommand RegisterCommand { get; }
 
         public string Username
         {
-            get => _user.Username;
+            get => _username;
             set
             {
-                if (_user.Username != value)
+                if (_username != value)
                 {
-                    _user.Username = value;
+                    _username = value;
                     OnPropertyChanged(nameof(Username));
                 }
             }
         }
 
-        public RegisterViewModel(RegisterCustomer registerCustomer)
+        public RegisterViewModel(
+            CurrentUserStore accountStore,
+            INavigationService homeNavigationService,
+            RegisterCustomer registerCustomer
+        )
         {
-            _registerCustomer = registerCustomer;
-            _user = new CustomerModel();
-        }
-
-        private void Register(object obj)
-        {
-            if (obj is PasswordBox passwordBox)
-            {
-                _user.Password = passwordBox.Password;
-                try
-                {
-
-                    _registerCustomer.Register(_user);
-                    MessageBox.Show("success");
-                }
-                catch (UserAlreadyExistsException ex)
-                {
-
-                    MessageBox.Show(ex.Message);
-                }
-            }
+            RegisterCommand = new RegisterCommand(this, accountStore, homeNavigationService, registerCustomer);
         }
     }
 }

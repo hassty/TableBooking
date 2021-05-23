@@ -43,7 +43,7 @@ namespace WpfUI.ViewModels
             }
         }
 
-        public LoginViewModel(AccountStore accountStore, INavigationService loginNavigationService)
+        public LoginViewModel(CurrentUserStore accountStore, INavigationService loginNavigationService)
         {
             LoginCommand = new LoginCommand(this, accountStore, loginNavigationService);
         }

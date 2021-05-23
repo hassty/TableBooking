@@ -1,4 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Core.Contracts;
+using Core.Contracts.DataAccess;
+using Core.UseCases;
+using DataAccess.Database;
+using DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 using WpfUI.Services;
@@ -18,18 +24,27 @@ namespace TableBooking
         {
             IServiceCollection services = new ServiceCollection();
 
-            services.AddSingleton<AccountStore>();
+            services.AddSingleton<CurrentUserStore>();
             services.AddSingleton<NavigationStore>();
+
+            services.AddSingleton<RegisterCustomer>();
+            services.AddSingleton<ICustomerRepository, CustomerRepository>();
+            services.AddSingleton<IPasswordProtectionStrategy, Sha256HashPasswordStrategy>();
+            services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf"));
 
             services.AddSingleton(s => CreateHomeNavigationService(s));
 
             services.AddTransient(s => new HomeViewModel(CreateLoginNavigationService(s)));
             services.AddTransient(s => new AccountViewModel(
-                s.GetRequiredService<AccountStore>(),
+                s.GetRequiredService<CurrentUserStore>(),
                 CreateHomeNavigationService(s)));
             services.AddTransient(s => new LoginViewModel(
-                s.GetRequiredService<AccountStore>(),
+                s.GetRequiredService<CurrentUserStore>(),
                 CreateAccountNavigationService(s)));
+            services.AddTransient(s => new RegisterViewModel(
+                s.GetRequiredService<CurrentUserStore>(),
+                CreateHomeNavigationService(s),
+                s.GetRequiredService<RegisterCustomer>()));
             services.AddTransient(CreateNavigationBarViewModel);
             services.AddSingleton<MainViewModel>();
 
@@ -67,10 +82,19 @@ namespace TableBooking
 
         private NavigationBarViewModel CreateNavigationBarViewModel(IServiceProvider serviceProvider)
         {
-            return new NavigationBarViewModel(serviceProvider.GetRequiredService<AccountStore>(),
+            return new NavigationBarViewModel(serviceProvider.GetRequiredService<CurrentUserStore>(),
                 CreateHomeNavigationService(serviceProvider),
                 CreateAccountNavigationService(serviceProvider),
-                CreateLoginNavigationService(serviceProvider));
+                CreateLoginNavigationService(serviceProvider),
+                CreateRegisterNavigationService(serviceProvider));
+        }
+
+        private INavigationService CreateRegisterNavigationService(IServiceProvider serviceProvider)
+        {
+            return new LayoutNavigationService<RegisterViewModel>(
+                serviceProvider.GetRequiredService<NavigationStore>(),
+                () => serviceProvider.GetRequiredService<RegisterViewModel>(),
+                () => serviceProvider.GetRequiredService<NavigationBarViewModel>());
         }
 
         protected override void OnStartup(StartupEventArgs e)

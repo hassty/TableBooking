@@ -13,12 +13,5 @@ namespace WpfUI.Views
         {
             InitializeComponent();
         }
-
-        private void Content_TextChanged(object sender, System.Windows.RoutedEventArgs e)
-        {
-            Register.IsEnabled = !String.IsNullOrWhiteSpace(Username.Text)
-                && !String.IsNullOrWhiteSpace(PasswordBox.Password)
-                && PasswordBox.Password.Equals(ConfirmPasswordBox.Password);
-        }
     }
 }

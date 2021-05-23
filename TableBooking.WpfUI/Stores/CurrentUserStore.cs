@@ -1,16 +1,14 @@
-﻿using Core.Contracts.Dto;
+﻿using Core.Contracts.DataAccess;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using WpfUI.Models;
 
 namespace WpfUI.Stores
 {
-    public class AccountStore
+    public class CurrentUserStore
     {
         private UserModel _currentUser;
 
-        public UserModel CurrentAccount
+        public UserModel CurrentUser
         {
             get => _currentUser;
             set
@@ -23,13 +21,13 @@ namespace WpfUI.Stores
             }
         }
 
-        public bool IsLoggedIn => CurrentAccount != null;
+        public bool IsLoggedIn => CurrentUser != null;
 
         public event Action CurrentAccountChanged;
 
         public void Logout()
         {
-            CurrentAccount = null;
+            CurrentUser = null;
         }
     }
 }

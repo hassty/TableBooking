@@ -10,12 +10,12 @@ namespace WpfUI.ViewModels
 {
     public class AccountViewModel : ViewModelBase
     {
-        private readonly AccountStore _accountStore;
+        private readonly CurrentUserStore _accountStore;
         public ICommand NavigateHomeCommand { get; }
-        public string Password => _accountStore.CurrentAccount?.Password;
-        public string Username => _accountStore.CurrentAccount?.Username;
+        public string Password => _accountStore.CurrentUser?.Password;
+        public string Username => _accountStore.CurrentUser?.Username;
 
-        public AccountViewModel(AccountStore accountStore, INavigationService homeNavigationService)
+        public AccountViewModel(CurrentUserStore accountStore, INavigationService homeNavigationService)
         {
             _accountStore = accountStore;
             NavigateHomeCommand = new NavigateCommand(homeNavigationService);

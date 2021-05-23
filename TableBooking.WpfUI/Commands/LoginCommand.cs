@@ -10,11 +10,11 @@ namespace WpfUI.Commands
 {
     public class LoginCommand : CommandBase
     {
-        private readonly AccountStore _accountStore;
+        private readonly CurrentUserStore _accountStore;
         private readonly INavigationService _navigationService;
         private readonly LoginViewModel _viewModel;
 
-        public LoginCommand(LoginViewModel viewModel, AccountStore accountStore, INavigationService navigationService)
+        public LoginCommand(LoginViewModel viewModel, CurrentUserStore accountStore, INavigationService navigationService)
         {
             _viewModel = viewModel;
             _accountStore = accountStore;
@@ -29,7 +29,7 @@ namespace WpfUI.Commands
                 Password = _viewModel.Password
             };
 
-            _accountStore.CurrentAccount = accountModel;
+            _accountStore.CurrentUser = accountModel;
             _navigationService.Navigate();
         }
     }

@@ -8,10 +8,10 @@ namespace WpfUI.Commands
 {
     public class LogoutCommand : CommandBase
     {
-        private readonly AccountStore _accountStore;
+        private readonly CurrentUserStore _accountStore;
         private readonly INavigationService _navigationService;
 
-        public LogoutCommand(AccountStore accountStore, INavigationService navigationService)
+        public LogoutCommand(CurrentUserStore accountStore, INavigationService navigationService)
         {
             _accountStore = accountStore;
             _navigationService = navigationService;
