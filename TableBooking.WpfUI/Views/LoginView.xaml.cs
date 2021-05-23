@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using WpfUI.ViewModels;
 
 namespace WpfUI.Views
 {
@@ -10,15 +9,9 @@ namespace WpfUI.Views
     /// </summary>
     public partial class LoginView : UserControl, IView
     {
-        public LoginView(LoginViewModel loginViewModel)
+        public LoginView()
         {
             InitializeComponent();
-            DataContext = loginViewModel;
-        }
-
-        private void Content_TextChanged(object sender, RoutedEventArgs e)
-        {
-            Login.IsEnabled = !String.IsNullOrWhiteSpace(Username.Text) && !String.IsNullOrWhiteSpace(PasswordBox.Password);
         }
     }
 }

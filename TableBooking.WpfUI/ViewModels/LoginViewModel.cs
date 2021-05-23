@@ -5,50 +5,47 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using WpfUI.Commands;
 using WpfUI.Models;
+using WpfUI.Services;
+using WpfUI.Stores;
 
 namespace WpfUI.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    public class LoginViewModel : ViewModelBase
     {
-        private readonly LoginUser _loginUser;
-        private CustomerModel _customer;
-        private DelegateCommand _loginCommand;
-        public ICommand LoginCommand => _loginCommand ??= new DelegateCommand(Login);
+        private string _password;
+        private string _username;
+
+        public ICommand LoginCommand { get; }
+
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                if (_password != value)
+                {
+                    _password = value;
+                    OnPropertyChanged(nameof(Password));
+                }
+            }
+        }
 
         public string Username
         {
-            get => _customer.Username;
+            get => _username;
             set
             {
-                if (_customer.Username != value)
+                if (_username != value)
                 {
-                    _customer.Username = value;
+                    _username = value;
                     OnPropertyChanged(nameof(Username));
                 }
             }
         }
 
-        public LoginViewModel(LoginUser loginUser)
+        public LoginViewModel(AccountStore accountStore, INavigationService loginNavigationService)
         {
-            _loginUser = loginUser;
-            _customer = new CustomerModel();
-        }
-
-        private void Login(object obj)
-        {
-            if (obj is PasswordBox passwordBox)
-            {
-                _customer.Password = passwordBox.Password;
-                try
-                {
-                    var user = _loginUser.Login(_customer.Username, _customer.Password);
-                    MessageBox.Show("success");
-                }
-                catch (InvalidCredentialsException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
+            LoginCommand = new LoginCommand(this, accountStore, loginNavigationService);
         }
     }
 }

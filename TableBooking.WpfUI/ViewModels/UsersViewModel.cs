@@ -8,7 +8,7 @@ using WpfUI.Models;
 
 namespace WpfUI.ViewModels
 {
-    public class UsersViewModel : BaseViewModel
+    public class UsersViewModel : ViewModelBase
     {
         private readonly IMapper _mapper;
         private readonly ICustomerRepository _customerRepository;

@@ -9,10 +9,9 @@ namespace WpfUI.Views
     /// </summary>
     public partial class RegisterView : UserControl, IView
     {
-        public RegisterView(RegisterViewModel registerViewModel)
+        public RegisterView()
         {
             InitializeComponent();
-            DataContext = registerViewModel;
         }
 
         private void Content_TextChanged(object sender, System.Windows.RoutedEventArgs e)

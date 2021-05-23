@@ -9,7 +9,7 @@ using WpfUI.Models;
 
 namespace WpfUI.ViewModels
 {
-    public class RestaurantsViewModel : BaseViewModel
+    public class RestaurantsViewModel : ViewModelBase
     {
         private readonly IMapper _mapper;
         private readonly RestaurantsInteractor _restaurantsInteractor;

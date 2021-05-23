@@ -8,20 +8,33 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <StackPanel>
-        <Label>Username</Label>
-        <TextBox
-            x:Name="Username"
-            Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-            TextChanged="Content_TextChanged" />
-        <Label>Password</Label>
-        <PasswordBox x:Name="PasswordBox" PasswordChanged="Content_TextChanged" />
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Login" />
+
+        <StackPanel Grid.Row="1">
+            <StackPanel>
+                <TextBlock Text="Username" />
+                <TextBox Text="{Binding Username}" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="2">
+                <TextBlock Text="Password" />
+                <TextBox Text="{Binding Password}" />
+            </StackPanel>
+        </StackPanel>
+
         <Button
-            x:Name="Login"
+            Grid.Row="2"
             Command="{Binding LoginCommand}"
-            CommandParameter="{Binding ElementName=PasswordBox}"
-            Content="Login"
-            IsDefault="True"
-            IsEnabled="False" />
-    </StackPanel>
+            Content="Login" />
+    </Grid>
 </UserControl>

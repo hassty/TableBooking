@@ -8,7 +8,7 @@ using WpfUI.Models;
 
 namespace WpfUI.ViewModels
 {
-    public class RegisterViewModel : BaseViewModel
+    public class RegisterViewModel : ViewModelBase
     {
         private readonly RegisterCustomer _registerCustomer;
         private DelegateCommand _registerCommand;
