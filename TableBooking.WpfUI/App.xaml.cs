@@ -31,8 +31,11 @@ namespace TableBooking
 
             services.AddSingleton<RegisterCustomer>();
             services.AddSingleton<LoginUser>();
+            services.AddSingleton<GetAllRestaurants>();
+
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<IAdminRepository, AdminRepository>();
+            services.AddSingleton<IRestaurantRepository, RestaurantRepository>();
             services.AddSingleton<IPasswordProtectionStrategy, Sha256HashPasswordStrategy>();
             services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf"));
             services.AddSingleton(s => new MapperConfiguration(cfg =>
@@ -48,7 +51,9 @@ namespace TableBooking
 
             services.AddSingleton(s => CreateHomeNavigationService(s));
 
-            services.AddTransient(s => new HomeViewModel(CreateLoginNavigationService(s)));
+            services.AddTransient(s => new HomeViewModel(
+                s.GetRequiredService<GetAllRestaurants>(),
+                s.GetRequiredService<IMapper>()));
             services.AddTransient(s => new AccountViewModel(
                 s.GetRequiredService<CurrentUserStore>(),
                 CreateHomeNavigationService(s)));
