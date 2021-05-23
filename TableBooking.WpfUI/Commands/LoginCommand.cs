@@ -23,10 +23,10 @@ namespace WpfUI.Commands
 
         public override void Execute(object parameter)
         {
-            var accountModel = new AccountModel
+            var accountModel = new UserModel
             {
-                Email = $"{_viewModel.Username}@test.com",
-                Username = _viewModel.Username
+                Username = _viewModel.Username,
+                Password = _viewModel.Password
             };
 
             _accountStore.CurrentAccount = accountModel;

@@ -11,8 +11,8 @@ namespace WpfUI.ViewModels
     public class AccountViewModel : ViewModelBase
     {
         private readonly AccountStore _accountStore;
-        public string Email => _accountStore.CurrentAccount?.Email;
         public ICommand NavigateHomeCommand { get; }
+        public string Password => _accountStore.CurrentAccount?.Password;
         public string Username => _accountStore.CurrentAccount?.Username;
 
         public AccountViewModel(AccountStore accountStore, INavigationService homeNavigationService)
@@ -24,7 +24,7 @@ namespace WpfUI.ViewModels
 
         private void OnCurrentAccountChanged()
         {
-            OnPropertyChanged(nameof(Email));
+            OnPropertyChanged(nameof(Password));
             OnPropertyChanged(nameof(Username));
         }
 

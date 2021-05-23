@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Contracts.Dto;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using WpfUI.Models;
@@ -7,16 +8,16 @@ namespace WpfUI.Stores
 {
     public class AccountStore
     {
-        private AccountModel _currentAccount;
+        private UserModel _currentUser;
 
-        public AccountModel CurrentAccount
+        public UserModel CurrentAccount
         {
-            get => _currentAccount;
+            get => _currentUser;
             set
             {
-                if (_currentAccount != value)
+                if (_currentUser != value)
                 {
-                    _currentAccount = value;
+                    _currentUser = value;
                     CurrentAccountChanged?.Invoke();
                 }
             }

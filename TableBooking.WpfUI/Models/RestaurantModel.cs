@@ -2,7 +2,7 @@
 
 namespace WpfUI.Models
 {
-    public class RestaurantModel : BaseModel
+    public class RestaurantModel : ModelBase
     {
         private string _address;
 

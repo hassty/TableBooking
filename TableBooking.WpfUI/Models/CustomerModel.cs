@@ -2,10 +2,21 @@
 
 namespace WpfUI.Models
 {
-    public class CustomerModel : ICustomerDto
+    public class CustomerModel : UserModel, ICustomerDto
     {
-        public string Password { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
+        private string _email;
+
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                if (_email != value)
+                {
+                    _email = value;
+                    OnPropertyChanged(nameof(Email));
+                }
+            }
+        }
     }
 }
