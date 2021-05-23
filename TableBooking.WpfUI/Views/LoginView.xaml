@@ -14,6 +14,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
@@ -38,5 +39,9 @@
             Command="{Binding LoginCommand}"
             Content="Login"
             IsDefault="True" />
+        <StackPanel Grid.Row="3">
+            <TextBlock Text="Don't have an account yet?" />
+            <Button Command="{Binding GoToRegisterCommand}" Content="Create new account" />
+        </StackPanel>
     </Grid>
 </UserControl>
