@@ -37,5 +37,10 @@
             Grid.Column="1"
             ItemsSource="{Binding Capacities}"
             SelectedIndex="0" />
+        <Button
+            Grid.Row="4"
+            Grid.Column="1"
+            Command="{Binding AddOrderCommand}"
+            Content="Make reservation" />
     </Grid>
 </UserControl>

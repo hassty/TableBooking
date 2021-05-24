@@ -35,6 +35,7 @@ namespace TableBooking
             services.AddSingleton<LoginUser>();
             services.AddSingleton<GetAllRestaurants>();
             services.AddSingleton<RestaurantInteractor>();
+            services.AddSingleton<AddOrder>();
 
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<IAdminRepository, AdminRepository>();
@@ -63,6 +64,7 @@ namespace TableBooking
 
             services.AddTransient(s => new HomeViewModel(
                 s.GetRequiredService<CurrentRestaurantStore>(),
+                s.GetRequiredService<CurrentUserStore>(),
                 s.GetRequiredService<GetAllRestaurants>(),
                 CreateAddOrderNavigatonService(s),
                 s.GetRequiredService<IMapper>()));
@@ -82,7 +84,10 @@ namespace TableBooking
                 s.GetRequiredService<RegisterCustomer>()));
             services.AddTransient(s => new AddOrderViewModel(
                 s.GetRequiredService<CurrentRestaurantStore>(),
+                s.GetRequiredService<CurrentUserStore>(),
                 s.GetRequiredService<RestaurantInteractor>(),
+                s.GetRequiredService<AddOrder>(),
+                CreateAccountNavigationService(s),
                 s.GetRequiredService<IMapper>()
                 ));
             services.AddTransient(CreateNavigationBarViewModel);
