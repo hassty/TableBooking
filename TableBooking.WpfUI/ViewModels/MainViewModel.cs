@@ -1,7 +1,4 @@
-﻿using System.Windows.Input;
-using WpfUI.Commands;
-using WpfUI.Stores;
-using WpfUI.Views;
+﻿using WpfUI.Stores;
 
 namespace WpfUI.ViewModels
 {

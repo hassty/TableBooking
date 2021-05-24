@@ -7,10 +7,10 @@ namespace Core.Entities
 {
     public class OrderEntity
     {
+        public bool ConfirmedByAdmin { get; private set; }
         public CustomerEntity Customer { get; set; }
         public int Id { get; set; }
         public IList<MenuItemEntity> MenuItems { get; set; }
-        public bool ConfirmedByAdmin { get; set; }
         public DateTime OrderDate { get; private set; }
         public DateTime ReservationDate { get; set; }
         public TimeSpan ReservationDuration { get; set; }
@@ -19,8 +19,15 @@ namespace Core.Entities
 
         public OrderEntity()
         {
+            ConfirmedByAdmin = false;
             MenuItems = new List<MenuItemEntity>();
             OrderDate = DateTime.Now;
+        }
+
+        public void Confirm(AdminEntity admin)
+        {
+            admin.ConfirmOrder(this);
+            ConfirmedByAdmin = true;
         }
 
         public override bool Equals(object obj)

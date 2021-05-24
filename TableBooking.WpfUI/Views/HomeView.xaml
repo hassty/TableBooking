@@ -15,10 +15,17 @@
         </Grid.RowDefinitions>
 
         <DataGrid
+            Grid.Row="0"
             CanUserReorderColumns="False"
             CanUserResizeColumns="False"
             CanUserResizeRows="False"
             IsReadOnly="True"
-            ItemsSource="{Binding Restaurants}" />
+            ItemsSource="{Binding Restaurants}"
+            SelectedItem="{Binding SelectedRestaurant}" />
+
+        <Button
+            Grid.Row="1"
+            Command="{Binding AddOrderCommand}"
+            Content="Make reservation" />
     </Grid>
 </UserControl>

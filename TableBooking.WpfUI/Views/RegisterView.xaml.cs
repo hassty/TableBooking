@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows.Controls;
-using WpfUI.ViewModels;
+﻿using System.Windows.Controls;
 
 namespace WpfUI.Views
 {

@@ -3,17 +3,16 @@ using DataAccess.Database;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Core.Tests
 {
     public class DatabaseFixture : IDisposable
     {
+        public IAdminRepository AdminRepository { get; private set; }
         public DbContext Context { get; private set; }
         public ICustomerRepository CustomerRepository { get; private set; }
         public IOrderRepository OrderRepository { get; private set; }
-        public IAdminRepository AdminRepository { get; private set; }
+
         public DatabaseFixture(string databaseName)
         {
             var options = new DbContextOptionsBuilder<TableBookingContext>()
@@ -26,6 +25,7 @@ namespace Core.Tests
             OrderRepository = new OrderRepository(Context);
             AdminRepository = new AdminRepository(Context);
         }
+
         public void Dispose()
         {
             Context.Dispose();

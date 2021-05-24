@@ -17,6 +17,11 @@ namespace Core.Entities.Users
             UnconfirmedOrders.Add(order);
         }
 
+        public void ConfirmOrder(OrderEntity order)
+        {
+            UnconfirmedOrders.Remove(order);
+        }
+
         public override bool Equals(object obj)
         {
             return obj is AdminEntity entity &&

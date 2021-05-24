@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Core.Entities
 {
@@ -8,18 +7,19 @@ namespace Core.Entities
         public int Capacity { get; set; }
         public int Id { get; set; }
         public RestaurantEntity Restaurant { get; set; }
+        public int RestaurantId { get; set; }
 
         public override bool Equals(object obj)
         {
             return obj is TableEntity entity &&
                    Capacity == entity.Capacity &&
                    Id == entity.Id &&
-                   EqualityComparer<RestaurantEntity>.Default.Equals(Restaurant, entity.Restaurant);
+                   RestaurantId == entity.RestaurantId;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Capacity, Id, Restaurant);
+            return HashCode.Combine(Capacity, Id, RestaurantId);
         }
     }
 }

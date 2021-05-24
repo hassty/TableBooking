@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WpfUI.ViewModels
+﻿namespace WpfUI.ViewModels
 {
     public class LayoutViewModel : ViewModelBase
     {

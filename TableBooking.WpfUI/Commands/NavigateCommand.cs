@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WpfUI.Services;
+﻿using WpfUI.Services;
 
 namespace WpfUI.Commands
 {
