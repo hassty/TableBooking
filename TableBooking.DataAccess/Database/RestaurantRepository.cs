@@ -15,10 +15,12 @@ namespace DataAccess.Database
         {
         }
 
-        public RestaurantEntity GetRestaurantByName(string name)
+        public RestaurantEntity GetRestaurantByNameAndAddress(string name, string address)
         {
-            return _tableBookingContext.Restaurants.Where(r => r.Name.Equals(name)).FirstOrDefault();
+            return _tableBookingContext.Restaurants
+                .Where(r => r.Name == name && r.Address == address)
+                .Include(r => r.Tables)
+                .FirstOrDefault();
         }
-
     }
 }

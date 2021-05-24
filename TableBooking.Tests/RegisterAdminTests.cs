@@ -2,10 +2,7 @@
 using Core.Contracts.DataAccess;
 using Core.Exceptions;
 using Core.UseCases;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using WpfUI.Models;
 using Xunit;
 

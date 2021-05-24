@@ -26,6 +26,10 @@
             <DataTemplate DataType="{x:Type viewmodels:RegisterViewModel}">
                 <views:RegisterView />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:AddOrderViewModel}">
+                <views:AddOrderView />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type viewmodels:LayoutViewModel}">
                 <components:Layout />
             </DataTemplate>

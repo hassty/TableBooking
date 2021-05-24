@@ -13,7 +13,7 @@ namespace DataAccess.Entities
         public DbSet<RestaurantEntity> Restaurants { get; set; }
 
         public TableBookingContext(DbContextOptions<TableBookingContext> options)
-            : base(options)
+                    : base(options)
         {
             Database.EnsureCreated();
         }
@@ -22,11 +22,16 @@ namespace DataAccess.Entities
         {
             var user = modelBuilder.Entity<UserEntity>();
             var admin = modelBuilder.Entity<AdminEntity>();
+            var customer = modelBuilder.Entity<CustomerEntity>();
+            var restaurant = modelBuilder.Entity<RestaurantEntity>();
+            var table = modelBuilder.Entity<TableEntity>();
 
             user.HasAlternateKey(u => u.Username);
             user.Property(u => u.PasswordHash).HasMaxLength(44);
 
             admin.Ignore(a => a.UnconfirmedOrders);
+
+            restaurant.HasAlternateKey(r => new { r.Name, r.Address });
 
             base.OnModelCreating(modelBuilder);
         }

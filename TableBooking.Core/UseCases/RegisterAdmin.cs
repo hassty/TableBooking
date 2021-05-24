@@ -3,8 +3,6 @@ using Core.Contracts.DataAccess;
 using Core.Contracts.Dto;
 using Core.Exceptions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Core.UseCases
 {

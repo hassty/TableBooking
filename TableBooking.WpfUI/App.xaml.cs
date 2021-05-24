@@ -7,6 +7,7 @@ using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Configuration;
 using System.Windows;
 using WpfUI;
 using WpfUI.Services;
@@ -27,18 +28,30 @@ namespace TableBooking
             IServiceCollection services = new ServiceCollection();
 
             services.AddSingleton<CurrentUserStore>();
+            services.AddSingleton<CurrentRestaurantStore>();
             services.AddSingleton<NavigationStore>();
 
             services.AddSingleton<RegisterCustomer>();
             services.AddSingleton<LoginUser>();
+            services.AddSingleton<GetAllRestaurants>();
+            services.AddSingleton<RestaurantInteractor>();
+
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<IAdminRepository, AdminRepository>();
+            services.AddSingleton<IRestaurantRepository, RestaurantRepository>();
+            services.AddSingleton<IOrderRepository, OrderRepository>();
             services.AddSingleton<IPasswordProtectionStrategy, Sha256HashPasswordStrategy>();
-            services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf"));
+
+            //services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf").EnableSensitiveDataLogging());
+            services.AddDbContext<DbContext, TableBookingContext>(o => o.UseSqlServer(
+                ConfigurationManager.ConnectionStrings["SqlServerDB"].ConnectionString
+            ));
+
             services.AddSingleton(s => new MapperConfiguration(cfg =>
               {
                   cfg.AddProfile<WpfMappingProfile>();
-              }));
+              })
+            );
             services.AddSingleton(s =>
             {
                 var config = s.GetRequiredService<MapperConfiguration>();
@@ -48,7 +61,11 @@ namespace TableBooking
 
             services.AddSingleton(s => CreateHomeNavigationService(s));
 
-            services.AddTransient(s => new HomeViewModel(CreateLoginNavigationService(s)));
+            services.AddTransient(s => new HomeViewModel(
+                s.GetRequiredService<CurrentRestaurantStore>(),
+                s.GetRequiredService<GetAllRestaurants>(),
+                CreateAddOrderNavigatonService(s),
+                s.GetRequiredService<IMapper>()));
             services.AddTransient(s => new AccountViewModel(
                 s.GetRequiredService<CurrentUserStore>(),
                 CreateHomeNavigationService(s)));
@@ -63,6 +80,11 @@ namespace TableBooking
                 CreateHomeNavigationService(s),
                 CreateLoginNavigationService(s),
                 s.GetRequiredService<RegisterCustomer>()));
+            services.AddTransient(s => new AddOrderViewModel(
+                s.GetRequiredService<CurrentRestaurantStore>(),
+                s.GetRequiredService<RestaurantInteractor>(),
+                s.GetRequiredService<IMapper>()
+                ));
             services.AddTransient(CreateNavigationBarViewModel);
             services.AddSingleton<MainViewModel>();
 
@@ -80,6 +102,13 @@ namespace TableBooking
                 serviceProvider.GetRequiredService<NavigationStore>(),
                 () => serviceProvider.GetRequiredService<AccountViewModel>(),
                 () => serviceProvider.GetRequiredService<NavigationBarViewModel>());
+        }
+
+        private INavigationService CreateAddOrderNavigatonService(IServiceProvider serviceProvider)
+        {
+            return new NavigationService<AddOrderViewModel>(
+                serviceProvider.GetRequiredService<NavigationStore>(),
+                () => serviceProvider.GetRequiredService<AddOrderViewModel>());
         }
 
         private INavigationService CreateHomeNavigationService(IServiceProvider serviceProvider)

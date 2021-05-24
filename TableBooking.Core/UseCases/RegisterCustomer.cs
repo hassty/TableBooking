@@ -1,7 +1,6 @@
 ﻿using Core.Contracts;
 using Core.Contracts.DataAccess;
 using Core.Contracts.Dto;
-using Core.Entities.Users;
 using Core.Exceptions;
 using System;
 

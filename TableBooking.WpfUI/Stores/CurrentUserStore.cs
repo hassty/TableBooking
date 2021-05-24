@@ -1,5 +1,4 @@
-﻿using Core.Contracts.DataAccess;
-using System;
+﻿using System;
 using WpfUI.Models;
 
 namespace WpfUI.Stores

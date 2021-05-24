@@ -3,24 +3,18 @@ using Core.Entities;
 
 namespace Core.UseCases
 {
-    public class OrdersInteractor
+    public class AddOrder
     {
         private readonly IOrderRepository _orderRepository;
 
-        public OrdersInteractor(IOrderRepository orderRepository)
+        public AddOrder(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }
 
-        public void AddOrder(OrderEntity order)
+        public void Add(OrderEntity order)
         {
             _orderRepository.Add(order);
-            _orderRepository.SaveChanges();
-        }
-
-        public void RemoveOrder(OrderEntity order)
-        {
-            _orderRepository.Remove(order);
             _orderRepository.SaveChanges();
         }
     }
