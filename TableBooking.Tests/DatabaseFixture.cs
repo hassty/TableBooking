@@ -12,6 +12,7 @@ namespace Core.Tests
         public DbContext Context { get; private set; }
         public ICustomerRepository CustomerRepository { get; private set; }
         public IOrderRepository OrderRepository { get; private set; }
+        public IRestaurantRepository RestaurantRepository { get; private set; }
 
         public DatabaseFixture(string databaseName)
         {
@@ -24,6 +25,7 @@ namespace Core.Tests
             CustomerRepository = new CustomerRepository(Context);
             OrderRepository = new OrderRepository(Context);
             AdminRepository = new AdminRepository(Context);
+            RestaurantRepository = new RestaurantRepository(Context);
         }
 
         public void Dispose()

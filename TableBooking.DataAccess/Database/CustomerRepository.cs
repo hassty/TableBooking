@@ -1,7 +1,9 @@
 ﻿using Core.Contracts.DataAccess;
+using Core.Entities;
 using Core.Entities.Users;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DataAccess.Database
@@ -23,6 +25,15 @@ namespace DataAccess.Database
         public CustomerEntity GetUserWithUsername(string username)
         {
             return _tableBookingContext.Customers.FirstOrDefault(c => c.Username == username);
+        }
+
+        public IEnumerable<OrderEntity> GetCustomerOrders(string username)
+        {
+            return _tableBookingContext
+                .Customers
+                .Include(c => c.Orders)
+                .FirstOrDefault(c => c.Username == username)
+                .Orders;
         }
     }
 }

@@ -56,7 +56,7 @@ namespace Core.Tests
         }
 
         [Fact]
-        public void Loign_ShouldFailIfSuchUserNotExists()
+        public void Loign_ShouldThrowIfIfSuchUserNotExists()
         {
             Assert.Throws<InvalidCredentialsException>(() =>
             {
@@ -71,7 +71,7 @@ namespace Core.Tests
         [InlineData(null, "fake")]
         [InlineData(null, null)]
         [InlineData("", null)]
-        public void Login_ShouldFailIfEnteredInvalidCredentials(string username, string password)
+        public void Login_ShouldThrowIfIfEnteredInvalidCredentials(string username, string password)
         {
             Assert.Throws<InvalidCredentialsException>(() =>
             {

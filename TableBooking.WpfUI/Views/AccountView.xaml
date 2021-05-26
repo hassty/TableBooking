@@ -11,13 +11,19 @@
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Account" />
+        <ListView ItemsSource="{Binding Orders}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding ReservationDate}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
         <TextBlock Grid.Row="1" Text="{Binding Username}" />
         <TextBlock Grid.Row="2" Text="{Binding Password}" />
         <Button
