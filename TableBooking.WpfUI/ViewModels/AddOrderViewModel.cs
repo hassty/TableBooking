@@ -89,25 +89,13 @@ namespace WpfUI.ViewModels
             {
                 if (_userStore.CurrentUser is CustomerModel customer)
                 {
-                    var orderEntity = new OrderEntity()
-                    {
-                        Customer = new CustomerEntity()
-                        {
-                            Email = customer.Email,
-                            Username = customer.Username
-                        },
-                        ReservationDate = _order.ReservationDate,
-                        ReservationDuration = _order.ReservationDuration,
-                        Restaurant = new RestaurantEntity()
-                        {
-                            Name = _currentRestaurant.Name,
-                            Address = _currentRestaurant.Address,
-                            OpenedFrom = _currentRestaurant.OpenedFrom,
-                            OpenedTill = _currentRestaurant.OpenedTill,
-                            City = _currentRestaurant.City
-                        }
-                    };
-                    _addOrder.Add(orderEntity);
+                    var orderEntity = new OrderEntity(_order.ReservationDate, _order.ReservationDuration);
+
+                    _addOrder.Add(
+                        orderEntity,
+                        _userStore.CurrentUser.Username,
+                        _currentRestaurant.Name,
+                        _currentRestaurant.Address);
                     _accountNavigationService.Navigate();
                 }
             }

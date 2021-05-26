@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WpfUI.Models
 {
-    public class MenuItemMedel : ModelBase
+    public class MenuItemModel : ModelBase
     {
         public string Description { get; set; }
         public string Name { get; set; }

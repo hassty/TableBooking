@@ -1,6 +1,10 @@
 ﻿using Core.Entities;
 using Core.Entities.Users;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DataAccess.Entities
 {
@@ -20,6 +24,13 @@ namespace DataAccess.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var dayOfWeekListConverter = new ValueConverter<IList<DayOfWeek>, string>(
+                list => String.Join(',', list.Cast<int>()),
+                str => str.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                      .Select(day => (DayOfWeek)Enum.Parse(typeof(DayOfWeek), day))
+                      .ToList()
+            );
+
             var user = modelBuilder.Entity<UserEntity>();
             var admin = modelBuilder.Entity<AdminEntity>();
             var customer = modelBuilder.Entity<CustomerEntity>();
@@ -32,6 +43,7 @@ namespace DataAccess.Entities
             admin.Ignore(a => a.UnconfirmedOrders);
 
             restaurant.HasAlternateKey(r => new { r.Name, r.Address });
+            restaurant.Property(r => r.OffDays).HasConversion(dayOfWeekListConverter);
 
             base.OnModelCreating(modelBuilder);
         }

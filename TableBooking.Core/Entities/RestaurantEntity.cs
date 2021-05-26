@@ -7,6 +7,9 @@ namespace Core.Entities
     public class RestaurantEntity
     {
         public string Address { get; set; }
+        public int LatestOrderDate { get; set; }
+        public int LongestReservationTime { get; set; }
+        public IList<DayOfWeek> OffDays { get; set; }
         public string City { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
@@ -17,6 +20,7 @@ namespace Core.Entities
         public RestaurantEntity()
         {
             Tables = new List<TableEntity>();
+            OffDays = new List<DayOfWeek>();
         }
 
         public void AddTable(int capacity)

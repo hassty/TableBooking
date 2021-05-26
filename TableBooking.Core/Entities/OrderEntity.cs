@@ -17,11 +17,14 @@ namespace Core.Entities
         public RestaurantEntity Restaurant { get; set; }
         public TableEntity Table { get; set; }
 
-        public OrderEntity()
+        public OrderEntity(DateTime reservationDate, TimeSpan reservationDuration)
         {
             ConfirmedByAdmin = false;
             MenuItems = new List<MenuItemEntity>();
             OrderDate = DateTime.Now;
+
+            ReservationDate = reservationDate;
+            ReservationDuration = reservationDuration;
         }
 
         public void Confirm(AdminEntity admin)

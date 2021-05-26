@@ -18,6 +18,11 @@ namespace Core.Entities.Users
             Orders.Add(order);
         }
 
+        public IEnumerable<OrderEntity> GetOrders()
+        {
+            return Orders;
+        }
+
         public override bool Equals(object obj)
         {
             return obj is CustomerEntity entity &&

@@ -11,5 +11,6 @@ namespace WpfUI.Models
         public TimeSpan ReservationDuration { get; set; }
         public RestaurantModel Restaurant { get; set; }
         public int TableCapacity { get; set; }
+        public bool ConfirmedByAdmin { get; set; }
     }
 }
