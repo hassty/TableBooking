@@ -17,15 +17,21 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <ListView ItemsSource="{Binding Orders}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding ReservationDate}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <TextBlock Grid.Row="1" Text="{Binding Username}" />
-        <TextBlock Grid.Row="2" Text="{Binding Password}" />
+        <DataGrid
+            AutoGenerateColumns="False"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            CanUserReorderColumns="False"
+            IsReadOnly="True"
+            ItemsSource="{Binding Orders}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding RestaurantName}" Header="Restaurant" />
+                <DataGridTextColumn Binding="{Binding RestaurantAddress}" Header="Address" />
+                <DataGridTextColumn Binding="{Binding Status}" Header="Confirmed" />
+                <DataGridTextColumn Binding="{Binding ReservationDate, StringFormat='{}{0: dd/MMMM, HH:mm}'}" Header="Reservation date" />
+                <DataGridTextColumn Binding="{Binding ReservationDuration, StringFormat=hh\\:mm}" Header="Reservation duration" />
+            </DataGrid.Columns>
+        </DataGrid>
         <Button
             Grid.Row="3"
             Command="{Binding NavigateHomeCommand}"

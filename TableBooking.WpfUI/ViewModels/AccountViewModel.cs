@@ -16,9 +16,9 @@ namespace WpfUI.ViewModels
         private readonly IMapper _mapper;
 
         public ICommand NavigateHomeCommand { get; }
+        public List<OrderModel> Orders { get; set; }
         public string Password => _accountStore.CurrentUser?.Password;
         public string Username => _accountStore.CurrentUser?.Username;
-        public List<OrderModel> Orders { get; set; }
 
         public AccountViewModel(
             CurrentUserStore accountStore,
@@ -33,12 +33,13 @@ namespace WpfUI.ViewModels
             NavigateHomeCommand = new NavigateCommand(homeNavigationService);
             _accountStore.CurrentAccountChanged += OnCurrentAccountChanged;
 
-            var sho = _getOrders.GetUnconfirmedOrders(Username);
+            Orders = new List<OrderModel>();
+            LoadAllOrders();
         }
 
-        private void GetUnconfirmedOrders()
+        private void LoadAllOrders()
         {
-
+            Orders.AddRange(_mapper.Map<List<OrderModel>>(_getOrders.GetAllOrders(Username)));
         }
 
         private void OnCurrentAccountChanged()

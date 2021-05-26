@@ -20,6 +20,13 @@ namespace WpfUI
                 .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
                 .ForMember(dest => dest.Salt, opt => opt.Ignore())
                 .ForMember(dest => dest.Orders, opt => opt.Ignore());
+            CreateMap<OrderEntity, OrderModel>()
+                .ForMember(dest => dest.RestaurantName, opt => opt.MapFrom(o => o.Restaurant.Name))
+                .ForMember(dest => dest.Status, opt => opt.Ignore())
+                .ForMember(
+                    dest => dest.RestaurantAddress,
+                    opt => opt.MapFrom(o => $"{o.Restaurant.City} {o.Restaurant.Address}")
+                );
         }
     }
 }

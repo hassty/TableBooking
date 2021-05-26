@@ -31,12 +31,13 @@ namespace TableBooking
             services.AddSingleton<CurrentRestaurantStore>();
             services.AddSingleton<NavigationStore>();
 
-            services.AddSingleton<RegisterCustomer>();
-            services.AddSingleton<LoginUser>();
-            services.AddSingleton<GetAllRestaurants>();
-            services.AddSingleton<RestaurantInteractor>();
             services.AddSingleton<AddOrder>();
+            services.AddSingleton<GetAllRestaurants>();
             services.AddSingleton<GetCustomerOrders>();
+            services.AddSingleton<LoginUser>();
+            services.AddSingleton<RegisterAdmin>();
+            services.AddSingleton<RegisterCustomer>();
+            services.AddSingleton<RestaurantInteractor>();
 
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<IAdminRepository, AdminRepository>();
