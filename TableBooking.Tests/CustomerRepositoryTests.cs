@@ -32,7 +32,7 @@ namespace Core.Tests
         }
 
         [Fact]
-        public void Add_ShouldFailAddingUsersWithSameUsername()
+        public void Add_ShouldThrowIfAddingUsersWithSameUsername()
         {
             var customer1 = new CustomerEntity { Username = "customer" };
             var customer2 = new CustomerEntity { Username = "customer" };

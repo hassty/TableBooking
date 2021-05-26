@@ -10,7 +10,7 @@ namespace Core.Entities
         public bool ConfirmedByAdmin { get; private set; }
         public CustomerEntity Customer { get; set; }
         public int Id { get; set; }
-        public IList<MenuItemEntity> MenuItems { get; set; }
+        public IList<MenuItemEntity> MenuItems { get; private set; }
         public DateTime OrderDate { get; private set; }
         public DateTime ReservationDate { get; set; }
         public TimeSpan ReservationDuration { get; set; }
@@ -45,6 +45,11 @@ namespace Core.Entities
         public override int GetHashCode()
         {
             return HashCode.Combine(Customer, Id, OrderDate, Table);
+        }
+
+        public TimeSpan GetReservationTimeEnding()
+        {
+            return ReservationDate.Add(ReservationDuration).TimeOfDay;
         }
     }
 }

@@ -35,6 +35,7 @@ namespace DataAccess.Entities
             var admin = modelBuilder.Entity<AdminEntity>();
             var customer = modelBuilder.Entity<CustomerEntity>();
             var restaurant = modelBuilder.Entity<RestaurantEntity>();
+            var restaurantOrderOptions = modelBuilder.Entity<RestaurantOrderOptionsEntity>();
             var table = modelBuilder.Entity<TableEntity>();
 
             user.HasAlternateKey(u => u.Username);
@@ -43,7 +44,7 @@ namespace DataAccess.Entities
             admin.Ignore(a => a.UnconfirmedOrders);
 
             restaurant.HasAlternateKey(r => new { r.Name, r.Address });
-            restaurant.Property(r => r.OffDays).HasConversion(dayOfWeekListConverter);
+            restaurantOrderOptions.Property(r => r.OffDays).HasConversion(dayOfWeekListConverter);
 
             base.OnModelCreating(modelBuilder);
         }
