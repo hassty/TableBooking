@@ -12,6 +12,7 @@
     <UserControl.Resources>
         <Style TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Margin" Value="10,0" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Cursor" Value="Hand" />
@@ -46,7 +47,7 @@
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Foreground="White" Text="Navigation" />
+        <TextBlock Foreground="White" Text="Table booking" />
         <Button
             Grid.Column="1"
             Command="{Binding NavigateHomeCommand}"

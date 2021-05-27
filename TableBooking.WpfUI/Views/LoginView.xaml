@@ -36,12 +36,18 @@
 
         <Button
             Grid.Row="2"
+            Margin="0,10,0,0"
             Command="{Binding LoginCommand}"
             Content="Login"
             IsDefault="True" />
-        <StackPanel Grid.Row="3">
+        <StackPanel Grid.Row="3" Margin="0,10,0,0">
             <TextBlock Text="Don't have an account yet?" />
-            <Button Command="{Binding GoToRegisterCommand}" Content="Create new account" />
+            <Button
+                Background="Transparent"
+                BorderBrush="Transparent"
+                Command="{Binding GoToRegisterCommand}"
+                Content="Create new account"
+                Foreground="Blue" />
         </StackPanel>
     </Grid>
 </UserControl>

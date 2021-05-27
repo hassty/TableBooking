@@ -9,46 +9,59 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid>
+    <Grid Margin="50,20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-
-        <StackPanel Grid.RowSpan="5" Grid.Column="0">
-            <TextBlock Text="{Binding Name}" />
-            <TextBlock Text="{Binding City}" />
-            <TextBlock Text="{Binding Address}" />
+        <DataGrid
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            ItemsSource="{Binding MenuItems}" />
+        <StackPanel Grid.Column="1" Width="250">
+            <TextBlock HorizontalAlignment="Center" Text="Restaurant1" />
+            <TextBlock HorizontalAlignment="Center" Text="Address1" />
+            <StackPanel>
+                <Label HorizontalAlignment="Center" Content="Reservation date" />
+                <Calendar />
+            </StackPanel>
+            <Grid Margin="0,30">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Content="Reservation time" />
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Width="100" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Content="Party size" />
+                <ComboBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Width="100"
+                    ItemsSource="{Binding Capacities}" />
+            </Grid>
         </StackPanel>
-        <Calendar
-            Grid.Row="0"
-            Grid.Column="1"
-            IsTodayHighlighted="False"
-            SelectedDate="{Binding ReservationDate}" />
-        <ComboBox
+        <Button
             Grid.Row="1"
             Grid.Column="1"
-            ItemsSource="{Binding Capacities}"
-            SelectedIndex="0" />
-        <TextBox
-            Grid.Row="2"
-            Grid.Column="1"
-            Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBox
-            Grid.Row="3"
-            Grid.Column="1"
-            Text="{Binding Minutes, UpdateSourceTrigger=PropertyChanged}" />
-        <Button
-            Grid.Row="4"
-            Grid.Column="1"
-            Command="{Binding AddOrderCommand}"
-            Content="Make reservation" />
+            Width="100"
+            HorizontalAlignment="Center"
+            Content="Submit order" />
     </Grid>
 </UserControl>

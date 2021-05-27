@@ -45,10 +45,10 @@ namespace TableBooking
             services.AddSingleton<IOrderRepository, OrderRepository>();
             services.AddSingleton<IPasswordProtectionStrategy, Sha256HashPasswordStrategy>();
 
-            //services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf").EnableSensitiveDataLogging());
-            services.AddDbContext<DbContext, TableBookingContext>(o => o.UseSqlServer(
-                ConfigurationManager.ConnectionStrings["SqlServerDB"].ConnectionString
-            ));
+            services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf").EnableSensitiveDataLogging());
+            //services.AddDbContext<DbContext, TableBookingContext>(o => o.UseSqlServer(
+            //    ConfigurationManager.ConnectionStrings["SqlServerDB"].ConnectionString
+            //));
 
             services.AddSingleton(s => new MapperConfiguration(cfg =>
               {
@@ -62,7 +62,8 @@ namespace TableBooking
                 return config.CreateMapper();
             });
 
-            services.AddSingleton(s => CreateHomeNavigationService(s));
+            //services.AddSingleton(s => CreateHomeNavigationService(s));
+            services.AddSingleton(s => CreateAddOrderNavigatonService(s));
 
             services.AddTransient(s => new HomeViewModel(
                 s.GetRequiredService<CurrentRestaurantStore>(),
