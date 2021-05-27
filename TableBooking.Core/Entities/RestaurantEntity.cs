@@ -8,11 +8,11 @@ namespace Core.Entities
     {
         public string Address { get; set; }
         public string City { get; set; }
-        public RestaurantOrderOptionsEntity OrderOptions { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public TimeSpan OpenedFrom { get; set; }
         public TimeSpan OpenedTill { get; set; }
+        public RestaurantOrderOptionsEntity OrderOptions { get; set; }
         public IList<TableEntity> Tables { get; private set; }
 
         public RestaurantEntity() : this(new RestaurantOrderOptionsEntity())
@@ -45,21 +45,6 @@ namespace Core.Entities
             return HashCode.Combine(Address, Id, City, Name);
         }
 
-        public IEnumerable<int> GetTablesCapacities()
-        {
-            return Tables.Select(t => t.Capacity).Distinct().OrderBy(c => c);
-        }
-
-        public IList<DayOfWeek> GetOffDays()
-        {
-            return OrderOptions.OffDays;
-        }
-
-        public bool IsOffDay(DateTime date)
-        {
-            return OrderOptions.OffDays.Contains(date.DayOfWeek);
-        }
-
         public int GetLatestOrderDate()
         {
             return OrderOptions.LatestOrderDate;
@@ -70,9 +55,24 @@ namespace Core.Entities
             return OrderOptions.LongestReservationDuration;
         }
 
+        public IList<DateTime> GetOffDates()
+        {
+            return Enumerable.Range(0, OrderOptions.LatestOrderDate + 1).Select(d => DateTime.Now.AddDays(d)).ToList();
+        }
+
+        public IList<DayOfWeek> GetOffDays()
+        {
+            return OrderOptions.OffDays;
+        }
+
         public TimeSpan GetShortestReservationDuration()
         {
             return OrderOptions.ShortestReservationDuration;
+        }
+
+        public IEnumerable<int> GetTablesCapacities()
+        {
+            return Tables.Select(t => t.Capacity).Distinct().OrderBy(c => c);
         }
 
         public bool IsAllDayOpened()
@@ -80,5 +80,9 @@ namespace Core.Entities
             return OpenedFrom == OpenedTill;
         }
 
+        public bool IsOffDay(DateTime date)
+        {
+            return OrderOptions.OffDays.Contains(date.DayOfWeek);
+        }
     }
 }

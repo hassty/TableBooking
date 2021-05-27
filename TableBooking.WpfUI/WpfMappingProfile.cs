@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Entities.Users;
+using System;
 using WpfUI.Models;
 
 namespace WpfUI
@@ -10,6 +11,8 @@ namespace WpfUI
         public WpfMappingProfile()
         {
             CreateMap<RestaurantEntity, RestaurantModel>()
+                .ForMember(dest => dest.LatestOrderDate, opt => opt.MapFrom(r => DateTime.Now.AddDays(r.GetLatestOrderDate())))
+                .ForMember(dest => dest.OffDates, opt => opt.MapFrom(r => r.GetOffDates()))
                 .ReverseMap();
             CreateMap<UserEntity, UserModel>()
                 .ForMember(dest => dest.Password, opt => opt.Ignore());

@@ -31,12 +31,20 @@
             Grid.Row="0"
             Grid.Column="1"
             IsTodayHighlighted="False"
-            Loaded="Calendar_Loaded" />
+            SelectedDate="{Binding ReservationDate}" />
         <ComboBox
             Grid.Row="1"
             Grid.Column="1"
             ItemsSource="{Binding Capacities}"
             SelectedIndex="0" />
+        <TextBox
+            Grid.Row="2"
+            Grid.Column="1"
+            Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox
+            Grid.Row="3"
+            Grid.Column="1"
+            Text="{Binding Minutes, UpdateSourceTrigger=PropertyChanged}" />
         <Button
             Grid.Row="4"
             Grid.Column="1"

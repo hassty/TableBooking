@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Core.Entities
 {
@@ -9,8 +8,8 @@ namespace Core.Entities
         public int Id { get; set; }
         public int LatestOrderDate { get; set; }
         public TimeSpan LongestReservationDuration { get; set; }
-        public TimeSpan ShortestReservationDuration { get; set; }
         public IList<DayOfWeek> OffDays { get; private set; }
+        public TimeSpan ShortestReservationDuration { get; set; }
 
         public RestaurantOrderOptionsEntity() : this(new List<DayOfWeek>())
         {

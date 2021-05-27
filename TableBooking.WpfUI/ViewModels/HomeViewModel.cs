@@ -12,14 +12,14 @@ namespace WpfUI.ViewModels
     public class HomeViewModel : ViewModelBase
     {
         private readonly INavigationService _addOrderNavigationService;
-        private readonly CurrentUserStore _userStore;
-        private readonly GetAllRestaurants _getAllRestaurants;
+        private readonly GetRestaurants _getAllRestaurants;
         private readonly IMapper _mapper;
         private readonly CurrentRestaurantStore _restaurantStore;
+        private readonly CurrentUserStore _userStore;
         private RestaurantModel _selectedRestaurant;
         public ICommand AddOrderCommand { get; }
-        public List<RestaurantModel> Restaurants { get; set; }
         public bool IsLoggedIn => _userStore.IsLoggedIn;
+        public List<RestaurantModel> Restaurants { get; set; }
 
         public RestaurantModel SelectedRestaurant
 
@@ -39,7 +39,7 @@ namespace WpfUI.ViewModels
         public HomeViewModel(
             CurrentRestaurantStore restaurantStore,
             CurrentUserStore userStore,
-            GetAllRestaurants getAllRestaurants,
+            GetRestaurants getAllRestaurants,
             INavigationService addOrderNavigationService,
             IMapper mapper
         )
@@ -67,7 +67,7 @@ namespace WpfUI.ViewModels
 
         public void LoadAllRestaurants()
         {
-            Restaurants = _mapper.Map<List<RestaurantModel>>(_getAllRestaurants.GetRestaurants());
+            Restaurants = _mapper.Map<List<RestaurantModel>>(_getAllRestaurants.GetAllRestaurants());
         }
     }
 }

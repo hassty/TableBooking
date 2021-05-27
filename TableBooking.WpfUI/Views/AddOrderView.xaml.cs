@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using WpfUI.Stores;
 
 namespace WpfUI.Views
 {
@@ -11,14 +12,6 @@ namespace WpfUI.Views
         public AddOrderView()
         {
             InitializeComponent();
-        }
-
-        private void Calendar_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (sender is Calendar calendar)
-            {
-                calendar.BlackoutDates.AddDatesInPast();
-            }
         }
     }
 }

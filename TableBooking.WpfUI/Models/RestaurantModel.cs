@@ -1,17 +1,15 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
 namespace WpfUI.Models
 {
     public class RestaurantModel : ModelBase
     {
         private string _address;
-
         private string _city;
-
+        private DateTime _latestOrderDate;
         private string _name;
-
         private TimeSpan _openedFrom;
-
         private TimeSpan _openedTill;
 
         public string Address
@@ -40,6 +38,19 @@ namespace WpfUI.Models
             }
         }
 
+        public DateTime LatestOrderDate
+        {
+            get => _latestOrderDate;
+            set
+            {
+                if (_latestOrderDate != value)
+                {
+                    _latestOrderDate = value;
+                    OnPropertyChanged(nameof(LatestOrderDate));
+                }
+            }
+        }
+
         public string Name
         {
             get => _name;
@@ -52,6 +63,8 @@ namespace WpfUI.Models
                 }
             }
         }
+
+        public ObservableCollection<DateTime> OffDates { get; set; }
 
         public TimeSpan OpenedFrom
         {
@@ -77,6 +90,11 @@ namespace WpfUI.Models
                     OnPropertyChanged(nameof(OpenedTill));
                 }
             }
+        }
+
+        public RestaurantModel()
+        {
+            OffDates = new ObservableCollection<DateTime>();
         }
     }
 }

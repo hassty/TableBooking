@@ -9,14 +9,14 @@ namespace DataAccess.Database
     {
         protected DbContext _context;
 
-        private bool ContainsEntity(Entity entity)
-        {
-            return _context.Set<Entity>().Contains(entity);
-        }
-
         public GenericRepository(DbContext context)
         {
             _context = context;
+        }
+
+        private bool ContainsEntity(Entity entity)
+        {
+            return _context.Set<Entity>().Contains(entity);
         }
 
         public void Add(Entity entity)
@@ -70,7 +70,5 @@ namespace DataAccess.Database
         {
             _context.Set<Entity>().Update(entity);
         }
-
-
     }
 }

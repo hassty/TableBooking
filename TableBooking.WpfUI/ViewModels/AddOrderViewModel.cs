@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Core.Entities;
-using Core.Entities.Users;
 using Core.UseCases;
 using System;
 using System.Collections.Generic;
@@ -15,25 +14,51 @@ namespace WpfUI.ViewModels
 {
     public class AddOrderViewModel : ViewModelBase
     {
-        private readonly IMapper _mapper;
-        private readonly CurrentUserStore _userStore;
-        private readonly RestaurantInteractor _restaurantInteractor;
-        private readonly AddOrder _addOrder;
         private readonly INavigationService _accountNavigationService;
-
+        private readonly AddOrder _addOrder;
+        private readonly IMapper _mapper;
+        private readonly RestaurantInteractor _restaurantInteractor;
+        private readonly CurrentUserStore _userStore;
+        private int _hours;
+        private int _minutes;
         private OrderModel _order;
-        public TimeSpan ReservationDuration
+        private RestaurantModel _currentRestaurant { get; set; }
+
+        public ICommand AddOrderCommand { get; }
+
+        public string Address => _currentRestaurant.Address;
+
+        public List<int> Capacities { get; private set; }
+
+        public string City => _currentRestaurant.City;
+
+        public int Hours
         {
-            get => _order.ReservationDuration;
+            get => _hours;
             set
             {
-                if (_order.ReservationDuration != value)
+                if (_hours != value)
                 {
-                    _order.ReservationDuration = value;
-                    OnPropertyChanged(nameof(ReservationDuration));
+                    _hours = value;
+                    OnPropertyChanged(nameof(Hours));
                 }
             }
         }
+
+        public int Minutes
+        {
+            get => _minutes;
+            set
+            {
+                if (_minutes != value)
+                {
+                    _minutes = value;
+                    OnPropertyChanged(nameof(Minutes));
+                }
+            }
+        }
+
+        public string Name => _currentRestaurant.Name;
 
         public DateTime ReservationDate
         {
@@ -48,13 +73,18 @@ namespace WpfUI.ViewModels
             }
         }
 
-        private RestaurantModel _currentRestaurant { get; set; }
-        public string Address => _currentRestaurant.Address;
-
-        public List<int> Capacities { get; private set; }
-        public string City => _currentRestaurant.City;
-        public string Name => _currentRestaurant.Name;
-        public ICommand AddOrderCommand { get; }
+        public TimeSpan ReservationDuration
+        {
+            get => _order.ReservationDuration;
+            set
+            {
+                if (_order.ReservationDuration != value)
+                {
+                    _order.ReservationDuration = value;
+                    OnPropertyChanged(nameof(ReservationDuration));
+                }
+            }
+        }
 
         public AddOrderViewModel(
             CurrentRestaurantStore restaurantStore,
@@ -78,24 +108,19 @@ namespace WpfUI.ViewModels
             AddOrderCommand = new DelegateCommand(AddOrder, CanAddOrder);
         }
 
-        private bool CanAddOrder(object parameter)
-        {
-            return true;
-        }
-
         private void AddOrder(object parameter)
         {
             try
             {
                 if (_userStore.CurrentUser is CustomerModel customer)
                 {
-                    var orderEntity = new OrderEntity(_order.ReservationDate, _order.ReservationDuration);
+                    var orderEntity = new OrderEntity(
+                        _mapper.Map<RestaurantEntity>(_currentRestaurant),
+                        _order.ReservationDate,
+                        new TimeSpan(_hours, _minutes, 0)
+                    );
 
-                    _addOrder.Add(
-                        orderEntity,
-                        _userStore.CurrentUser.Username,
-                        _currentRestaurant.Name,
-                        _currentRestaurant.Address);
+                    _addOrder.Add(orderEntity, _userStore.CurrentUser.Username);
                     _accountNavigationService.Navigate();
                 }
             }
@@ -103,6 +128,11 @@ namespace WpfUI.ViewModels
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private bool CanAddOrder(object parameter)
+        {
+            return true;
         }
 
         public void GetCapacities()

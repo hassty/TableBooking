@@ -5,18 +5,17 @@ using Core.Exceptions;
 using Core.UseCases;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Core.Tests
 {
     public class AddOrderTests
     {
-        private readonly AddOrder _addOrder;
-        private readonly IOrderRepository _orderRepository;
-        private readonly ICustomerRepository _customerRepository;
-        private readonly IRestaurantRepository _restaurantRepository;
         private const string _username = "customer";
+        private readonly AddOrder _addOrder;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IRestaurantRepository _restaurantRepository;
 
         public AddOrderTests()
         {
@@ -33,7 +32,7 @@ namespace Core.Tests
         }
 
         [Fact]
-        public void Add_ShouldAddNewOrderToCustomerAndRestaurant()
+        public void Add_ShouldAddNewOrderToCustomer()
         {
             var customer = _customerRepository.GetUserWithUsername(_username);
             var restaurant = new RestaurantEntity()
@@ -43,30 +42,11 @@ namespace Core.Tests
             };
             _restaurantRepository.Add(restaurant);
             _restaurantRepository.SaveChanges();
-            var order = new OrderEntity(DateTime.Now.AddDays(1), new TimeSpan(2, 0, 0));
+            var order = new OrderEntity(restaurant, DateTime.Now.AddDays(1), new TimeSpan(2, 0, 0));
 
-            _addOrder.Add(order, customer.Username, restaurant.Name, restaurant.Address);
+            _addOrder.Add(order, customer.Username);
 
             Assert.Contains(order, _orderRepository.GetAllOrdersOfCustomer(customer.Username));
-        }
-
-        [Fact]
-        public void Add_ShouldThrowIfAddingOrderForPastDate()
-        {
-            var customer = _customerRepository.GetUserWithUsername(_username);
-            var restaurant = new RestaurantEntity()
-            {
-                Name = "past makdak",
-                Address = "addr"
-            };
-            _restaurantRepository.Add(restaurant);
-            _restaurantRepository.SaveChanges();
-            var order = new OrderEntity(DateTime.Now.AddDays(-1), new TimeSpan(2, 0, 0));
-
-            Assert.Throws<OrderDateException>(() =>
-            {
-                _addOrder.Add(order, customer.Username, restaurant.Name, restaurant.Address);
-            });
         }
 
         [Fact]
@@ -86,62 +66,30 @@ namespace Core.Tests
             };
             _restaurantRepository.Add(restaurant);
             _restaurantRepository.SaveChanges();
-            var order = new OrderEntity(DateTime.Now.AddDays(2), new TimeSpan(2, 0, 0));
+            var order = new OrderEntity(restaurant, DateTime.Now.AddDays(2), new TimeSpan(2, 0, 0));
 
             Assert.Throws<OrderDateException>(() =>
             {
-                _addOrder.Add(order, customer.Username, restaurant.Name, restaurant.Address);
+                _addOrder.Add(order, customer.Username);
             });
         }
 
         [Fact]
-        public void Add_ShouldThrowIfAddingOrderTooFarAwayInTheFuture()
+        public void Add_ShouldThrowIfAddingOrderForPastDate()
         {
             var customer = _customerRepository.GetUserWithUsername(_username);
             var restaurant = new RestaurantEntity()
             {
-                Name = "future makdak",
-                Address = "addr",
+                Name = "past makdak",
+                Address = "addr"
             };
-
             _restaurantRepository.Add(restaurant);
             _restaurantRepository.SaveChanges();
-            var order = new OrderEntity(
-                DateTime.Now.AddDays(restaurant.GetLatestOrderDate()),
-                new TimeSpan(2, 0, 0)
-            );
-
+            var order = new OrderEntity(restaurant, DateTime.Now.AddDays(-1), new TimeSpan(2, 0, 0));
 
             Assert.Throws<OrderDateException>(() =>
             {
-                _addOrder.Add(order, customer.Username, restaurant.Name, restaurant.Address);
-            });
-        }
-
-        [Fact]
-        public void Add_ShouldThrowIfAddingOrderForTooShortReservationTime()
-        {
-            var customer = _customerRepository.GetUserWithUsername(_username);
-            var restaurant = new RestaurantEntity(
-                new RestaurantOrderOptionsEntity()
-                {
-                    ShortestReservationDuration = new TimeSpan(0, 30, 0)
-                })
-            {
-                Name = "short makdak",
-                Address = "addr",
-            };
-            _restaurantRepository.Add(restaurant);
-            _restaurantRepository.SaveChanges();
-            var order = new OrderEntity(
-                DateTime.Now.AddDays(1),
-                new TimeSpan(0, 29, 0)
-            );
-
-
-            Assert.Throws<OrderTimeException>(() =>
-            {
-                _addOrder.Add(order, customer.Username, restaurant.Name, restaurant.Address);
+                _addOrder.Add(order, customer.Username);
             });
         }
 
@@ -161,14 +109,41 @@ namespace Core.Tests
             _restaurantRepository.Add(restaurant);
             _restaurantRepository.SaveChanges();
             var order = new OrderEntity(
+                restaurant,
                 DateTime.Now.AddDays(1),
                 new TimeSpan(1, 1, 0)
             );
 
+            Assert.Throws<OrderTimeException>(() =>
+            {
+                _addOrder.Add(order, customer.Username);
+            });
+        }
+
+        [Fact]
+        public void Add_ShouldThrowIfAddingOrderForTooShortReservationTime()
+        {
+            var customer = _customerRepository.GetUserWithUsername(_username);
+            var restaurant = new RestaurantEntity(
+                new RestaurantOrderOptionsEntity()
+                {
+                    ShortestReservationDuration = new TimeSpan(0, 30, 0)
+                })
+            {
+                Name = "short makdak",
+                Address = "addr",
+            };
+            _restaurantRepository.Add(restaurant);
+            _restaurantRepository.SaveChanges();
+            var order = new OrderEntity(
+                restaurant,
+                DateTime.Now.AddDays(1),
+                new TimeSpan(0, 29, 0)
+            );
 
             Assert.Throws<OrderTimeException>(() =>
             {
-                _addOrder.Add(order, customer.Username, restaurant.Name, restaurant.Address);
+                _addOrder.Add(order, customer.Username);
             });
         }
 
@@ -185,16 +160,39 @@ namespace Core.Tests
             _restaurantRepository.Add(restaurant);
             _restaurantRepository.SaveChanges();
             var order = new OrderEntity(
+                restaurant,
                 new DateTime(2021, 05, 26, 22, 0, 0),
                 new TimeSpan(0, 31, 0)
             );
 
-
             Assert.Throws<OrderTimeException>(() =>
             {
-                _addOrder.Add(order, customer.Username, restaurant.Name, restaurant.Address);
+                _addOrder.Add(order, customer.Username);
             });
         }
 
+        [Fact]
+        public void Add_ShouldThrowIfAddingOrderTooFarAwayInTheFuture()
+        {
+            var customer = _customerRepository.GetUserWithUsername(_username);
+            var restaurant = new RestaurantEntity()
+            {
+                Name = "future makdak",
+                Address = "addr",
+            };
+
+            _restaurantRepository.Add(restaurant);
+            _restaurantRepository.SaveChanges();
+            var order = new OrderEntity(
+                restaurant,
+                DateTime.Now.AddDays(restaurant.GetLatestOrderDate()),
+                new TimeSpan(2, 0, 0)
+            );
+
+            Assert.Throws<OrderDateException>(() =>
+            {
+                _addOrder.Add(order, customer.Username);
+            });
+        }
     }
 }
