@@ -4,9 +4,11 @@ using Core.UseCases;
 using DataAccess.Database;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Configuration;
+using System.IO;
 using System.Windows;
 using WpfUI;
 using WpfUI.Services;
@@ -20,11 +22,18 @@ namespace TableBooking
     /// </summary>
     public partial class App : Application
     {
+        private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
 
         public App()
         {
             IServiceCollection services = new ServiceCollection();
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            _configuration = builder.Build();
 
             services.AddSingleton<CurrentUserStore>();
             services.AddSingleton<CurrentRestaurantStore>();
@@ -47,13 +56,15 @@ namespace TableBooking
             services.AddSingleton<IOrderRepository, OrderRepository>();
             services.AddSingleton<IPasswordProtectionStrategy, Sha256HashPasswordStrategy>();
             services.AddSingleton<INotifier, EmailNotifier>(s => new EmailNotifier(
-                 "smtp-mail.outlook.com", "jrN4E9CR7qjnWvq", "tablebookingcourseproject@outlook.com"
-                ));
+                _configuration["Smtp:Username"],
+                _configuration["Smtp:Password"],
+                _configuration["Smtp:Host"]
+            ));
             //services.AddSingleton<INotifier, FakeNotifier>();
 
             //services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf").EnableSensitiveDataLogging());
             services.AddDbContext<DbContext, TableBookingContext>(o => o.UseSqlServer(
-                ConfigurationManager.ConnectionStrings["SqlServerDB"].ConnectionString
+                _configuration.GetConnectionString("SqlServerDB")
             ));
 
             services.AddSingleton(s => CreateHomeNavigationService(s));

@@ -14,7 +14,7 @@ namespace Core.UseCases
         private string _password;
         private string _sender;
 
-        public EmailNotifier(string host, string password, string sender)
+        public EmailNotifier(string sender, string password, string host)
         {
             _host = host;
             _password = password;
