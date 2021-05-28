@@ -5,12 +5,15 @@ using System.Text;
 using System.Windows.Input;
 using WpfUI.Commands;
 using WpfUI.Services;
+using WpfUI.Stores;
 
 namespace WpfUI.ViewModels
 {
     public class RestaurantDetailsViewModel : ViewModelBase
     {
         private readonly INavigationService _additionalOptionsNavigator;
+        private readonly INavigationService _addMenuItemsNavigator;
+        private readonly CurrentRestaurantStore _restaurantStore;
         private int _hoursFrom;
         private int _hoursTill;
         private int _minutesFrom;
@@ -115,12 +118,24 @@ namespace WpfUI.ViewModels
 
         #endregion Bindable Properties
 
-        public RestaurantDetailsViewModel(INavigationService additionalOptionsNavigator)
+        public RestaurantDetailsViewModel(
+            CurrentRestaurantStore restaurantStore,
+            INavigationService additionalOptionsNavigator,
+            INavigationService addMenuItemsNavigator
+        )
         {
+            _restaurantStore = restaurantStore;
             _additionalOptionsNavigator = additionalOptionsNavigator;
+            _addMenuItemsNavigator = addMenuItemsNavigator;
             _restaurant = new RestaurantEntity();
 
             AdditionalOptionsCommand = new DelegateCommand(NavigateToAdditionalOptions);
+            AddMenuItemsCommand = new DelegateCommand(AddMenuItem);
+        }
+
+        private void AddMenuItem(object obj)
+        {
+            _addMenuItemsNavigator.Navigate();
         }
 
         private void NavigateToAdditionalOptions(object obj)
