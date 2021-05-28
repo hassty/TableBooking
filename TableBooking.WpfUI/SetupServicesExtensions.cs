@@ -7,7 +7,10 @@ using DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using WpfUI.Stores;
 
 namespace WpfUI
@@ -37,6 +40,7 @@ namespace WpfUI
         {
             services.AddSingleton<AddOrder>();
             services.AddSingleton<AddRestaurant>();
+            services.AddSingleton<UpdateRestaurant>();
             services.AddSingleton<RemoveRestaurant>();
             services.AddSingleton<CancelOrder>();
             services.AddSingleton<ConfirmOrder>();

@@ -19,6 +19,7 @@ namespace WpfUI.ViewModels
         private readonly AddRestaurant _addRestaurant;
         private readonly INavigationService _goBackNavigator;
         private readonly CurrentRestaurantStore _restaurantStore;
+        private readonly UpdateRestaurant _updateRestaurant;
         private int _hoursFrom;
         private int _hoursTill;
         private int _minutesFrom;
@@ -128,6 +129,7 @@ namespace WpfUI.ViewModels
         public RestaurantDetailsViewModel(
             CurrentRestaurantStore restaurantStore,
             AddRestaurant addRestaurant,
+            UpdateRestaurant updateRestaurant,
             INavigationService goBackNavigator,
             INavigationService additionalOptionsNavigator,
             INavigationService addMenuItemsNavigator
@@ -135,33 +137,23 @@ namespace WpfUI.ViewModels
         {
             _restaurantStore = restaurantStore;
             _addRestaurant = addRestaurant;
+            _updateRestaurant = updateRestaurant;
             _goBackNavigator = goBackNavigator;
             _additionalOptionsNavigator = additionalOptionsNavigator;
             _addMenuItemsNavigator = addMenuItemsNavigator;
 
-            _restaurant = new RestaurantEntity();
+            _restaurant = (restaurantStore.CurrentRestaurant != null)
+                ? restaurantStore.CurrentRestaurant : new RestaurantEntity();
 
             AdditionalOptionsCommand = new DelegateCommand(NavigateToAdditionalOptions);
             AddMenuItemsCommand = new DelegateCommand(AddMenuItem);
             GoBackCommand = new DelegateCommand(_ => _goBackNavigator.Navigate());
-            SaveCommand = new DelegateCommand(AddRestaurant, CanAddRestaurant);
+            SaveCommand = new DelegateCommand(Save, CanAddRestaurant);
         }
 
         private void AddMenuItem(object obj)
         {
             _addMenuItemsNavigator.Navigate();
-        }
-
-        private void AddRestaurant(object obj)
-        {
-            try
-            {
-                _addRestaurant.Add(_restaurant);
-            }
-            catch (ItemAlreadyExistsException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
 
         private bool CanAddRestaurant(object arg)
@@ -174,6 +166,34 @@ namespace WpfUI.ViewModels
         private void NavigateToAdditionalOptions(object obj)
         {
             _additionalOptionsNavigator.Navigate();
+        }
+
+        private void Save(object obj)
+        {
+            if (_restaurantStore.CurrentRestaurant == null)
+            {
+                try
+                {
+                    _addRestaurant.Add(_restaurant);
+                    _goBackNavigator.Navigate();
+                }
+                catch (ItemAlreadyExistsException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            else
+            {
+                try
+                {
+                    _updateRestaurant.Update(_restaurant);
+                    _goBackNavigator.Navigate();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Can not change name and address");
+                }
+            }
         }
     }
 }

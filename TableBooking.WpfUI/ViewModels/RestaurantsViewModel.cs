@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using WpfUI.Commands;
 using WpfUI.Services;
+using WpfUI.Stores;
 
 namespace WpfUI.ViewModels
 {
@@ -14,6 +15,7 @@ namespace WpfUI.ViewModels
         private readonly INavigationService _addRestaurantNavigator;
         private readonly GetRestaurants _getRestaurants;
         private readonly RemoveRestaurant _removeRestaurant;
+        private readonly CurrentRestaurantStore _restaurantStore;
         private RestaurantEntity _selectedRestaurant;
 
         public ICommand AddCommand { get; }
@@ -37,28 +39,42 @@ namespace WpfUI.ViewModels
         }
 
         public RestaurantsViewModel(
+            CurrentRestaurantStore restaurantStore,
             GetRestaurants getRestaurants,
             RemoveRestaurant removeRestaurant,
             INavigationService goBackNavigator,
             INavigationService addRestaurantNavigator
         )
         {
+            _restaurantStore = restaurantStore;
             _getRestaurants = getRestaurants;
             _removeRestaurant = removeRestaurant;
             _addRestaurantNavigator = addRestaurantNavigator;
 
             GoBackCommand = new DelegateCommand(_ => goBackNavigator.Navigate());
-            AddCommand = new DelegateCommand(_ => _addRestaurantNavigator.Navigate());
 
+            AddCommand = new DelegateCommand(AddRestaurant);
             RemoveCommand = new DelegateCommand(RemoveRestaurant, CanChangeRestaurant);
-            EditCommand = new DelegateCommand(_ => { }, CanChangeRestaurant);
+            EditCommand = new DelegateCommand(EditRestaurant, CanChangeRestaurant);
 
             LoadRestaurants();
+        }
+
+        private void AddRestaurant(object obj)
+        {
+            _restaurantStore.CurrentRestaurant = null;
+            _addRestaurantNavigator.Navigate();
         }
 
         private bool CanChangeRestaurant(object obj)
         {
             return _selectedRestaurant != null && Restaurants.Count != 0;
+        }
+
+        private void EditRestaurant(object obj)
+        {
+            _restaurantStore.CurrentRestaurant = _selectedRestaurant;
+            _addRestaurantNavigator.Navigate();
         }
 
         private void LoadRestaurants()
