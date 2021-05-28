@@ -32,8 +32,10 @@ namespace TableBooking
 
             services.AddSingleton<AddOrder>();
             services.AddSingleton<CancelOrder>();
+            services.AddSingleton<ConfirmOrder>();
             services.AddSingleton<GetRestaurants>();
             services.AddSingleton<GetCustomerOrders>();
+            services.AddSingleton<GetAllUnconfirmedOrders>();
             services.AddSingleton<LoginUser>();
             services.AddSingleton<RegisterAdmin>();
             services.AddSingleton<RegisterCustomer>();
@@ -44,6 +46,10 @@ namespace TableBooking
             services.AddSingleton<IRestaurantRepository, RestaurantRepository>();
             services.AddSingleton<IOrderRepository, OrderRepository>();
             services.AddSingleton<IPasswordProtectionStrategy, Sha256HashPasswordStrategy>();
+            services.AddSingleton<INotifier, EmailNotifier>(s => new EmailNotifier(
+                 "smtp-mail.outlook.com", "jrN4E9CR7qjnWvq", "tablebookingcourseproject@outlook.com"
+                ));
+            //services.AddSingleton<INotifier, FakeNotifier>();
 
             //services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf").EnableSensitiveDataLogging());
             services.AddDbContext<DbContext, TableBookingContext>(o => o.UseSqlServer(
@@ -65,6 +71,7 @@ namespace TableBooking
             services.AddTransient(s => new LoginViewModel(
                 s.GetRequiredService<CurrentUserStore>(),
                 CreateAccountNavigationService(s),
+                CreateUnconfirmedOrdersNavigationService(s),
                 CreateRegisterNavigationService(s),
                 s.GetRequiredService<LoginUser>()));
             services.AddTransient(s => new RegisterViewModel(
@@ -78,6 +85,9 @@ namespace TableBooking
                 s.GetRequiredService<RestaurantInteractor>(),
                 s.GetRequiredService<AddOrder>(),
                 CreateAccountNavigationService(s)));
+            services.AddTransient(s => new UnconfirmedOrdersViewModel(
+                s.GetRequiredService<GetAllUnconfirmedOrders>(),
+                s.GetRequiredService<ConfirmOrder>()));
             services.AddTransient(CreateNavigationBarViewModel);
             services.AddSingleton<MainViewModel>();
 
@@ -133,6 +143,13 @@ namespace TableBooking
             return new NavigationService<RegisterViewModel>(
                 serviceProvider.GetRequiredService<NavigationStore>(),
                 () => serviceProvider.GetRequiredService<RegisterViewModel>());
+        }
+
+        private INavigationService CreateUnconfirmedOrdersNavigationService(IServiceProvider serviceProvider)
+        {
+            return new NavigationService<UnconfirmedOrdersViewModel>(
+                serviceProvider.GetRequiredService<NavigationStore>(),
+                () => serviceProvider.GetRequiredService<UnconfirmedOrdersViewModel>());
         }
 
         protected override void OnStartup(StartupEventArgs e)

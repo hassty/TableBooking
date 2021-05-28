@@ -1,4 +1,5 @@
-﻿using Core.Exceptions;
+﻿using Core.Entities.Users;
+using Core.Exceptions;
 using Core.UseCases;
 using System;
 using System.Windows;
@@ -12,7 +13,8 @@ namespace WpfUI.ViewModels
     public class LoginViewModel : ViewModelBase
     {
         private readonly CurrentUserStore _accountStore;
-        private readonly INavigationService _loginNavigationService;
+        private readonly INavigationService _adminNavigationService;
+        private readonly INavigationService _customerNavigationService;
         private readonly LoginUser _loginUser;
         private readonly INavigationService _registerNavigationService;
         private string _password;
@@ -48,13 +50,15 @@ namespace WpfUI.ViewModels
 
         public LoginViewModel(
             CurrentUserStore accountStore,
-            INavigationService loginNavigationService,
+            INavigationService customerNavigationService,
+            INavigationService adminNavigationService,
             INavigationService registerNavigationService,
             LoginUser loginUser
         )
         {
             _accountStore = accountStore;
-            _loginNavigationService = loginNavigationService;
+            _customerNavigationService = customerNavigationService;
+            _adminNavigationService = adminNavigationService;
             _registerNavigationService = registerNavigationService;
             _loginUser = loginUser;
 
@@ -78,7 +82,18 @@ namespace WpfUI.ViewModels
             {
                 var loggedInUser = _loginUser.Login(_username, _password);
                 _accountStore.CurrentUser = loggedInUser;
-                _loginNavigationService.Navigate();
+                if (loggedInUser is CustomerEntity)
+                {
+                    _customerNavigationService.Navigate();
+                }
+                else if (loggedInUser is AdminEntity)
+                {
+                    _adminNavigationService.Navigate();
+                }
+                else
+                {
+                    throw new InvalidCredentialsException("Unknown user");
+                }
             }
             catch (InvalidCredentialsException ex)
             {

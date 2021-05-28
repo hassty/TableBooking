@@ -6,6 +6,7 @@ namespace Core.Contracts.DataAccess
     public interface IOrderRepository : IRepository<OrderEntity>
     {
         IEnumerable<OrderEntity> GetAllOrdersOfCustomer(string username);
+
         IEnumerable<OrderEntity> GetAllUnconfirmedOrders();
     }
 }

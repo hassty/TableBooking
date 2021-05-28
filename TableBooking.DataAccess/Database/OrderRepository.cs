@@ -16,15 +16,18 @@ namespace DataAccess.Database
         {
         }
 
-
         public IEnumerable<OrderEntity> GetAllOrdersOfCustomer(string username)
         {
-            return _tableBookingContext.Orders.Where(o => o.Customer.Username.Equals(username)).AsEnumerable();
+            return _tableBookingContext.Orders.Where(o => o.Customer.Username.Equals(username));
         }
 
         public IEnumerable<OrderEntity> GetAllUnconfirmedOrders()
         {
-            return _tableBookingContext.Orders.Where(o => o.ConfirmedByAdmin == false).AsEnumerable();
+            return _tableBookingContext.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.Restaurant)
+                .Include(o => o.Table)
+                .Where(o => o.ConfirmedByAdmin == false);
         }
     }
 }

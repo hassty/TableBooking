@@ -17,9 +17,10 @@ namespace WpfUI.ViewModels
         private readonly CurrentUserStore _accountStore;
         private readonly CancelOrder _cancelOrder;
         private readonly GetCustomerOrders _getOrders;
-
         private OrderEntity _selectedOrder;
         public ICommand CancelSelectedOrderCommand { get; }
+        public ICommand ConfirmOrderCommand { get; }
+        public bool IsCustomer => _accountStore.IsCustomer;
         public ICommand NavigateHomeCommand { get; }
         public List<OrderEntity> Orders { get; set; }
 
@@ -48,6 +49,7 @@ namespace WpfUI.ViewModels
             _accountStore = accountStore;
             _getOrders = getOrders;
             _cancelOrder = cancelOrder;
+
             _accountStore.CurrentAccountChanged += OnCurrentAccountChanged;
 
             NavigateHomeCommand = new NavigateCommand(homeNavigationService);
@@ -65,7 +67,14 @@ namespace WpfUI.ViewModels
         {
             try
             {
-                _cancelOrder.Remove(SelectedOrder, Username);
+                if (_selectedOrder.ConfirmedByAdmin == true)
+                {
+                    MessageBox.Show("To cancel confirmed order you should contact restaurant's staff over phone or email");
+                }
+                else
+                {
+                    _cancelOrder.Remove(_selectedOrder, Username);
+                }
             }
             catch (EntityNotFoundException ex)
             {

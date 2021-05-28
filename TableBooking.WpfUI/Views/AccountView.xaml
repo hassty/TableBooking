@@ -36,7 +36,7 @@
             <Button Command="{Binding CancelSelectedOrderCommand}" Content="Cancel selected order" />
             <Button
                 Command="{Binding NavigateHomeCommand}"
-                Content="Add order"
+                Content="Make new order"
                 IsDefault="True" />
         </StackPanel>
     </Grid>

@@ -20,6 +20,8 @@ namespace WpfUI.Stores
             }
         }
 
+        public bool IsAdmin => CurrentUser is AdminEntity;
+        public bool IsCustomer => CurrentUser is CustomerEntity;
         public bool IsLoggedIn => CurrentUser != null;
 
         public event Action CurrentAccountChanged;

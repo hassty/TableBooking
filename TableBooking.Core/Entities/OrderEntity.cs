@@ -7,7 +7,7 @@ namespace Core.Entities
 {
     public class OrderEntity
     {
-        public bool ConfirmedByAdmin { get; private set; }
+        public bool ConfirmedByAdmin { get; set; }
         public CustomerEntity Customer { get; set; }
         public int Id { get; set; }
         public IList<MenuItemEntity> MenuItems { get; private set; }

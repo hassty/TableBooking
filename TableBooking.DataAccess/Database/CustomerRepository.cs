@@ -22,18 +22,16 @@ namespace DataAccess.Database
             return GetUserWithUsername(username) != null;
         }
 
+        public IEnumerable<OrderEntity> GetCustomerOrders(string username)
+        {
+            return _tableBookingContext.Orders
+                .Include(o => o.Customer)
+                .Where(o => o.Customer.Username == username);
+        }
+
         public CustomerEntity GetUserWithUsername(string username)
         {
             return _tableBookingContext.Customers.FirstOrDefault(c => c.Username == username);
-        }
-
-        public IEnumerable<OrderEntity> GetCustomerOrders(string username)
-        {
-            return _tableBookingContext
-                .Customers
-                .Include(c => c.Orders)
-                .FirstOrDefault(c => c.Username == username)
-                .Orders;
         }
     }
 }
