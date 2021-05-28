@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using WpfUI.ViewModels;
+using WpfUI.Views;
 
 namespace TableBooking
 {

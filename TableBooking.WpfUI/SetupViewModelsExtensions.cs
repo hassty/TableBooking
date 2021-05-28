@@ -42,6 +42,7 @@ namespace WpfUI
             where TViewModel : ViewModelBase
         {
             services.AddSingleton(s => CreateLayoutNavigationService<TViewModel>(s));
+            services.AddSingleton<DataTemplateManager>();
 
             services.AddSingleton<MainViewModel>();
             services.AddSingleton(s => new MainWindow()
@@ -92,6 +93,9 @@ namespace WpfUI
 
             services.AddTransient(s => new RestaurantsViewModel(
                 s.GetRequiredService<GetRestaurants>()
+                ));
+
+            services.AddTransient(s => new RestaurantDetailsViewModel(
                 ));
 
             services.AddTransient(CreateNavigationBarViewModel);

@@ -13,35 +13,13 @@
     Height="450"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <Grid>
-        <Grid.Resources>
-            <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
-                <views:HomeView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:AccountViewModel}">
-                <views:AccountView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
-                <views:LoginView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:RegisterViewModel}">
-                <views:RegisterView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:AddOrderViewModel}">
-                <views:AddOrderView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:UnconfirmedOrdersViewModel}">
-                <views:UnconfirmedOrdersView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:RestaurantsViewModel}">
-                <views:RestaurantsView />
-            </DataTemplate>
+    <Grid x:Name="Grid">
 
+        <Grid.Resources>
             <DataTemplate DataType="{x:Type viewmodels:LayoutViewModel}">
                 <components:Layout />
             </DataTemplate>
         </Grid.Resources>
-
         <ContentControl Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>
