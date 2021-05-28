@@ -1,7 +1,6 @@
 ﻿using Core.Contracts.DataAccess;
 using Core.Entities;
 using Core.Entities.Users;
-using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;

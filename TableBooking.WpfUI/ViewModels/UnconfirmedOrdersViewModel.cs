@@ -1,9 +1,7 @@
 ﻿using Core.Entities;
 using Core.Exceptions;
 using Core.UseCases;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using WpfUI.Commands;

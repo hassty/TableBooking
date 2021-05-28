@@ -1,6 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using WpfUI.Stores;
+﻿using System.Windows.Controls;
 
 namespace WpfUI.Views
 {

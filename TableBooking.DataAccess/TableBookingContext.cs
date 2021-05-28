@@ -6,14 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DataAccess.Entities
+namespace DataAccess
 {
     public class TableBookingContext : DbContext
     {
         public DbSet<AdminEntity> Admins { get; set; }
         public DbSet<CustomerEntity> Customers { get; set; }
         public DbSet<OrderEntity> Orders { get; set; }
-
         public DbSet<RestaurantEntity> Restaurants { get; set; }
 
         public TableBookingContext(DbContextOptions<TableBookingContext> options)
@@ -36,7 +35,6 @@ namespace DataAccess.Entities
             var customer = modelBuilder.Entity<CustomerEntity>();
             var restaurant = modelBuilder.Entity<RestaurantEntity>();
             var restaurantOrderOptions = modelBuilder.Entity<RestaurantOrderOptionsEntity>();
-            var table = modelBuilder.Entity<TableEntity>();
 
             user.HasAlternateKey(u => u.Username);
             user.Property(u => u.PasswordHash).HasMaxLength(44);

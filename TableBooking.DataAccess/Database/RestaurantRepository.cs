@@ -1,6 +1,5 @@
 ﻿using Core.Contracts.DataAccess;
 using Core.Entities;
-using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -18,8 +17,8 @@ namespace DataAccess.Database
         public RestaurantEntity GetRestaurantByNameAndAddress(string name, string address)
         {
             return _tableBookingContext.Restaurants
+                .Include(r => r.OrderOptions)
                 .Where(r => r.Name == name && r.Address == address)
-                .Include(r => r.Tables)
                 .FirstOrDefault();
         }
     }

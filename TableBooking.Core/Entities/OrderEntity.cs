@@ -1,5 +1,4 @@
-﻿using Core.Entities.Menu;
-using Core.Entities.Users;
+﻿using Core.Entities.Users;
 using System;
 using System.Collections.Generic;
 
@@ -12,17 +11,23 @@ namespace Core.Entities
         public int Id { get; set; }
         public IList<MenuItemEntity> MenuItems { get; private set; }
         public DateTime OrderDate { get; private set; }
+        public int PartySize { get; set; }
         public DateTime ReservationDate { get; set; }
         public TimeSpan ReservationDuration { get; set; }
         public RestaurantEntity Restaurant { get; set; }
         public string Status { get => ConfirmedByAdmin ? "Confirmed" : "Waiting"; }
-        public TableEntity Table { get; set; }
 
-        public OrderEntity(RestaurantEntity restaurant, DateTime reservationDate, TimeSpan reservationDuration)
+        public OrderEntity(
+            RestaurantEntity restaurant,
+            DateTime reservationDate,
+            TimeSpan reservationDuration,
+            int partySize = 1
+        )
         {
             ConfirmedByAdmin = false;
             MenuItems = new List<MenuItemEntity>();
             OrderDate = DateTime.Now;
+            PartySize = partySize;
 
             Restaurant = restaurant;
             ReservationDate = reservationDate;
@@ -33,24 +38,21 @@ namespace Core.Entities
         {
         }
 
-        public void Confirm(AdminEntity admin)
-        {
-            admin.ConfirmOrder(this);
-            ConfirmedByAdmin = true;
-        }
-
         public override bool Equals(object obj)
         {
             return obj is OrderEntity entity &&
                    EqualityComparer<CustomerEntity>.Default.Equals(Customer, entity.Customer) &&
                    Id == entity.Id &&
                    OrderDate == entity.OrderDate &&
-                   EqualityComparer<TableEntity>.Default.Equals(Table, entity.Table);
+                   PartySize == entity.PartySize &&
+                   ReservationDate == entity.ReservationDate &&
+                   ReservationDuration.Equals(entity.ReservationDuration) &&
+                   EqualityComparer<RestaurantEntity>.Default.Equals(Restaurant, entity.Restaurant);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Customer, Id, OrderDate, Table);
+            return HashCode.Combine(Customer, Id, OrderDate, PartySize, ReservationDate, ReservationDuration, Restaurant);
         }
 
         public TimeSpan GetReservationTimeEnding()

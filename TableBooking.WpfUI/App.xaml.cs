@@ -1,16 +1,14 @@
 ﻿using Core.Contracts;
 using Core.Contracts.DataAccess;
 using Core.UseCases;
+using DataAccess;
 using DataAccess.Database;
-using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Configuration;
 using System.IO;
 using System.Windows;
-using WpfUI;
 using WpfUI.Services;
 using WpfUI.Stores;
 using WpfUI.ViewModels;
@@ -55,19 +53,20 @@ namespace TableBooking
             services.AddSingleton<IRestaurantRepository, RestaurantRepository>();
             services.AddSingleton<IOrderRepository, OrderRepository>();
             services.AddSingleton<IPasswordProtectionStrategy, Sha256HashPasswordStrategy>();
-            services.AddSingleton<INotifier, EmailNotifier>(s => new EmailNotifier(
-                _configuration["Smtp:Username"],
-                _configuration["Smtp:Password"],
-                _configuration["Smtp:Host"]
-            ));
-            //services.AddSingleton<INotifier, FakeNotifier>();
+            //services.AddSingleton<INotifier, EmailNotifier>(s => new EmailNotifier(
+            //    _configuration["Smtp:Username"],
+            //    _configuration["Smtp:Password"],
+            //    _configuration["Smtp:Host"]
+            //));
+            services.AddSingleton<INotifier, FakeNotifier>();
 
             //services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf").EnableSensitiveDataLogging());
             services.AddDbContext<DbContext, TableBookingContext>(o => o.UseSqlServer(
                 _configuration.GetConnectionString("SqlServerDB")
             ));
 
-            services.AddSingleton(s => CreateHomeNavigationService(s));
+            //services.AddSingleton(s => CreateHomeNavigationService(s));
+            services.AddSingleton(s => CreateRestaurantsNavigationService(s));
 
             services.AddTransient(s => new HomeViewModel(
                 s.GetRequiredService<CurrentRestaurantStore>(),
@@ -99,6 +98,9 @@ namespace TableBooking
             services.AddTransient(s => new UnconfirmedOrdersViewModel(
                 s.GetRequiredService<GetAllUnconfirmedOrders>(),
                 s.GetRequiredService<ConfirmOrder>()));
+            services.AddTransient(s => new RestaurantsViewModel(
+                s.GetRequiredService<GetRestaurants>()
+                ));
             services.AddTransient(CreateNavigationBarViewModel);
             services.AddSingleton<MainViewModel>();
 
@@ -154,6 +156,13 @@ namespace TableBooking
             return new NavigationService<RegisterViewModel>(
                 serviceProvider.GetRequiredService<NavigationStore>(),
                 () => serviceProvider.GetRequiredService<RegisterViewModel>());
+        }
+
+        private INavigationService CreateRestaurantsNavigationService(IServiceProvider serviceProvider)
+        {
+            return new NavigationService<RestaurantsViewModel>(
+                serviceProvider.GetRequiredService<NavigationStore>(),
+                () => serviceProvider.GetRequiredService<RestaurantsViewModel>());
         }
 
         private INavigationService CreateUnconfirmedOrdersNavigationService(IServiceProvider serviceProvider)

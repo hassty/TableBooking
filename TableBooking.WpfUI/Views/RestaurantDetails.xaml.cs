@@ -3,11 +3,11 @@
 namespace WpfUI.Views
 {
     /// <summary>
-    /// Interaction logic for UnconfirmedOrdersView.xaml
+    /// Interaction logic for RestaurantDetails.xaml
     /// </summary>
-    public partial class UnconfirmedOrdersView : UserControl
+    public partial class RestaurantDetails : UserControl
     {
-        public UnconfirmedOrdersView()
+        public RestaurantDetails()
         {
             InitializeComponent();
         }

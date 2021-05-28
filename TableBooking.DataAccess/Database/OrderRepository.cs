@@ -1,6 +1,5 @@
 ﻿using Core.Contracts.DataAccess;
 using Core.Entities;
-using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +25,6 @@ namespace DataAccess.Database
             return _tableBookingContext.Orders
                 .Include(o => o.Customer)
                 .Include(o => o.Restaurant)
-                .Include(o => o.Table)
                 .Where(o => o.ConfirmedByAdmin == false);
         }
     }

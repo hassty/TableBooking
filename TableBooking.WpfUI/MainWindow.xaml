@@ -33,6 +33,9 @@
             <DataTemplate DataType="{x:Type viewmodels:UnconfirmedOrdersViewModel}">
                 <views:UnconfirmedOrdersView />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:RestaurantsViewModel}">
+                <views:RestaurantsView />
+            </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewmodels:LayoutViewModel}">
                 <components:Layout />

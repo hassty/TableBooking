@@ -1,18 +1,15 @@
 ﻿using Core.Contracts;
 using Core.Exceptions;
 using System;
-using System.Collections.Generic;
 using System.Net.Mail;
-using System.Net.NetworkInformation;
-using System.Text;
 
 namespace Core.UseCases
 {
     public class EmailNotifier : INotifier
     {
-        private string _host;
-        private string _password;
-        private string _sender;
+        private readonly string _host;
+        private readonly string _password;
+        private readonly string _sender;
 
         public EmailNotifier(string sender, string password, string host)
         {
@@ -35,9 +32,11 @@ namespace Core.UseCases
 
             try
             {
-                var mail = new MailMessage(_sender.Trim(), recepient.Trim());
-                mail.Subject = "Order confirmation";
-                mail.Body = message;
+                var mail = new MailMessage(_sender.Trim(), recepient.Trim())
+                {
+                    Subject = "Order confirmation",
+                    Body = message
+                };
                 smtpClient.Send(mail);
             }
             catch (Exception)

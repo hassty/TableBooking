@@ -1,5 +1,4 @@
 ﻿using Core.Entities;
-using Core.Entities.Menu;
 using Core.Entities.Users;
 using Core.UseCases;
 using System;
@@ -20,7 +19,7 @@ namespace WpfUI.ViewModels
         private readonly CurrentUserStore _userStore;
         private int _hours;
         private int _minutes;
-        private OrderEntity _order;
+        private readonly OrderEntity _order;
         private RestaurantEntity _currentRestaurant { get; set; }
         public ICommand AddOrderCommand { get; }
         public string Address => _currentRestaurant.Address;

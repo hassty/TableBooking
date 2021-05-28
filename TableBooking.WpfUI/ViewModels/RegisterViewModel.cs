@@ -1,5 +1,4 @@
-﻿using Core.Entities.Users;
-using Core.Exceptions;
+﻿using Core.Exceptions;
 using Core.UseCases;
 using System;
 using System.Windows;

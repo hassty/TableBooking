@@ -9,11 +9,11 @@ namespace Core.Entities
         public string Address { get; set; }
         public string City { get; set; }
         public int Id { get; set; }
+        public IList<MenuItemEntity> MenuItems { get; private set; }
         public string Name { get; set; }
         public TimeSpan OpenedFrom { get; set; }
         public TimeSpan OpenedTill { get; set; }
         public RestaurantOrderOptionsEntity OrderOptions { get; set; }
-        public IList<TableEntity> Tables { get; private set; }
 
         public RestaurantEntity() : this(new RestaurantOrderOptionsEntity())
         {
@@ -21,14 +21,9 @@ namespace Core.Entities
 
         public RestaurantEntity(RestaurantOrderOptionsEntity orderOptions)
         {
-            Tables = new List<TableEntity>();
+            MenuItems = new List<MenuItemEntity>();
             OrderOptions = orderOptions;
             OpenedTill = OpenedFrom = new TimeSpan(0, 0, 0);
-        }
-
-        public void AddTable(int capacity)
-        {
-            Tables.Add(new TableEntity() { Restaurant = this, Capacity = capacity });
         }
 
         public override bool Equals(object obj)
@@ -72,7 +67,7 @@ namespace Core.Entities
 
         public IEnumerable<int> GetTablesCapacities()
         {
-            return Tables.Select(t => t.Capacity).Distinct().OrderBy(c => c);
+            return Enumerable.Range(1, OrderOptions.MaxPartySize + 1);
         }
 
         public bool IsAllDayOpened()

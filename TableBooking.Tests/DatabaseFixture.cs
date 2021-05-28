@@ -1,6 +1,6 @@
 ﻿using Core.Contracts.DataAccess;
+using DataAccess;
 using DataAccess.Database;
-using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 
