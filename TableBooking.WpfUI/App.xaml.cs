@@ -22,23 +22,17 @@ namespace TableBooking
 
     public partial class App : Application
     {
-        private IConfiguration _configuration;
         private IServiceProvider _serviceProvider;
 
         private void ConfigureServices()
         {
             IServiceCollection services = new ServiceCollection();
 
-            _configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-
             services
                 .RegisterStores()
                 .RegisterUseCases()
                 .RegisterRepositories()
-                .SetupDatabase(_configuration)
+                .SetupDatabase()
                 .SetupStrategies()
                 .SetupViewModels()
                 .SetupMainViewModel<RestaurantDetailsViewModel>();

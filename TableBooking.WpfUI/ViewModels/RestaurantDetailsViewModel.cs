@@ -4,20 +4,18 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 using WpfUI.Commands;
+using WpfUI.Services;
 
 namespace WpfUI.ViewModels
 {
     public class RestaurantDetailsViewModel : ViewModelBase
     {
-        private string _address;
-        private string _city;
+        private readonly INavigationService _additionalOptionsNavigator;
         private int _hoursFrom;
         private int _hoursTill;
         private int _minutesFrom;
         private int _minutesTill;
-        private string _name;
         private RestaurantEntity _restaurant;
-
         public ICommand AdditionalOptionsCommand { get; }
         public ICommand AddMenuItemsCommand { get; }
         public ICommand SaveCommand { get; }
@@ -26,12 +24,12 @@ namespace WpfUI.ViewModels
 
         public string Address
         {
-            get => _address;
+            get => _restaurant.Address;
             set
             {
-                if (_address != value)
+                if (_restaurant.Address != value)
                 {
-                    _address = value;
+                    _restaurant.Address = value;
                     OnPropertyChanged(nameof(Address));
                 }
             }
@@ -39,12 +37,12 @@ namespace WpfUI.ViewModels
 
         public string City
         {
-            get => _city;
+            get => _restaurant.City;
             set
             {
-                if (_city != value)
+                if (_restaurant.City != value)
                 {
-                    _city = value;
+                    _restaurant.City = value;
                     OnPropertyChanged(nameof(City));
                 }
             }
@@ -104,12 +102,12 @@ namespace WpfUI.ViewModels
 
         public string Name
         {
-            get => _name;
+            get => _restaurant.Name;
             set
             {
-                if (_name != value)
+                if (_restaurant.Name != value)
                 {
-                    _name = value;
+                    _restaurant.Name = value;
                     OnPropertyChanged(nameof(Name));
                 }
             }
@@ -117,9 +115,17 @@ namespace WpfUI.ViewModels
 
         #endregion Bindable Properties
 
-        public RestaurantDetailsViewModel()
+        public RestaurantDetailsViewModel(INavigationService additionalOptionsNavigator)
         {
+            _additionalOptionsNavigator = additionalOptionsNavigator;
             _restaurant = new RestaurantEntity();
+
+            AdditionalOptionsCommand = new DelegateCommand(NavigateToAdditionalOptions);
+        }
+
+        private void NavigateToAdditionalOptions(object obj)
+        {
+            _additionalOptionsNavigator.Navigate();
         }
     }
 }

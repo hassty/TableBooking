@@ -96,6 +96,11 @@ namespace WpfUI
                 ));
 
             services.AddTransient(s => new RestaurantDetailsViewModel(
+                CreateNavigationService<RestaurantAdditionalOptionsViewModel>(s)
+                ));
+
+            services.AddTransient(s => new RestaurantAdditionalOptionsViewModel(
+                CreateNavigationService<RestaurantDetailsViewModel>(s)
                 ));
 
             services.AddTransient(CreateNavigationBarViewModel);
