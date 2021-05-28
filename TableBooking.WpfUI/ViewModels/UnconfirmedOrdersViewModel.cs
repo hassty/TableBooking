@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using WpfUI.Commands;
 using WpfUI.Services;
+using WpfUI.Stores;
 
 namespace WpfUI.ViewModels
 {
@@ -14,11 +15,14 @@ namespace WpfUI.ViewModels
     {
         private readonly ConfirmOrder _confirmOrder;
         private readonly GetAllUnconfirmedOrders _getAllUnconfirmedOrders;
+        private readonly INavigationService _homeNavigationService;
         private readonly INavigationService _restaurantNavigationService;
+        private readonly CurrentUserStore _userStore;
         private OrderEntity _selectedOrder;
 
         public ICommand ConfirmOrderCommand { get; }
         public ICommand GoToRestaurantsCommand { get; }
+        public ICommand LogoutCommand { get; }
 
         public OrderEntity SelectedOrder
         {
@@ -36,17 +40,22 @@ namespace WpfUI.ViewModels
         public List<OrderEntity> UnconfirmedOrders { get; set; }
 
         public UnconfirmedOrdersViewModel(
+            CurrentUserStore userStore,
             GetAllUnconfirmedOrders getAllUnconfirmedOrders,
             ConfirmOrder confirmOrder,
-            INavigationService restaurantNavigationService
+            INavigationService restaurantNavigationService,
+            INavigationService homeNavigationService
         )
         {
+            _userStore = userStore;
             _getAllUnconfirmedOrders = getAllUnconfirmedOrders;
             _confirmOrder = confirmOrder;
             _restaurantNavigationService = restaurantNavigationService;
+            _homeNavigationService = homeNavigationService;
 
             ConfirmOrderCommand = new DelegateCommand(Confirm, CanConfirm);
             GoToRestaurantsCommand = new DelegateCommand(_ => _restaurantNavigationService.Navigate());
+            LogoutCommand = new DelegateCommand(Logout);
 
             LoadUnconfirmedOrders();
         }
@@ -76,6 +85,12 @@ namespace WpfUI.ViewModels
         {
             UnconfirmedOrders = new List<OrderEntity>(_getAllUnconfirmedOrders.GetOrders());
             OnPropertyChanged(nameof(UnconfirmedOrders));
+        }
+
+        private void Logout(object obj)
+        {
+            _userStore.Logout();
+            _homeNavigationService.Navigate();
         }
     }
 }

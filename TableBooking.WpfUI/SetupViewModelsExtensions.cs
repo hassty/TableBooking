@@ -92,19 +92,23 @@ namespace WpfUI
                 ));
 
             services.AddTransient(s => new UnconfirmedOrdersViewModel(
+                s.GetRequiredService<CurrentUserStore>(),
                 s.GetRequiredService<GetAllUnconfirmedOrders>(),
                 s.GetRequiredService<ConfirmOrder>(),
-                CreateNavigationService<RestaurantDetailsViewModel>(s)
+                CreateNavigationService<RestaurantsViewModel>(s),
+                CreateLayoutNavigationService<HomeViewModel>(s)
                 ));
 
             services.AddTransient(s => new RestaurantsViewModel(
-                s.GetRequiredService<GetRestaurants>()
+                s.GetRequiredService<GetRestaurants>(),
+                CreateNavigationService<UnconfirmedOrdersViewModel>(s),
+                CreateNavigationService<RestaurantDetailsViewModel>(s)
                 ));
 
             services.AddTransient(s => new RestaurantDetailsViewModel(
                 s.GetRequiredService<CurrentRestaurantStore>(),
                 s.GetRequiredService<AddRestaurant>(),
-                CreateNavigationService<UnconfirmedOrdersViewModel>(s),
+                CreateNavigationService<RestaurantsViewModel>(s),
                 CreateNavigationService<RestaurantAdditionalOptionsViewModel>(s),
                 CreateNavigationService<AddMenuItemsViewModel>(s)
                 ));
