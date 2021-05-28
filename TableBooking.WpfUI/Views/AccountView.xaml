@@ -13,13 +13,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
         <DataGrid
             AutoGenerateColumns="False"
-            CanUserAddRows="False"
+            CanUserAddRows="True"
             CanUserDeleteRows="False"
             CanUserReorderColumns="False"
             IsReadOnly="True"

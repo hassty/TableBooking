@@ -135,17 +135,7 @@ namespace WpfUI.ViewModels
 
         public void GetCapacities()
         {
-            //Capacities = _restaurantInteractor.GetRestaurantTablesCapacities(_currentRestaurant.Name, _currentRestaurant.Address);
-            Capacities = new List<int> { 1, 2, 3, 4, 5 };
-            MenuItems = new List<MenuItemModel> {
-                new MenuItemModel() { Name = "menu item 1", Price = 1 },
-                new MenuItemModel() { Name = "menu item 2", Price = 4 },
-                new MenuItemModel() { Name = "menu item 3", Price = 8 },
-                new MenuItemModel() { Name = "menu item 4", Price = 8 },
-                new MenuItemModel() { Name = "menu item 5", Price = 2 },
-                new MenuItemModel() { Name = "menu item 6", Price = 2 },
-                new MenuItemModel() { Name = "menu item 7", Price = 8 },
-            };
+            Capacities = _restaurantInteractor.GetRestaurantTablesCapacities(_currentRestaurant.Name, _currentRestaurant.Address);
         }
     }
 }

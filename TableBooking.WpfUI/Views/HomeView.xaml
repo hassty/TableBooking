@@ -13,7 +13,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
@@ -21,7 +21,6 @@
             Grid.Row="0"
             AutoGenerateColumns="False"
             CanUserReorderColumns="False"
-            CanUserResizeColumns="False"
             CanUserResizeRows="False"
             IsReadOnly="True"
             ItemsSource="{Binding Restaurants}"

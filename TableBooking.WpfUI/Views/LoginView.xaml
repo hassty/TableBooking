@@ -20,7 +20,11 @@
             <ColumnDefinition Width="150" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Login" />
+        <TextBlock
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            FontWeight="Bold"
+            Text="Login" />
 
         <StackPanel Grid.Row="1" FocusManager.FocusedElement="{Binding ElementName=Username}">
             <StackPanel>

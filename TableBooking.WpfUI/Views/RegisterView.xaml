@@ -22,7 +22,11 @@
             <ColumnDefinition Width="150" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Register" />
+        <TextBlock
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            FontWeight="Bold"
+            Text="Register" />
 
         <StackPanel Grid.Row="1" FocusManager.FocusedElement="{Binding ElementName=Username}">
             <StackPanel>
