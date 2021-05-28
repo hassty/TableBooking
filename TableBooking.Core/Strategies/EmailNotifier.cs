@@ -3,7 +3,7 @@ using Core.Exceptions;
 using System;
 using System.Net.Mail;
 
-namespace Core.UseCases
+namespace Core.Strategies
 {
     public class EmailNotifier : INotifier
     {

@@ -1,5 +1,6 @@
 ﻿using Core.Contracts.DataAccess;
 using Core.Exceptions;
+using Core.Strategies;
 using Core.UseCases;
 using WpfUI.Dto;
 using Xunit;

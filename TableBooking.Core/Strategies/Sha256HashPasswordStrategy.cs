@@ -3,7 +3,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Core.UseCases
+namespace Core.Strategies
 {
     public class Sha256HashPasswordStrategy : IPasswordProtectionStrategy
     {
@@ -16,6 +16,5 @@ namespace Core.UseCases
 
             return Convert.ToBase64String(hashed);
         }
-
     }
 }

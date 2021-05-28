@@ -1,6 +1,6 @@
 ﻿using Core.Contracts;
 
-namespace Core.UseCases
+namespace Core.Strategies
 {
     public class FakeNotifier : INotifier
     {
