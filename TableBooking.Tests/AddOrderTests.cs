@@ -24,7 +24,7 @@ namespace Core.Tests
             _orderRepository = databaseFixture.OrderRepository;
             _customerRepository = databaseFixture.CustomerRepository;
             _restaurantRepository = databaseFixture.RestaurantRepository;
-            _addOrder = new AddOrder(_orderRepository, _customerRepository, _restaurantRepository);
+            _addOrder = new AddOrder(_orderRepository, _customerRepository);
 
             var customer = new CustomerEntity() { Username = _username };
             _customerRepository.Add(customer);

@@ -18,9 +18,9 @@ namespace Core.Entities.Users
             Orders.Add(order);
         }
 
-        public IEnumerable<OrderEntity> GetOrders()
+        public void CancelOrder(OrderEntity order)
         {
-            return Orders;
+            Orders.Remove(order);
         }
 
         public override bool Equals(object obj)
@@ -35,6 +35,11 @@ namespace Core.Entities.Users
         public override int GetHashCode()
         {
             return HashCode.Combine(PasswordHash, Salt, Username, Email, Orders);
+        }
+
+        public IEnumerable<OrderEntity> GetOrders()
+        {
+            return Orders;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Core.Contracts;
 using Core.Contracts.DataAccess;
 using Core.Contracts.Dto;
+using Core.Entities.Users;
 using Core.Exceptions;
 using System;
 
@@ -19,6 +20,7 @@ namespace Core.UseCases
             _customerRepository = customerRespository;
             _passwordProtectionStrategy = passwordProtectionStrategy;
         }
+
         public (int, string) HashAndSaltPassword(string password)
         {
             var rng = new Random();
@@ -31,7 +33,7 @@ namespace Core.UseCases
         }
 
         /// <exception cref="UserAlreadyExistsException"></exception>
-        public void Register(ICustomerDto customer)
+        public CustomerEntity Register(ICustomerDto customer)
         {
             if (_customerRepository.ContainsUserWithUsername(customer.Username))
             {
@@ -43,6 +45,7 @@ namespace Core.UseCases
 
             _customerRepository.Add(newCustomer);
             _customerRepository.SaveChanges();
+            return newCustomer;
         }
     }
 }

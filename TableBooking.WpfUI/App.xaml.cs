@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Core.Contracts;
+﻿using Core.Contracts;
 using Core.Contracts.DataAccess;
 using Core.UseCases;
 using DataAccess.Database;
@@ -32,6 +31,7 @@ namespace TableBooking
             services.AddSingleton<NavigationStore>();
 
             services.AddSingleton<AddOrder>();
+            services.AddSingleton<CancelOrder>();
             services.AddSingleton<GetRestaurants>();
             services.AddSingleton<GetCustomerOrders>();
             services.AddSingleton<LoginUser>();
@@ -50,36 +50,22 @@ namespace TableBooking
                 ConfigurationManager.ConnectionStrings["SqlServerDB"].ConnectionString
             ));
 
-            services.AddSingleton(s => new MapperConfiguration(cfg =>
-              {
-                  cfg.AddProfile<WpfMappingProfile>();
-              })
-            );
-            services.AddSingleton(s =>
-            {
-                var config = s.GetRequiredService<MapperConfiguration>();
-                config.AssertConfigurationIsValid();
-                return config.CreateMapper();
-            });
-
             services.AddSingleton(s => CreateHomeNavigationService(s));
 
             services.AddTransient(s => new HomeViewModel(
                 s.GetRequiredService<CurrentRestaurantStore>(),
                 s.GetRequiredService<CurrentUserStore>(),
                 s.GetRequiredService<GetRestaurants>(),
-                CreateAddOrderNavigatonService(s),
-                s.GetRequiredService<IMapper>()));
+                CreateAddOrderNavigatonService(s)));
             services.AddTransient(s => new AccountViewModel(
                 s.GetRequiredService<CurrentUserStore>(),
                 CreateHomeNavigationService(s),
                 s.GetRequiredService<GetCustomerOrders>(),
-                s.GetRequiredService<IMapper>()));
+                s.GetRequiredService<CancelOrder>()));
             services.AddTransient(s => new LoginViewModel(
                 s.GetRequiredService<CurrentUserStore>(),
                 CreateAccountNavigationService(s),
                 CreateRegisterNavigationService(s),
-                s.GetRequiredService<IMapper>(),
                 s.GetRequiredService<LoginUser>()));
             services.AddTransient(s => new RegisterViewModel(
                 s.GetRequiredService<CurrentUserStore>(),
@@ -91,9 +77,7 @@ namespace TableBooking
                 s.GetRequiredService<CurrentUserStore>(),
                 s.GetRequiredService<RestaurantInteractor>(),
                 s.GetRequiredService<AddOrder>(),
-                CreateAccountNavigationService(s),
-                s.GetRequiredService<IMapper>()
-                ));
+                CreateAccountNavigationService(s)));
             services.AddTransient(CreateNavigationBarViewModel);
             services.AddSingleton<MainViewModel>();
 

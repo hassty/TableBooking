@@ -1,12 +1,12 @@
-﻿using AutoMapper;
-using Core.Entities;
+﻿using Core.Entities;
+using Core.Entities.Menu;
+using Core.Entities.Users;
 using Core.UseCases;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using WpfUI.Commands;
-using WpfUI.Models;
 using WpfUI.Services;
 using WpfUI.Stores;
 
@@ -16,17 +16,15 @@ namespace WpfUI.ViewModels
     {
         private readonly INavigationService _accountNavigationService;
         private readonly AddOrder _addOrder;
-        private readonly IMapper _mapper;
         private readonly RestaurantInteractor _restaurantInteractor;
         private readonly CurrentUserStore _userStore;
         private int _hours;
         private int _minutes;
-        private OrderModel _order;
-        private RestaurantModel _currentRestaurant { get; set; }
+        private OrderEntity _order;
+        private RestaurantEntity _currentRestaurant { get; set; }
         public ICommand AddOrderCommand { get; }
         public string Address => _currentRestaurant.Address;
         public List<int> Capacities { get; private set; }
-        public string City => _currentRestaurant.City;
 
         public int Hours
         {
@@ -41,7 +39,7 @@ namespace WpfUI.ViewModels
             }
         }
 
-        public List<MenuItemModel> MenuItems { get; set; }
+        public List<MenuItemEntity> MenuItems { get; set; }
 
         public int Minutes
         {
@@ -71,26 +69,12 @@ namespace WpfUI.ViewModels
             }
         }
 
-        public TimeSpan ReservationDuration
-        {
-            get => _order.ReservationDuration;
-            set
-            {
-                if (_order.ReservationDuration != value)
-                {
-                    _order.ReservationDuration = value;
-                    OnPropertyChanged(nameof(ReservationDuration));
-                }
-            }
-        }
-
         public AddOrderViewModel(
             CurrentRestaurantStore restaurantStore,
             CurrentUserStore userStore,
             RestaurantInteractor restaurantInteractor,
             AddOrder addOrder,
-            INavigationService accountNavigationService,
-            IMapper mapper
+            INavigationService accountNavigationService
         )
         {
             _currentRestaurant = restaurantStore.CurrentRestaurant;
@@ -98,9 +82,8 @@ namespace WpfUI.ViewModels
             _restaurantInteractor = restaurantInteractor;
             _addOrder = addOrder;
             _accountNavigationService = accountNavigationService;
-            _mapper = mapper;
 
-            _order = new OrderModel();
+            _order = new OrderEntity();
             GetCapacities();
 
             AddOrderCommand = new DelegateCommand(AddOrder, CanAddOrder);
@@ -110,10 +93,10 @@ namespace WpfUI.ViewModels
         {
             try
             {
-                if (_userStore.CurrentUser is CustomerModel customer)
+                if (_userStore.CurrentUser is CustomerEntity customer)
                 {
                     var orderEntity = new OrderEntity(
-                        _mapper.Map<RestaurantEntity>(_currentRestaurant),
+                        _currentRestaurant,
                         _order.ReservationDate,
                         new TimeSpan(_hours, _minutes, 0)
                     );

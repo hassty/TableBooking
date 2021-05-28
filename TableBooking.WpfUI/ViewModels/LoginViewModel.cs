@@ -1,11 +1,9 @@
-﻿using AutoMapper;
-using Core.Exceptions;
+﻿using Core.Exceptions;
 using Core.UseCases;
 using System;
 using System.Windows;
 using System.Windows.Input;
 using WpfUI.Commands;
-using WpfUI.Models;
 using WpfUI.Services;
 using WpfUI.Stores;
 
@@ -16,7 +14,6 @@ namespace WpfUI.ViewModels
         private readonly CurrentUserStore _accountStore;
         private readonly INavigationService _loginNavigationService;
         private readonly LoginUser _loginUser;
-        private readonly IMapper _mapper;
         private readonly INavigationService _registerNavigationService;
         private string _password;
         private string _username;
@@ -53,14 +50,12 @@ namespace WpfUI.ViewModels
             CurrentUserStore accountStore,
             INavigationService loginNavigationService,
             INavigationService registerNavigationService,
-            IMapper mapper,
             LoginUser loginUser
         )
         {
             _accountStore = accountStore;
             _loginNavigationService = loginNavigationService;
             _registerNavigationService = registerNavigationService;
-            _mapper = mapper;
             _loginUser = loginUser;
 
             LoginCommand = new DelegateCommand(Login, CanLogin);
@@ -82,7 +77,7 @@ namespace WpfUI.ViewModels
             try
             {
                 var loggedInUser = _loginUser.Login(_username, _password);
-                _accountStore.CurrentUser = _mapper.Map<UserModel>(loggedInUser);
+                _accountStore.CurrentUser = loggedInUser;
                 _loginNavigationService.Navigate();
             }
             catch (InvalidCredentialsException ex)

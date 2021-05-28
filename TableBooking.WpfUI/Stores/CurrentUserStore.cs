@@ -1,13 +1,13 @@
-﻿using System;
-using WpfUI.Models;
+﻿using Core.Entities.Users;
+using System;
 
 namespace WpfUI.Stores
 {
     public class CurrentUserStore
     {
-        private UserModel _currentUser;
+        private UserEntity _currentUser;
 
-        public UserModel CurrentUser
+        public UserEntity CurrentUser
         {
             get => _currentUser;
             set

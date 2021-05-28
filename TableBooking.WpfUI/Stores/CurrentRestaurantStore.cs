@@ -1,13 +1,13 @@
-﻿using System;
-using WpfUI.Models;
+﻿using Core.Entities;
+using System;
 
 namespace WpfUI.Stores
 {
     public class CurrentRestaurantStore
     {
-        private RestaurantModel _currentRestaurant;
+        private RestaurantEntity _currentRestaurant;
 
-        public RestaurantModel CurrentRestaurant
+        public RestaurantEntity CurrentRestaurant
         {
             get => _currentRestaurant;
             set

@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+﻿using Core.Entities;
+using Core.Exceptions;
 using Core.UseCases;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using WpfUI.Commands;
-using WpfUI.Models;
 using WpfUI.Services;
 using WpfUI.Stores;
 
@@ -13,39 +15,76 @@ namespace WpfUI.ViewModels
     public class AccountViewModel : ViewModelBase
     {
         private readonly CurrentUserStore _accountStore;
+        private readonly CancelOrder _cancelOrder;
         private readonly GetCustomerOrders _getOrders;
-        private readonly IMapper _mapper;
 
+        private OrderEntity _selectedOrder;
+        public ICommand CancelSelectedOrderCommand { get; }
         public ICommand NavigateHomeCommand { get; }
-        public List<OrderModel> Orders { get; set; }
-        public string Password => _accountStore.CurrentUser?.Password;
+        public List<OrderEntity> Orders { get; set; }
+
+        public OrderEntity SelectedOrder
+        {
+            get => _selectedOrder;
+            set
+            {
+                if (_selectedOrder != value)
+                {
+                    _selectedOrder = value;
+                    OnPropertyChanged(nameof(SelectedOrder));
+                }
+            }
+        }
+
         public string Username => _accountStore.CurrentUser?.Username;
 
         public AccountViewModel(
             CurrentUserStore accountStore,
             INavigationService homeNavigationService,
             GetCustomerOrders getOrders,
-            IMapper mapper
+            CancelOrder cancelOrder
         )
         {
             _accountStore = accountStore;
             _getOrders = getOrders;
-            _mapper = mapper;
-            NavigateHomeCommand = new NavigateCommand(homeNavigationService);
+            _cancelOrder = cancelOrder;
             _accountStore.CurrentAccountChanged += OnCurrentAccountChanged;
 
-            Orders = new List<OrderModel>();
+            NavigateHomeCommand = new NavigateCommand(homeNavigationService);
+            CancelSelectedOrderCommand = new DelegateCommand(CancelOrder, CanCancelOrder);
+
             LoadAllOrders();
+        }
+
+        private bool CanCancelOrder(object parameter)
+        {
+            return _selectedOrder != null && Orders.Count != 0;
+        }
+
+        private void CancelOrder(object parameter)
+        {
+            try
+            {
+                _cancelOrder.Remove(SelectedOrder, Username);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                LoadAllOrders();
+            }
         }
 
         private void LoadAllOrders()
         {
-            Orders.AddRange(_mapper.Map<List<OrderModel>>(_getOrders.GetAllOrders(Username)));
+            Orders = new List<OrderEntity>(_getOrders.GetAllOrders(Username));
+            OnPropertyChanged(nameof(Orders));
         }
 
         private void OnCurrentAccountChanged()
         {
-            OnPropertyChanged(nameof(Password));
             OnPropertyChanged(nameof(Username));
         }
 

@@ -9,17 +9,14 @@ namespace Core.UseCases
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IOrderRepository _orderRepository;
-        private readonly IRestaurantRepository _restaurantRepository;
 
         public AddOrder(
             IOrderRepository orderRepository,
-            ICustomerRepository customerRepository,
-            IRestaurantRepository restaurantRepository
+            ICustomerRepository customerRepository
         )
         {
             _orderRepository = orderRepository;
             _customerRepository = customerRepository;
-            _restaurantRepository = restaurantRepository;
         }
 
         private void ValidateOrderDate(OrderEntity order, RestaurantEntity restaurant)

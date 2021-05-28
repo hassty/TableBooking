@@ -21,19 +21,23 @@
             CanUserDeleteRows="False"
             CanUserReorderColumns="False"
             IsReadOnly="True"
-            ItemsSource="{Binding Orders}">
+            ItemsSource="{Binding Orders, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectedOrder}"
+            SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding RestaurantName}" Header="Restaurant" />
-                <DataGridTextColumn Binding="{Binding RestaurantAddress}" Header="Address" />
+                <DataGridTextColumn Binding="{Binding Restaurant.Name}" Header="Restaurant" />
+                <DataGridTextColumn Binding="{Binding Restaurant.Address}" Header="Address" />
                 <DataGridTextColumn Binding="{Binding Status}" Header="Confirmed" />
                 <DataGridTextColumn Binding="{Binding ReservationDate, StringFormat='{}{0: dd/MMMM, HH:mm}'}" Header="Reservation date" />
                 <DataGridTextColumn Binding="{Binding ReservationDuration, StringFormat=hh\\:mm}" Header="Reservation duration" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button
-            Grid.Row="3"
-            Command="{Binding NavigateHomeCommand}"
-            Content="Home"
-            IsDefault="True" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Command="{Binding CancelSelectedOrderCommand}" Content="Cancel selected order" />
+            <Button
+                Command="{Binding NavigateHomeCommand}"
+                Content="Home"
+                IsDefault="True" />
+        </StackPanel>
     </Grid>
 </UserControl>

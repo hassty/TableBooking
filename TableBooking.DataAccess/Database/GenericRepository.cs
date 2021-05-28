@@ -1,4 +1,5 @@
 ﻿using Core.Contracts.DataAccess;
+using Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,9 +42,9 @@ namespace DataAccess.Database
 
         public void Remove(Entity entity)
         {
-            if (!ContainsEntity(entity))
+            if (_context.Set<Entity>().Contains(entity) == false)
             {
-                return;
+                throw new EntityNotFoundException("Item was not found or already deleted");
             }
             _context.Set<Entity>().Remove(entity);
         }

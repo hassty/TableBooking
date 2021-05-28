@@ -1,10 +1,11 @@
-﻿using Core.Exceptions;
+﻿using Core.Entities.Users;
+using Core.Exceptions;
 using Core.UseCases;
 using System;
 using System.Windows;
 using System.Windows.Input;
 using WpfUI.Commands;
-using WpfUI.Models;
+using WpfUI.Dto;
 using WpfUI.Services;
 using WpfUI.Stores;
 
@@ -93,7 +94,7 @@ namespace WpfUI.ViewModels
 
         private void Register(object obj)
         {
-            var customer = new CustomerModel()
+            var customer = new CustomerDto()
             {
                 Username = _username,
                 Password = _password
@@ -101,8 +102,7 @@ namespace WpfUI.ViewModels
 
             try
             {
-                _registerCustomer.Register(customer);
-                _accountStore.CurrentUser = customer;
+                _accountStore.CurrentUser = _registerCustomer.Register(customer);
                 _homeNavigationService.Navigate();
             }
             catch (UserAlreadyExistsException ex)

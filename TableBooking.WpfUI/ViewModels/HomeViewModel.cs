@@ -1,9 +1,8 @@
-﻿using AutoMapper;
+﻿using Core.Entities;
 using Core.UseCases;
 using System.Collections.Generic;
 using System.Windows.Input;
 using WpfUI.Commands;
-using WpfUI.Models;
 using WpfUI.Services;
 using WpfUI.Stores;
 
@@ -13,15 +12,14 @@ namespace WpfUI.ViewModels
     {
         private readonly INavigationService _addOrderNavigationService;
         private readonly GetRestaurants _getAllRestaurants;
-        private readonly IMapper _mapper;
         private readonly CurrentRestaurantStore _restaurantStore;
         private readonly CurrentUserStore _userStore;
-        private RestaurantModel _selectedRestaurant;
+        private RestaurantEntity _selectedRestaurant;
         public ICommand AddOrderCommand { get; }
         public bool IsLoggedIn => _userStore.IsLoggedIn;
-        public List<RestaurantModel> Restaurants { get; set; }
+        public List<RestaurantEntity> Restaurants { get; set; }
 
-        public RestaurantModel SelectedRestaurant
+        public RestaurantEntity SelectedRestaurant
 
         {
             get => _selectedRestaurant;
@@ -40,15 +38,13 @@ namespace WpfUI.ViewModels
             CurrentRestaurantStore restaurantStore,
             CurrentUserStore userStore,
             GetRestaurants getAllRestaurants,
-            INavigationService addOrderNavigationService,
-            IMapper mapper
+            INavigationService addOrderNavigationService
         )
         {
             _restaurantStore = restaurantStore;
             _userStore = userStore;
             _getAllRestaurants = getAllRestaurants;
             _addOrderNavigationService = addOrderNavigationService;
-            _mapper = mapper;
 
             AddOrderCommand = new DelegateCommand(AddOrder, CanAddOrder);
 
@@ -67,7 +63,7 @@ namespace WpfUI.ViewModels
 
         public void LoadAllRestaurants()
         {
-            Restaurants = _mapper.Map<List<RestaurantModel>>(_getAllRestaurants.GetAllRestaurants());
+            Restaurants = _getAllRestaurants.GetAllRestaurants();
         }
     }
 }

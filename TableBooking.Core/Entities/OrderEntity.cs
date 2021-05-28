@@ -15,6 +15,7 @@ namespace Core.Entities
         public DateTime ReservationDate { get; set; }
         public TimeSpan ReservationDuration { get; set; }
         public RestaurantEntity Restaurant { get; set; }
+        public string Status { get => ConfirmedByAdmin ? "Confirmed" : "Waiting"; }
         public TableEntity Table { get; set; }
 
         public OrderEntity(RestaurantEntity restaurant, DateTime reservationDate, TimeSpan reservationDuration)

@@ -3,16 +3,17 @@ using Core.Contracts.DataAccess;
 using Core.Exceptions;
 using Core.UseCases;
 using System.Linq;
-using WpfUI.Models;
+using WpfUI.Dto;
 using Xunit;
 
 namespace Core.Tests
 {
     public class RegisterAdminTests
     {
-        private readonly RegisterAdmin _registerAdmin;
         private readonly IAdminRepository _adminRepository;
         private readonly IPasswordProtectionStrategy _passwordProtectionStrategy;
+        private readonly RegisterAdmin _registerAdmin;
+
         public RegisterAdminTests()
         {
             var databaseFixture = new DatabaseFixture(nameof(RegisterAdminTests));
@@ -23,11 +24,10 @@ namespace Core.Tests
             _registerAdmin = new RegisterAdmin(_adminRepository, _passwordProtectionStrategy);
         }
 
-
         [Fact]
         public void Register_ShouldRegisterNewUniqueUser()
         {
-            var admin = new AdminModel
+            var admin = new AdminDto
             {
                 Username = "unique admin",
                 Password = "1488",
@@ -40,12 +40,12 @@ namespace Core.Tests
         [Fact]
         public void Register_ShouldThrowExceptionIfUsernameAlreadyExists()
         {
-            var admin1 = new AdminModel
+            var admin1 = new AdminDto
             {
                 Username = "existing username",
                 Password = "1337"
             };
-            var admin2 = new AdminModel
+            var admin2 = new AdminDto
             {
                 Username = "existing username",
                 Password = "420"
