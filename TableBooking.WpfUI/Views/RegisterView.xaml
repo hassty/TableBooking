@@ -33,13 +33,16 @@
                 <TextBlock Text="Username" />
                 <TextBox Name="Username" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
-
-            <StackPanel Grid.Row="2">
+            <StackPanel>
+                <TextBlock Text="Email" />
+                <TextBox Name="Email" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel>
                 <TextBlock Text="Password" />
                 <components:BindablePasswordBox Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
 
-            <StackPanel Grid.Row="3">
+            <StackPanel>
                 <TextBlock Text="Confirm password" />
                 <components:BindablePasswordBox Password="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>

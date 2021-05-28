@@ -18,6 +18,7 @@ namespace WpfUI.ViewModels
         private readonly INavigationService _loginNavigationService;
         private readonly RegisterCustomer _registerCustomer;
         private string _confirmPassword;
+        private string _email;
         private string _password;
         private string _username;
 
@@ -30,6 +31,19 @@ namespace WpfUI.ViewModels
                 {
                     _confirmPassword = value;
                     OnPropertyChanged(nameof(ConfirmPassword));
+                }
+            }
+        }
+
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                if (_email != value)
+                {
+                    _email = value;
+                    OnPropertyChanged(nameof(Email));
                 }
             }
         }
@@ -83,6 +97,7 @@ namespace WpfUI.ViewModels
         private bool CanRegister(object arg)
         {
             return !String.IsNullOrWhiteSpace(_username)
+                && !String.IsNullOrWhiteSpace(_email)
                 && !String.IsNullOrWhiteSpace(_password) && !String.IsNullOrWhiteSpace(_confirmPassword)
                 && _password == _confirmPassword;
         }
@@ -97,7 +112,8 @@ namespace WpfUI.ViewModels
             var customer = new CustomerDto()
             {
                 Username = _username,
-                Password = _password
+                Password = _password,
+                Email = _email
             };
 
             try
