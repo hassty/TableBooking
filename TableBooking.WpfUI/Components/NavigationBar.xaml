@@ -47,28 +47,28 @@
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Foreground="White" Text="Table booking" />
         <Button
-            Grid.Column="1"
+            Grid.Column="0"
             Command="{Binding NavigateHomeCommand}"
+            Content="Home"
             Foreground="White" />
         <Button
-            Grid.Column="2"
+            Grid.Column="1"
             Command="{Binding NavigateLoginCommand}"
             Content="Login"
             Visibility="{Binding IsLoggedOut, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <Button
-            Grid.Column="3"
+            Grid.Column="2"
             Command="{Binding NavigateRegisterCommand}"
             Content="Register"
             Visibility="{Binding IsLoggedOut, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <Button
-            Grid.Column="4"
+            Grid.Column="3"
             Command="{Binding NavigateAccountCommand}"
             Content="Account"
             Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <Button
-            Grid.Column="5"
+            Grid.Column="4"
             Command="{Binding LogoutCommand}"
             Content="Logout"
             Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}" />
