@@ -130,7 +130,7 @@ namespace Core.Tests
         {
             var fake = new CustomerEntity { Username = "not added" };
 
-            Assert.Throws<EntityNotFoundException>(() =>
+            Assert.Throws<ItemNotFoundException>(() =>
             {
                 _customerRepository.Remove(fake);
             });

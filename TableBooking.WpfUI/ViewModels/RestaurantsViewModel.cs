@@ -1,6 +1,8 @@
 ﻿using Core.Entities;
+using Core.Exceptions;
 using Core.UseCases;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
 using WpfUI.Commands;
 using WpfUI.Services;
@@ -11,11 +13,12 @@ namespace WpfUI.ViewModels
     {
         private readonly INavigationService _addRestaurantNavigator;
         private readonly GetRestaurants _getRestaurants;
+        private readonly RemoveRestaurant _removeRestaurant;
         private RestaurantEntity _selectedRestaurant;
 
+        public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand GoBackCommand { get; }
-        public ICommand InsertCommand { get; }
         public ICommand RemoveCommand { get; }
 
         public List<RestaurantEntity> Restaurants { get; set; }
@@ -35,16 +38,19 @@ namespace WpfUI.ViewModels
 
         public RestaurantsViewModel(
             GetRestaurants getRestaurants,
+            RemoveRestaurant removeRestaurant,
             INavigationService goBackNavigator,
             INavigationService addRestaurantNavigator
         )
         {
             _getRestaurants = getRestaurants;
+            _removeRestaurant = removeRestaurant;
             _addRestaurantNavigator = addRestaurantNavigator;
 
             GoBackCommand = new DelegateCommand(_ => goBackNavigator.Navigate());
-            InsertCommand = new DelegateCommand(_ => _addRestaurantNavigator.Navigate());
-            RemoveCommand = new DelegateCommand(_ => { }, CanChangeRestaurant);
+            AddCommand = new DelegateCommand(_ => _addRestaurantNavigator.Navigate());
+
+            RemoveCommand = new DelegateCommand(RemoveRestaurant, CanChangeRestaurant);
             EditCommand = new DelegateCommand(_ => { }, CanChangeRestaurant);
 
             LoadRestaurants();
@@ -59,6 +65,19 @@ namespace WpfUI.ViewModels
         {
             Restaurants = _getRestaurants.GetAllRestaurants();
             OnPropertyChanged(nameof(Restaurants));
+        }
+
+        private void RemoveRestaurant(object obj)
+        {
+            try
+            {
+                _removeRestaurant.Remove(_selectedRestaurant);
+                LoadRestaurants();
+            }
+            catch (ItemNotFoundException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

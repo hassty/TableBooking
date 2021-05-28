@@ -40,11 +40,12 @@ namespace DataAccess.Database
             return _context.Set<Entity>().ToList();
         }
 
+        /// <exception cref="ItemNotFoundException"></exception>
         public void Remove(Entity entity)
         {
             if (_context.Set<Entity>().Contains(entity) == false)
             {
-                throw new EntityNotFoundException("Item was not found or already deleted");
+                throw new ItemNotFoundException("Item was not found or already deleted");
             }
             _context.Set<Entity>().Remove(entity);
         }

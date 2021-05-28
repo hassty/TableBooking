@@ -37,6 +37,7 @@ namespace WpfUI
         {
             services.AddSingleton<AddOrder>();
             services.AddSingleton<AddRestaurant>();
+            services.AddSingleton<RemoveRestaurant>();
             services.AddSingleton<CancelOrder>();
             services.AddSingleton<ConfirmOrder>();
             services.AddSingleton<GetRestaurants>();

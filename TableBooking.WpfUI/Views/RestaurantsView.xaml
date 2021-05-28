@@ -23,6 +23,7 @@
             ColumnWidth="*"
             IsReadOnly="True"
             ItemsSource="{Binding Restaurants}"
+            SelectedItem="{Binding SelectedRestaurant}"
             SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
@@ -36,7 +37,7 @@
             <Button Command="{Binding GoBackCommand}" Content="Back" />
             <Button Command="{Binding RemoveCommand}" Content="Remove" />
             <Button Command="{Binding EditCommand}" Content="Edit" />
-            <Button Command="{Binding InsertCommand}" Content="Insert" />
+            <Button Command="{Binding AddCommand}" Content="Add" />
         </StackPanel>
     </Grid>
 </UserControl>

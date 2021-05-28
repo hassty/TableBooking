@@ -101,6 +101,7 @@ namespace WpfUI
 
             services.AddTransient(s => new RestaurantsViewModel(
                 s.GetRequiredService<GetRestaurants>(),
+                s.GetRequiredService<RemoveRestaurant>(),
                 CreateNavigationService<UnconfirmedOrdersViewModel>(s),
                 CreateNavigationService<RestaurantDetailsViewModel>(s)
                 ));

@@ -15,7 +15,7 @@ namespace Core.UseCases
             _orderRepository = orderRepository;
         }
 
-        /// <exception cref="EntityNotFoundException"></exception>
+        /// <exception cref="ItemNotFoundException"></exception>
         public void Remove(OrderEntity order, string username)
         {
             var customer = _customerRepository.GetUserWithUsername(username);
@@ -25,7 +25,7 @@ namespace Core.UseCases
                 _orderRepository.Remove(order);
                 _orderRepository.SaveChanges();
             }
-            catch (EntityNotFoundException)
+            catch (ItemNotFoundException)
             {
                 throw;
             }

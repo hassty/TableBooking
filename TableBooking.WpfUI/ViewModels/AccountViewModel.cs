@@ -74,7 +74,7 @@ namespace WpfUI.ViewModels
                     _cancelOrder.Remove(_selectedOrder, Username);
                 }
             }
-            catch (EntityNotFoundException ex)
+            catch (ItemNotFoundException ex)
             {
                 MessageBox.Show(ex.Message);
             }
