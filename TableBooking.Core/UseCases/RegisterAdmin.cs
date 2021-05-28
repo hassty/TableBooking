@@ -30,12 +30,12 @@ namespace Core.UseCases
             return (salt, passwordHash);
         }
 
-        /// <exception cref="UserAlreadyExistsException"></exception>
+        /// <exception cref="ItemAlreadyExistsException"></exception>
         public void Register(IAdminDto admin)
         {
             if (_adminRepository.ContainsUserWithUsername(admin.Username))
             {
-                throw new UserAlreadyExistsException("User with this username already exists");
+                throw new ItemAlreadyExistsException("User with this username already exists");
             }
 
             var newAdmin = admin.ToEntity();

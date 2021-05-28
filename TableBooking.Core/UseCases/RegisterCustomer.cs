@@ -32,12 +32,12 @@ namespace Core.UseCases
             return (salt, passwordHash);
         }
 
-        /// <exception cref="UserAlreadyExistsException"></exception>
+        /// <exception cref="ItemAlreadyExistsException"></exception>
         public CustomerEntity Register(ICustomerDto customer)
         {
             if (_customerRepository.ContainsUserWithUsername(customer.Username))
             {
-                throw new UserAlreadyExistsException("User with this username already exists");
+                throw new ItemAlreadyExistsException("User with this username already exists");
             }
 
             var newCustomer = customer.ToEntity();

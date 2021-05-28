@@ -36,6 +36,7 @@ namespace WpfUI
         public static IServiceCollection RegisterUseCases(this IServiceCollection services)
         {
             services.AddSingleton<AddOrder>();
+            services.AddSingleton<AddRestaurant>();
             services.AddSingleton<CancelOrder>();
             services.AddSingleton<ConfirmOrder>();
             services.AddSingleton<GetRestaurants>();
@@ -51,15 +52,15 @@ namespace WpfUI
 
         public static IServiceCollection SetupDatabase(this IServiceCollection services)
         {
-            services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf"));
+            //services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf"));
 
-            //var configuration = new ConfigurationBuilder()
-            //    .SetBasePath(Directory.GetCurrentDirectory())
-            //    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            //    .Build();
-            //services.AddDbContext<DbContext, TableBookingContext>(o => o.UseSqlServer(
-            //    configuration.GetConnectionString("SqlServerDB")
-            //));
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+            services.AddDbContext<DbContext, TableBookingContext>(o => o.UseSqlServer(
+                configuration.GetConnectionString("SqlServerDB")
+            ));
 
             return services;
         }

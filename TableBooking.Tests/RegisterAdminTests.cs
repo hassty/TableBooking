@@ -53,7 +53,7 @@ namespace Core.Tests
             };
             var initialCount = _adminRepository.GetAll().ToList().Count;
 
-            Assert.Throws<UserAlreadyExistsException>(() =>
+            Assert.Throws<ItemAlreadyExistsException>(() =>
             {
                 _registerAdmin.Register(admin1);
                 _registerAdmin.Register(admin2);

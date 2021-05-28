@@ -4,6 +4,8 @@ namespace Core.Contracts.DataAccess
 {
     public interface IRestaurantRepository : IRepository<RestaurantEntity>
     {
-        public RestaurantEntity GetRestaurantByNameAndAddress(string name, string address);
+        bool ContainsRestaurant(string name, string address);
+
+        RestaurantEntity GetRestaurantByNameAndAddress(string name, string address);
     }
 }

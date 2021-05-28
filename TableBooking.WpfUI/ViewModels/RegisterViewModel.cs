@@ -120,7 +120,7 @@ namespace WpfUI.ViewModels
                 _accountStore.CurrentUser = _registerCustomer.Register(customer);
                 _homeNavigationService.Navigate();
             }
-            catch (UserAlreadyExistsException ex)
+            catch (ItemAlreadyExistsException ex)
             {
                 MessageBox.Show(ex.Message);
             }

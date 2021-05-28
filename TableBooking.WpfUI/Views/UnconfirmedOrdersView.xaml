@@ -29,9 +29,9 @@
                 <DataGridTextColumn Binding="{Binding Table.Capacity}" Header="Party size" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button
-            Grid.Row="1"
-            Command="{Binding ConfirmOrderCommand}"
-            Content="Confirm" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Command="{Binding ConfirmOrderCommand}" Content="Confirm" />
+            <Button Command="{Binding GoToRestaurantsCommand}" Content="Restaurants" />
+        </StackPanel>
     </Grid>
 </UserControl>

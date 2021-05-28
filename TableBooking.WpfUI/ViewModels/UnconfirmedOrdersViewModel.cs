@@ -1,10 +1,12 @@
 ﻿using Core.Entities;
 using Core.Exceptions;
 using Core.UseCases;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using WpfUI.Commands;
+using WpfUI.Services;
 
 namespace WpfUI.ViewModels
 {
@@ -12,8 +14,11 @@ namespace WpfUI.ViewModels
     {
         private readonly ConfirmOrder _confirmOrder;
         private readonly GetAllUnconfirmedOrders _getAllUnconfirmedOrders;
+        private readonly INavigationService _restaurantNavigationService;
         private OrderEntity _selectedOrder;
+
         public ICommand ConfirmOrderCommand { get; }
+        public ICommand GoToRestaurantsCommand { get; }
 
         public OrderEntity SelectedOrder
         {
@@ -30,12 +35,18 @@ namespace WpfUI.ViewModels
 
         public List<OrderEntity> UnconfirmedOrders { get; set; }
 
-        public UnconfirmedOrdersViewModel(GetAllUnconfirmedOrders getAllUnconfirmedOrders, ConfirmOrder confirmOrder)
+        public UnconfirmedOrdersViewModel(
+            GetAllUnconfirmedOrders getAllUnconfirmedOrders,
+            ConfirmOrder confirmOrder,
+            INavigationService restaurantNavigationService
+        )
         {
             _getAllUnconfirmedOrders = getAllUnconfirmedOrders;
             _confirmOrder = confirmOrder;
+            _restaurantNavigationService = restaurantNavigationService;
 
             ConfirmOrderCommand = new DelegateCommand(Confirm, CanConfirm);
+            GoToRestaurantsCommand = new DelegateCommand(_ => _restaurantNavigationService.Navigate());
 
             LoadUnconfirmedOrders();
         }

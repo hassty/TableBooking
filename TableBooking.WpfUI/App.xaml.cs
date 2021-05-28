@@ -35,7 +35,7 @@ namespace TableBooking
                 .SetupDatabase()
                 .SetupStrategies()
                 .SetupViewModels()
-                .SetupMainViewModel<RestaurantDetailsViewModel>();
+                .SetupMainViewModel<HomeViewModel>();
 
             _serviceProvider = services.BuildServiceProvider();
         }

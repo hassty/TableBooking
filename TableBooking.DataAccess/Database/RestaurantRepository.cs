@@ -14,12 +14,16 @@ namespace DataAccess.Database
         {
         }
 
+        public bool ContainsRestaurant(string name, string address)
+        {
+            return _tableBookingContext.Restaurants.FirstOrDefault(r => r.Name == name && r.Address == address) != null;
+        }
+
         public RestaurantEntity GetRestaurantByNameAndAddress(string name, string address)
         {
             return _tableBookingContext.Restaurants
                 .Include(r => r.OrderOptions)
-                .Where(r => r.Name == name && r.Address == address)
-                .FirstOrDefault();
+                .FirstOrDefault(r => r.Name == name && r.Address == address);
         }
     }
 }

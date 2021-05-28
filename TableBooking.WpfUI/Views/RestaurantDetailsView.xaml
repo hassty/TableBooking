@@ -55,6 +55,7 @@
             Grid.Row="2"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
+            <Button Command="{Binding GoBackCommand}" Content="Back" />
             <Button Command="{Binding AdditionalOptionsCommand}" Content="Additional options" />
             <Button Command="{Binding AddMenuItemsCommand}" Content="Add menu items" />
             <Button Command="{Binding SaveCommand}" Content="Save new restaurant" />

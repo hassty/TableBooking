@@ -1,7 +1,10 @@
 ﻿using Core.Entities;
+using Core.Exceptions;
+using Core.UseCases;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using WpfUI.Commands;
 using WpfUI.Services;
@@ -13,14 +16,18 @@ namespace WpfUI.ViewModels
     {
         private readonly INavigationService _additionalOptionsNavigator;
         private readonly INavigationService _addMenuItemsNavigator;
+        private readonly AddRestaurant _addRestaurant;
+        private readonly INavigationService _goBackNavigator;
         private readonly CurrentRestaurantStore _restaurantStore;
         private int _hoursFrom;
         private int _hoursTill;
         private int _minutesFrom;
         private int _minutesTill;
         private RestaurantEntity _restaurant;
+
         public ICommand AdditionalOptionsCommand { get; }
         public ICommand AddMenuItemsCommand { get; }
+        public ICommand GoBackCommand { get; }
         public ICommand SaveCommand { get; }
 
         #region Bindable Properties
@@ -120,22 +127,48 @@ namespace WpfUI.ViewModels
 
         public RestaurantDetailsViewModel(
             CurrentRestaurantStore restaurantStore,
+            AddRestaurant addRestaurant,
+            INavigationService goBackNavigator,
             INavigationService additionalOptionsNavigator,
             INavigationService addMenuItemsNavigator
         )
         {
             _restaurantStore = restaurantStore;
+            _addRestaurant = addRestaurant;
+            _goBackNavigator = goBackNavigator;
             _additionalOptionsNavigator = additionalOptionsNavigator;
             _addMenuItemsNavigator = addMenuItemsNavigator;
+
             _restaurant = new RestaurantEntity();
 
             AdditionalOptionsCommand = new DelegateCommand(NavigateToAdditionalOptions);
             AddMenuItemsCommand = new DelegateCommand(AddMenuItem);
+            GoBackCommand = new DelegateCommand(_ => _goBackNavigator.Navigate());
+            SaveCommand = new DelegateCommand(AddRestaurant, CanAddRestaurant);
         }
 
         private void AddMenuItem(object obj)
         {
             _addMenuItemsNavigator.Navigate();
+        }
+
+        private void AddRestaurant(object obj)
+        {
+            try
+            {
+                _addRestaurant.Add(_restaurant);
+            }
+            catch (ItemAlreadyExistsException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private bool CanAddRestaurant(object arg)
+        {
+            return !String.IsNullOrWhiteSpace(Name)
+                && !String.IsNullOrWhiteSpace(City)
+                && !String.IsNullOrWhiteSpace(Address);
         }
 
         private void NavigateToAdditionalOptions(object obj)

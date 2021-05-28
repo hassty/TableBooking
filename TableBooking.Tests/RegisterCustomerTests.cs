@@ -54,7 +54,7 @@ namespace Core.Tests
             };
             var initialCount = _customerRepository.GetAll().ToList().Count;
 
-            Assert.Throws<UserAlreadyExistsException>(() =>
+            Assert.Throws<ItemAlreadyExistsException>(() =>
             {
                 _registerCustomer.Register(customer1);
                 _registerCustomer.Register(customer2);
