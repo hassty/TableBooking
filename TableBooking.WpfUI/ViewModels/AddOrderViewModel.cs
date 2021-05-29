@@ -23,39 +23,37 @@ namespace WpfUI.ViewModels
         private MenuItemEntity _selectedMenuItem;
         private RestaurantEntity _currentRestaurant { get; set; }
 
+        public string OpenedFrom => _currentRestaurant.OpenedFrom.ToString();
+        public string OpenedTill => _currentRestaurant.OpenedTill.ToString();
+
         public ICommand AddItemCommand { get; }
         public ICommand AddOrderCommand { get; }
         public string Address => _currentRestaurant.Address;
         public ICommand GoBackCommand { get; }
 
-        public int HoursDuration
-        {
-            get => _order.ReservationDuration.Hours;
-            set
-            {
-                if (_order.ReservationDuration.Hours != value)
-                {
-                    _order.ReservationDuration = new TimeSpan(value, MinutesDuration, 0);
-                    OnPropertyChanged(nameof(HoursDuration));
-                }
-            }
-        }
-
         public List<MenuItemEntity> MenuItems { get; set; }
 
-        public int MinutesDuration
+        private string _duration;
+        public string Duration
         {
-            get => _order.ReservationDuration.Minutes;
+            get => _duration;
             set
             {
-                if (_order.ReservationDuration.Minutes != value)
-                {
-                    _order.ReservationDuration = new TimeSpan(HoursDuration, value, 0);
-                    OnPropertyChanged(nameof(MinutesDuration));
-                }
+                _duration = value;
+                OnPropertyChanged(nameof(Duration));
             }
         }
 
+        private string _time;
+        public string Time
+        {
+            get => _time;
+            set
+            {
+                _time = value;
+                OnPropertyChanged(nameof(Time));
+            }
+        }
         public string Name => _currentRestaurant.Name;
 
         public List<int> PartySizes { get; private set; }
@@ -71,32 +69,6 @@ namespace WpfUI.ViewModels
                 {
                     _order.ReservationDate = value;
                     OnPropertyChanged(nameof(ReservationDate));
-                }
-            }
-        }
-
-        public int ReservationHours
-        {
-            get => _order.ReservationDate.Hour;
-            set
-            {
-                if (_order.ReservationDate.Hour != value)
-                {
-                    _order.ReservationDate = _order.ReservationDate.Date + new TimeSpan(value, ReservationMinutes, 0);
-                    OnPropertyChanged(nameof(ReservationHours));
-                }
-            }
-        }
-
-        public int ReservationMinutes
-        {
-            get => _order.ReservationDate.Minute;
-            set
-            {
-                if (_order.ReservationDate.Minute != value)
-                {
-                    _order.ReservationDate = _order.ReservationDate.Date + new TimeSpan(ReservationHours, value, 0);
-                    OnPropertyChanged(nameof(ReservationMinutes));
                 }
             }
         }
@@ -158,8 +130,8 @@ namespace WpfUI.ViewModels
                 {
                     var orderEntity = new OrderEntity(
                         _currentRestaurant,
-                        _order.ReservationDate,
-                        _order.ReservationDuration
+                        DateTime.Parse(_time),
+                        DateTime.Parse(_duration).TimeOfDay
                     );
 
                     _addOrder.Add(orderEntity, _userStore.CurrentUser.Username);

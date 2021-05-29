@@ -60,8 +60,6 @@ namespace WpfUI
 
         public static IServiceCollection SetupDatabase(this IServiceCollection services)
         {
-            //services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf"));
-
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -76,14 +74,16 @@ namespace WpfUI
         public static IServiceCollection SetupStrategies(this IServiceCollection services)
         {
             services.AddSingleton<IPasswordProtectionStrategy, Sha256HashPasswordStrategy>();
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
 
-            //services.AddSingleton<INotifier, EmailNotifier>(s => new EmailNotifier(
-            //    _configuration["Smtp:Username"],
-            //    _configuration["Smtp:Password"],
-            //    _configuration["Smtp:Host"]
-            //));
-
-            services.AddSingleton<INotifier, FakeNotifier>();
+            services.AddSingleton<INotifier, EmailNotifier>(s => new EmailNotifier(
+                 configuration["Smtp:Username"],
+                 configuration["Smtp:Password"],
+                 configuration["Smtp:Host"]
+            ));
 
             return services;
         }

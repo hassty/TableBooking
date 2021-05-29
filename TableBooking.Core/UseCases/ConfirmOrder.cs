@@ -35,9 +35,12 @@ namespace Core.UseCases
             {
                 throw;
             }
+            finally
+            {
+                _orderRepository.Update(order);
+                _orderRepository.SaveChanges();
+            }
 
-            _orderRepository.Update(order);
-            _orderRepository.SaveChanges();
         }
     }
 }
