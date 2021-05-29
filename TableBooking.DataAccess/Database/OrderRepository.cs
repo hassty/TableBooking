@@ -27,5 +27,12 @@ namespace DataAccess.Database
                 .Include(o => o.Restaurant)
                 .Where(o => o.ConfirmedByAdmin == false);
         }
+
+        public bool RestaurantHasOrders(string name, string address)
+        {
+            return _tableBookingContext.Orders
+                .Include(o => o.Restaurant)
+                .Any(o => o.Restaurant.Name == name && o.Restaurant.Address == address);
+        }
     }
 }

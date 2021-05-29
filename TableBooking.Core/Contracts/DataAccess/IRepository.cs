@@ -4,6 +4,8 @@ namespace Core.Contracts.DataAccess
 {
     public interface IRepository
     {
+        void Rollback();
+
         void SaveChanges();
     }
 

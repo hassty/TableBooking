@@ -55,9 +55,9 @@ namespace Core.Entities
             return Enumerable.Range(0, OrderOptions.LatestOrderDate + 1).Select(d => DateTime.Now.AddDays(d)).ToList();
         }
 
-        public IList<DayOfWeek> GetOffDays()
+        public IEnumerable<int> GetPartySizes()
         {
-            return OrderOptions.OffDays;
+            return Enumerable.Range(1, OrderOptions.MaxPartySize + 1);
         }
 
         public TimeSpan GetShortestReservationDuration()
@@ -65,19 +65,9 @@ namespace Core.Entities
             return OrderOptions.ShortestReservationDuration;
         }
 
-        public IEnumerable<int> GetTablesCapacities()
-        {
-            return Enumerable.Range(1, OrderOptions.MaxPartySize + 1);
-        }
-
         public bool IsAllDayOpened()
         {
             return OpenedFrom == OpenedTill;
-        }
-
-        public bool IsOffDay(DateTime date)
-        {
-            return OrderOptions.OffDays.Contains(date.DayOfWeek);
         }
     }
 }

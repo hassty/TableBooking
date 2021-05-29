@@ -23,13 +23,6 @@ namespace DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var dayOfWeekListConverter = new ValueConverter<IList<DayOfWeek>, string>(
-                list => String.Join(',', list.Cast<int>()),
-                str => str.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                      .Select(day => (DayOfWeek)Enum.Parse(typeof(DayOfWeek), day))
-                      .ToList()
-            );
-
             var user = modelBuilder.Entity<UserEntity>();
             var admin = modelBuilder.Entity<AdminEntity>();
             var customer = modelBuilder.Entity<CustomerEntity>();
@@ -42,7 +35,6 @@ namespace DataAccess
             admin.Ignore(a => a.UnconfirmedOrders);
 
             restaurant.HasAlternateKey(r => new { r.Name, r.Address });
-            restaurantOrderOptions.Property(r => r.OffDays).HasConversion(dayOfWeekListConverter);
 
             base.OnModelCreating(modelBuilder);
         }

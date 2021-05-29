@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="WpfUI.Views.RestaurantDetailsView"
+    x:Class="WpfUI.Views.UpdateRestaurantView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -21,7 +21,7 @@
         </Grid.Resources>
         <Label
             Margin="0,10"
-            Content="Add restaurant"
+            Content="Update restaurant"
             FontSize="20" />
         <StackPanel Grid.Row="1">
             <Label Content="Name" />
@@ -35,20 +35,20 @@
                 <TextBox
                     MinWidth="40"
                     Margin="0,0,10,0"
-                    Text="{Binding HoursFrom}" />
+                    Text="{Binding HoursFrom, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBox
                     MinWidth="40"
                     Margin="0,0,50,0"
-                    Text="{Binding MinutesFrom}" />
+                    Text="{Binding MinutesFrom, UpdateSourceTrigger=PropertyChanged}" />
                 <Label Content="Opened till" />
                 <TextBox
                     MinWidth="40"
                     Margin="0,0,10,0"
-                    Text="{Binding HoursTill}" />
+                    Text="{Binding HoursTill, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBox
                     MinWidth="40"
                     Margin="0,0,50,0"
-                    Text="{Binding MinutesTill}" />
+                    Text="{Binding MinutesTill, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </StackPanel>
         <StackPanel
@@ -56,8 +56,6 @@
             HorizontalAlignment="Center"
             Orientation="Horizontal">
             <Button Command="{Binding GoBackCommand}" Content="Back" />
-            <Button Command="{Binding AdditionalOptionsCommand}" Content="Additional options" />
-            <Button Command="{Binding AddMenuItemsCommand}" Content="Add menu items" />
             <Button Command="{Binding SaveCommand}" Content="Save" />
         </StackPanel>
     </Grid>

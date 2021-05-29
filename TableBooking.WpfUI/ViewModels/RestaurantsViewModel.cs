@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.Exceptions;
 using Core.UseCases;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
@@ -16,6 +17,7 @@ namespace WpfUI.ViewModels
         private readonly GetRestaurants _getRestaurants;
         private readonly RemoveRestaurant _removeRestaurant;
         private readonly CurrentRestaurantStore _restaurantStore;
+        private readonly INavigationService _updateRestaurantNavigator;
         private RestaurantEntity _selectedRestaurant;
 
         public ICommand AddCommand { get; }
@@ -43,27 +45,23 @@ namespace WpfUI.ViewModels
             GetRestaurants getRestaurants,
             RemoveRestaurant removeRestaurant,
             INavigationService goBackNavigator,
-            INavigationService addRestaurantNavigator
+            INavigationService addRestaurantNavigator,
+            INavigationService updateRestaurantNavigator
         )
         {
             _restaurantStore = restaurantStore;
             _getRestaurants = getRestaurants;
             _removeRestaurant = removeRestaurant;
             _addRestaurantNavigator = addRestaurantNavigator;
+            _updateRestaurantNavigator = updateRestaurantNavigator;
 
             GoBackCommand = new DelegateCommand(_ => goBackNavigator.Navigate());
 
-            AddCommand = new DelegateCommand(AddRestaurant);
+            AddCommand = new DelegateCommand(_ => _addRestaurantNavigator.Navigate());
             RemoveCommand = new DelegateCommand(RemoveRestaurant, CanChangeRestaurant);
             EditCommand = new DelegateCommand(EditRestaurant, CanChangeRestaurant);
 
             LoadRestaurants();
-        }
-
-        private void AddRestaurant(object obj)
-        {
-            _restaurantStore.CurrentRestaurant = null;
-            _addRestaurantNavigator.Navigate();
         }
 
         private bool CanChangeRestaurant(object obj)
@@ -74,7 +72,7 @@ namespace WpfUI.ViewModels
         private void EditRestaurant(object obj)
         {
             _restaurantStore.CurrentRestaurant = _selectedRestaurant;
-            _addRestaurantNavigator.Navigate();
+            _updateRestaurantNavigator.Navigate();
         }
 
         private void LoadRestaurants()
@@ -90,7 +88,10 @@ namespace WpfUI.ViewModels
                 _removeRestaurant.Remove(_selectedRestaurant);
                 LoadRestaurants();
             }
-            catch (ItemNotFoundException ex)
+            catch (Exception ex) when (
+                ex is RestaurantOrdersException
+                || ex is ItemAlreadyExistsException
+            )
             {
                 MessageBox.Show(ex.Message);
             }

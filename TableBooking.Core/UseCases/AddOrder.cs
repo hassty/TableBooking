@@ -25,10 +25,6 @@ namespace Core.UseCases
             {
                 throw new OrderDateException("Can't add order for the past date");
             }
-            if (restaurant.IsOffDay(order.ReservationDate))
-            {
-                throw new OrderDateException("Can't add order for a day off");
-            }
             if (order.ReservationDate.Date >= DateTime.Now.Date.AddDays(restaurant.GetLatestOrderDate()))
             {
                 throw new OrderDateException("Can't add order for too far in the future");

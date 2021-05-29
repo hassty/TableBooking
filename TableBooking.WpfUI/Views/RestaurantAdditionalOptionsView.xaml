@@ -20,15 +20,19 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
             <Label Content="Latest order date" />
-            <TextBox />
+            <TextBox Text="{Binding LatestOrderDate, UpdateSourceTrigger=PropertyChanged}" />
             <Label Content="Longest reservation duration" />
-            <TextBox />
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBox MinWidth="40" Text="{Binding LongestHours, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox MinWidth="40" Text="{Binding LongestMinutes, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
             <Label Content="Shortest reservation duration" />
-            <TextBox />
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBox MinWidth="40" Text="{Binding ShortestHours, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox MinWidth="40" Text="{Binding ShortestMinutes, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
             <Label Content="Max party size" />
-            <TextBox />
-            <Label Content="Off days" />
-            <ListBox ItemsSource="{Binding Days}" SelectionMode="Extended" />
+            <TextBox Text="{Binding MaxPartySize}" />
         </StackPanel>
         <StackPanel
             Grid.Row="1"
@@ -39,7 +43,7 @@
                 Margin="0,0,20,0"
                 Command="{Binding GoBackCommand}"
                 Content="Back" />
-            <Button Content="Add" />
+            <Button Command="{Binding SaveCommand}" Content="Save" />
         </StackPanel>
     </Grid>
 </UserControl>

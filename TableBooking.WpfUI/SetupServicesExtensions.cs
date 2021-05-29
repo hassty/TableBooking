@@ -42,6 +42,7 @@ namespace WpfUI
             services.AddSingleton<AddRestaurant>();
             services.AddSingleton<UpdateRestaurant>();
             services.AddSingleton<RemoveRestaurant>();
+            services.AddSingleton<CancelRestaurantChanges>();
             services.AddSingleton<CancelOrder>();
             services.AddSingleton<ConfirmOrder>();
             services.AddSingleton<GetRestaurants>();
@@ -50,7 +51,6 @@ namespace WpfUI
             services.AddSingleton<LoginUser>();
             services.AddSingleton<RegisterAdmin>();
             services.AddSingleton<RegisterCustomer>();
-            services.AddSingleton<RestaurantInteractor>();
 
             return services;
         }

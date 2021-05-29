@@ -3,6 +3,7 @@ using Core.Entities.Users;
 using Core.UseCases;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using WpfUI.Commands;
@@ -15,15 +16,14 @@ namespace WpfUI.ViewModels
     {
         private readonly INavigationService _accountNavigationService;
         private readonly AddOrder _addOrder;
-        private readonly RestaurantInteractor _restaurantInteractor;
+        private readonly GetRestaurants _getRestaurants;
+        private readonly OrderEntity _order;
         private readonly CurrentUserStore _userStore;
         private int _hours;
         private int _minutes;
-        private readonly OrderEntity _order;
         private RestaurantEntity _currentRestaurant { get; set; }
         public ICommand AddOrderCommand { get; }
         public string Address => _currentRestaurant.Address;
-        public List<int> Capacities { get; private set; }
 
         public int Hours
         {
@@ -54,6 +54,7 @@ namespace WpfUI.ViewModels
         }
 
         public string Name => _currentRestaurant.Name;
+        public List<int> PartySizes { get; private set; }
 
         public DateTime ReservationDate
         {
@@ -71,19 +72,19 @@ namespace WpfUI.ViewModels
         public AddOrderViewModel(
             CurrentRestaurantStore restaurantStore,
             CurrentUserStore userStore,
-            RestaurantInteractor restaurantInteractor,
             AddOrder addOrder,
+            GetRestaurants getRestaurants,
             INavigationService accountNavigationService
         )
         {
             _currentRestaurant = restaurantStore.CurrentRestaurant;
             _userStore = userStore;
-            _restaurantInteractor = restaurantInteractor;
             _addOrder = addOrder;
+            _getRestaurants = getRestaurants;
             _accountNavigationService = accountNavigationService;
 
             _order = new OrderEntity();
-            GetCapacities();
+            GetRestaurantPartySizes();
 
             AddOrderCommand = new DelegateCommand(AddOrder, CanAddOrder);
         }
@@ -115,9 +116,9 @@ namespace WpfUI.ViewModels
             return true;
         }
 
-        public void GetCapacities()
+        public void GetRestaurantPartySizes()
         {
-            Capacities = _restaurantInteractor.GetRestaurantTablesCapacities(_currentRestaurant.Name, _currentRestaurant.Address);
+            PartySizes = _getRestaurants.GetRestaurantByNameAndAddress(Name, Address).GetPartySizes().ToList();
         }
     }
 }

@@ -63,6 +63,31 @@ namespace DataAccess.Database
             _context.Set<Entity>().RemoveRange(entitiesToDelete);
         }
 
+        public void Rollback()
+        {
+            var changedEntires = _context.ChangeTracker.Entries()
+                .Where(e => e.State != EntityState.Unchanged).ToList();
+
+            foreach (var entry in changedEntires)
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Unchanged;
+                        break;
+
+                    case EntityState.Modified:
+                        entry.CurrentValues.SetValues(entry.OriginalValues);
+                        entry.State = EntityState.Unchanged;
+                        break;
+
+                    case EntityState.Added:
+                        entry.State = EntityState.Detached;
+                        break;
+                }
+            }
+        }
+
         public void SaveChanges()
         {
             _context.SaveChanges();

@@ -50,31 +50,6 @@ namespace Core.Tests
         }
 
         [Fact]
-        public void Add_ShouldThrowIfAddingOrderForDayOff()
-        {
-            var customer = _customerRepository.GetUserWithUsername(_username);
-            var offDays = new List<DayOfWeek> {
-                DateTime.Now.AddDays(2).DayOfWeek,
-                DateTime.Now.AddDays(4).DayOfWeek
-            };
-            var restaurant = new RestaurantEntity(
-                new RestaurantOrderOptionsEntity(offDays)
-            )
-            {
-                Name = "off days makdak",
-                Address = "addr",
-            };
-            _restaurantRepository.Add(restaurant);
-            _restaurantRepository.SaveChanges();
-            var order = new OrderEntity(restaurant, DateTime.Now.AddDays(2), new TimeSpan(2, 0, 0));
-
-            Assert.Throws<OrderDateException>(() =>
-            {
-                _addOrder.Add(order, customer.Username);
-            });
-        }
-
-        [Fact]
         public void Add_ShouldThrowIfAddingOrderForPastDate()
         {
             var customer = _customerRepository.GetUserWithUsername(_username);

@@ -1,5 +1,4 @@
 ﻿using Core.Entities;
-using Core.Exceptions;
 using Core.UseCases;
 using System;
 using System.Collections.Generic;
@@ -12,22 +11,16 @@ using WpfUI.Stores;
 
 namespace WpfUI.ViewModels
 {
-    public class RestaurantDetailsViewModel : ViewModelBase
+    public class UpdateRestaurantViewModel : ViewModelBase
     {
-        private readonly INavigationService _additionalOptionsNavigator;
-        private readonly INavigationService _addMenuItemsNavigator;
-        private readonly AddRestaurant _addRestaurant;
+        private readonly CancelRestaurantChanges _cancelRestaurantChanges;
         private readonly INavigationService _goBackNavigator;
         private readonly CurrentRestaurantStore _restaurantStore;
+        private readonly string _unchangedAddress;
+        private readonly string _unchangedName;
         private readonly UpdateRestaurant _updateRestaurant;
-        private int _hoursFrom;
-        private int _hoursTill;
-        private int _minutesFrom;
-        private int _minutesTill;
         private RestaurantEntity _restaurant;
 
-        public ICommand AdditionalOptionsCommand { get; }
-        public ICommand AddMenuItemsCommand { get; }
         public ICommand GoBackCommand { get; }
         public ICommand SaveCommand { get; }
 
@@ -61,12 +54,12 @@ namespace WpfUI.ViewModels
 
         public int HoursFrom
         {
-            get => _hoursFrom;
+            get => _restaurant.OpenedFrom.Hours;
             set
             {
-                if (_hoursFrom != value)
+                if (_restaurant.OpenedFrom.Hours != value)
                 {
-                    _hoursFrom = value;
+                    _restaurant.OpenedFrom = new TimeSpan(value, MinutesFrom, 0);
                     OnPropertyChanged(nameof(HoursFrom));
                 }
             }
@@ -74,12 +67,12 @@ namespace WpfUI.ViewModels
 
         public int HoursTill
         {
-            get => _hoursTill;
+            get => _restaurant.OpenedTill.Hours;
             set
             {
-                if (_hoursTill != value)
+                if (_restaurant.OpenedTill.Hours != value)
                 {
-                    _hoursTill = value;
+                    _restaurant.OpenedTill = new TimeSpan(value, MinutesTill, 0);
                     OnPropertyChanged(nameof(HoursTill));
                 }
             }
@@ -87,12 +80,12 @@ namespace WpfUI.ViewModels
 
         public int MinutesFrom
         {
-            get => _minutesFrom;
+            get => _restaurant.OpenedFrom.Minutes;
             set
             {
-                if (_minutesFrom != value)
+                if (_restaurant.OpenedFrom.Minutes != value)
                 {
-                    _minutesFrom = value;
+                    _restaurant.OpenedFrom = new TimeSpan(HoursFrom, value, 0);
                     OnPropertyChanged(nameof(MinutesFrom));
                 }
             }
@@ -100,12 +93,12 @@ namespace WpfUI.ViewModels
 
         public int MinutesTill
         {
-            get => _minutesTill;
+            get => _restaurant.OpenedTill.Minutes;
             set
             {
-                if (_minutesTill != value)
+                if (_restaurant.OpenedTill.Minutes != value)
                 {
-                    _minutesTill = value;
+                    _restaurant.OpenedTill = new TimeSpan(HoursTill, value, 0);
                     OnPropertyChanged(nameof(MinutesTill));
                 }
             }
@@ -126,34 +119,24 @@ namespace WpfUI.ViewModels
 
         #endregion Bindable Properties
 
-        public RestaurantDetailsViewModel(
+        public UpdateRestaurantViewModel(
             CurrentRestaurantStore restaurantStore,
-            AddRestaurant addRestaurant,
             UpdateRestaurant updateRestaurant,
-            INavigationService goBackNavigator,
-            INavigationService additionalOptionsNavigator,
-            INavigationService addMenuItemsNavigator
+            CancelRestaurantChanges cancelRestaurantChanges,
+            INavigationService goBackNavigator
         )
         {
             _restaurantStore = restaurantStore;
-            _addRestaurant = addRestaurant;
+            _cancelRestaurantChanges = cancelRestaurantChanges;
             _updateRestaurant = updateRestaurant;
             _goBackNavigator = goBackNavigator;
-            _additionalOptionsNavigator = additionalOptionsNavigator;
-            _addMenuItemsNavigator = addMenuItemsNavigator;
 
-            _restaurant = (restaurantStore.CurrentRestaurant != null)
-                ? restaurantStore.CurrentRestaurant : new RestaurantEntity();
+            _restaurant = restaurantStore.CurrentRestaurant;
+            _unchangedName = _restaurant.Name;
+            _unchangedAddress = _restaurant.Address;
 
-            AdditionalOptionsCommand = new DelegateCommand(NavigateToAdditionalOptions);
-            AddMenuItemsCommand = new DelegateCommand(AddMenuItem);
-            GoBackCommand = new DelegateCommand(_ => _goBackNavigator.Navigate());
+            GoBackCommand = new DelegateCommand(Cancel);
             SaveCommand = new DelegateCommand(Save, CanAddRestaurant);
-        }
-
-        private void AddMenuItem(object obj)
-        {
-            _addMenuItemsNavigator.Navigate();
         }
 
         private bool CanAddRestaurant(object arg)
@@ -163,36 +146,25 @@ namespace WpfUI.ViewModels
                 && !String.IsNullOrWhiteSpace(Address);
         }
 
-        private void NavigateToAdditionalOptions(object obj)
+        private void Cancel(object obj)
         {
-            _additionalOptionsNavigator.Navigate();
+            _restaurantStore.CurrentRestaurant.Name = _unchangedName;
+            _restaurantStore.CurrentRestaurant.Address = _unchangedAddress;
+            _cancelRestaurantChanges.Cancel();
+
+            _goBackNavigator.Navigate();
         }
 
         private void Save(object obj)
         {
-            if (_restaurantStore.CurrentRestaurant == null)
+            try
             {
-                try
-                {
-                    _addRestaurant.Add(_restaurant);
-                    _goBackNavigator.Navigate();
-                }
-                catch (ItemAlreadyExistsException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                _updateRestaurant.Update(_restaurant);
+                _goBackNavigator.Navigate();
             }
-            else
+            catch (Exception)
             {
-                try
-                {
-                    _updateRestaurant.Update(_restaurant);
-                    _goBackNavigator.Navigate();
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Can not change name and address");
-                }
+                MessageBox.Show("Can not change name and address");
             }
         }
     }

@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace WpfUI.Views
 {
     /// <summary>
-    /// Interaction logic for RestaurantDetailsView.xaml
+    /// Interaction logic for AddRestaurantView.xaml
     /// </summary>
-    public partial class RestaurantDetailsView : UserControl
+    public partial class AddRestaurantView : UserControl
     {
-        public RestaurantDetailsView()
+        public AddRestaurantView()
         {
             InitializeComponent();
         }

@@ -9,17 +9,10 @@ namespace Core.Entities
         public int LatestOrderDate { get; set; }
         public TimeSpan LongestReservationDuration { get; set; }
         public int MaxPartySize { get; set; }
-        public IList<DayOfWeek> OffDays { get; private set; }
         public TimeSpan ShortestReservationDuration { get; set; }
 
-        public RestaurantOrderOptionsEntity() : this(new List<DayOfWeek>())
+        public RestaurantOrderOptionsEntity()
         {
-        }
-
-        public RestaurantOrderOptionsEntity(IList<DayOfWeek> offDays)
-        {
-            OffDays = offDays;
-
             LatestOrderDate = 14;
             MaxPartySize = 3;
             LongestReservationDuration = new TimeSpan(4, 20, 0);
