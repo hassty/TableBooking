@@ -104,6 +104,7 @@ namespace WpfUI
                 s.GetRequiredService<GetRestaurants>(),
                 s.GetRequiredService<RemoveRestaurant>(),
                 CreateNavigationService<UnconfirmedOrdersViewModel>(s),
+                CreateNavigationService<AddMenuItemsViewModel>(s),
                 CreateNavigationService<AddRestaurantViewModel>(s),
                 CreateNavigationService<UpdateRestaurantViewModel>(s)
                 ));
@@ -121,7 +122,9 @@ namespace WpfUI
                 ));
 
             services.AddTransient(s => new AddMenuItemsViewModel(
-                CreateNavigationService<AddRestaurantViewModel>(s)
+                s.GetRequiredService<CurrentRestaurantStore>(),
+                s.GetRequiredService<AddMenuItem>(),
+                CreateNavigationService<RestaurantsViewModel>(s)
                 ));
 
             services.AddTransient(CreateNavigationBarViewModel);

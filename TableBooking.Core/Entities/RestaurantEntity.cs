@@ -9,7 +9,7 @@ namespace Core.Entities
         public string Address { get; set; }
         public string City { get; set; }
         public int Id { get; set; }
-        public IList<MenuItemEntity> MenuItems { get; private set; }
+        public IList<MenuItemEntity> MenuItems { get; set; }
         public string Name { get; set; }
         public TimeSpan OpenedFrom { get; set; }
         public TimeSpan OpenedTill { get; set; }
@@ -17,6 +17,7 @@ namespace Core.Entities
 
         public RestaurantEntity() : this(new RestaurantOrderOptionsEntity())
         {
+            MenuItems = new List<MenuItemEntity>();
         }
 
         public RestaurantEntity(RestaurantOrderOptionsEntity orderOptions)

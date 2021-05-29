@@ -12,6 +12,7 @@ namespace DataAccess
     {
         public DbSet<AdminEntity> Admins { get; set; }
         public DbSet<CustomerEntity> Customers { get; set; }
+        public DbSet<MenuItemEntity> MenuItems { get; set; }
         public DbSet<OrderEntity> Orders { get; set; }
         public DbSet<RestaurantEntity> Restaurants { get; set; }
 

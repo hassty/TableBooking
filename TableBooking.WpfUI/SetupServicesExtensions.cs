@@ -40,17 +40,20 @@ namespace WpfUI
         {
             services.AddSingleton<AddOrder>();
             services.AddSingleton<AddRestaurant>();
-            services.AddSingleton<UpdateRestaurant>();
-            services.AddSingleton<RemoveRestaurant>();
-            services.AddSingleton<CancelRestaurantChanges>();
+            services.AddSingleton<AddMenuItem>();
             services.AddSingleton<CancelOrder>();
+            services.AddSingleton<CancelRestaurantChanges>();
             services.AddSingleton<ConfirmOrder>();
-            services.AddSingleton<GetRestaurants>();
-            services.AddSingleton<GetCustomerOrders>();
             services.AddSingleton<GetAllUnconfirmedOrders>();
+            services.AddSingleton<GetCustomerOrders>();
+            services.AddSingleton<GetRestaurants>();
+            services.AddSingleton<GetRestaurantMenuItems>();
             services.AddSingleton<LoginUser>();
             services.AddSingleton<RegisterAdmin>();
             services.AddSingleton<RegisterCustomer>();
+            services.AddSingleton<RemoveRestaurant>();
+            services.AddSingleton<UpdateMenuItems>();
+            services.AddSingleton<UpdateRestaurant>();
 
             return services;
         }

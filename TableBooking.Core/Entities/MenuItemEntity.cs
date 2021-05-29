@@ -7,6 +7,8 @@ namespace Core.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
+        public RestaurantEntity Restaurant { get; set; }
+        public int RestaurantId { get; set; }
 
         public override bool Equals(object obj)
         {

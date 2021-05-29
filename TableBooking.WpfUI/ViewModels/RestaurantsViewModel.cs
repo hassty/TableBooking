@@ -15,6 +15,7 @@ namespace WpfUI.ViewModels
     {
         private readonly INavigationService _addRestaurantNavigator;
         private readonly GetRestaurants _getRestaurants;
+        private readonly INavigationService _menuItemsNavigator;
         private readonly RemoveRestaurant _removeRestaurant;
         private readonly CurrentRestaurantStore _restaurantStore;
         private readonly INavigationService _updateRestaurantNavigator;
@@ -23,6 +24,7 @@ namespace WpfUI.ViewModels
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand GoBackCommand { get; }
+        public ICommand GoToMenuItemsCommand { get; }
         public ICommand RemoveCommand { get; }
 
         public List<RestaurantEntity> Restaurants { get; set; }
@@ -45,6 +47,7 @@ namespace WpfUI.ViewModels
             GetRestaurants getRestaurants,
             RemoveRestaurant removeRestaurant,
             INavigationService goBackNavigator,
+            INavigationService menuItemsNavigator,
             INavigationService addRestaurantNavigator,
             INavigationService updateRestaurantNavigator
         )
@@ -52,12 +55,14 @@ namespace WpfUI.ViewModels
             _restaurantStore = restaurantStore;
             _getRestaurants = getRestaurants;
             _removeRestaurant = removeRestaurant;
+            _menuItemsNavigator = menuItemsNavigator;
             _addRestaurantNavigator = addRestaurantNavigator;
             _updateRestaurantNavigator = updateRestaurantNavigator;
 
             GoBackCommand = new DelegateCommand(_ => goBackNavigator.Navigate());
-
             AddCommand = new DelegateCommand(_ => _addRestaurantNavigator.Navigate());
+
+            GoToMenuItemsCommand = new DelegateCommand(EditMenu, CanChangeRestaurant);
             RemoveCommand = new DelegateCommand(RemoveRestaurant, CanChangeRestaurant);
             EditCommand = new DelegateCommand(EditRestaurant, CanChangeRestaurant);
 
@@ -67,6 +72,12 @@ namespace WpfUI.ViewModels
         private bool CanChangeRestaurant(object obj)
         {
             return _selectedRestaurant != null && Restaurants.Count != 0;
+        }
+
+        private void EditMenu(object obj)
+        {
+            _restaurantStore.CurrentRestaurant = _selectedRestaurant;
+            _menuItemsNavigator.Navigate();
         }
 
         private void EditRestaurant(object obj)

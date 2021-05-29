@@ -22,16 +22,16 @@
 
         <StackPanel Grid.Row="0" MinWidth="200">
             <Label Content="Name" />
-            <TextBox />
+            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
             <Label Content="Price" />
-            <TextBox />
+            <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <StackPanel
             Grid.Row="1"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
             <Button Command="{Binding GoBackCommand}" Content="Back" />
-            <Button Content="Add" />
+            <Button Command="{Binding AddCommand}" Content="Add" />
         </StackPanel>
     </Grid>
 </UserControl>

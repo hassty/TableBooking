@@ -33,10 +33,14 @@
                 <DataGridTextColumn Binding="{Binding OpenedTill}" Header="Opened till" />
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
             <Button Command="{Binding GoBackCommand}" Content="Back" />
             <Button Command="{Binding RemoveCommand}" Content="Remove" />
-            <Button Command="{Binding EditCommand}" Content="Edit" />
+            <Button Command="{Binding EditCommand}" Content="Edit info" />
+            <Button Command="{Binding GoToMenuItemsCommand}" Content="Edit menu items" />
             <Button Command="{Binding AddCommand}" Content="Add" />
         </StackPanel>
     </Grid>

@@ -22,14 +22,17 @@
             SelectedItem="{Binding SelectedOrder}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header="Order id" />
-                <DataGridTextColumn Binding="{Binding ReservationDate}" Header="Reservation date" />
-                <DataGridTextColumn Binding="{Binding ReservationDuration}" Header="Reservation duration" />
+                <DataGridTextColumn Binding="{Binding ReservationDate, StringFormat='{}{0: dd/MMMM, HH:mm}'}" Header="Reservation date" />
+                <DataGridTextColumn Binding="{Binding ReservationDuration, StringFormat=hh\\:mm}" Header="Reservation duration" />
                 <DataGridTextColumn Binding="{Binding Customer.Username}" Header="Customer" />
                 <DataGridTextColumn Binding="{Binding Restaurant.Name}" Header="Restaurant" />
-                <DataGridTextColumn Binding="{Binding Table.Capacity}" Header="Party size" />
+                <DataGridTextColumn Binding="{Binding PartySize}" Header="Party size" />
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
             <Button Command="{Binding ConfirmOrderCommand}" Content="Confirm" />
             <Button Command="{Binding GoToRestaurantsCommand}" Content="Restaurants" />
             <Button Command="{Binding LogoutCommand}" Content="Logout" />

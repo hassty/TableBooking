@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(TableBookingContext))]
-    [Migration("20210528154315_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20210529044739_AddRestaurantToMenuItem")]
+    partial class AddRestaurantToMenuItem
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,16 +37,16 @@ namespace DataAccess.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("RestaurantEntityId")
+                    b.Property<int>("RestaurantId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderEntityId");
 
-                    b.HasIndex("RestaurantEntityId");
+                    b.HasIndex("RestaurantId");
 
-                    b.ToTable("MenuItemEntity");
+                    b.ToTable("MenuItems");
                 });
 
             modelBuilder.Entity("Core.Entities.OrderEntity", b =>
@@ -138,9 +138,6 @@ namespace DataAccess.Migrations
                     b.Property<int>("MaxPartySize")
                         .HasColumnType("int");
 
-                    b.Property<string>("OffDays")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<TimeSpan>("ShortestReservationDuration")
                         .HasColumnType("time");
 
@@ -203,9 +200,13 @@ namespace DataAccess.Migrations
                         .WithMany("MenuItems")
                         .HasForeignKey("OrderEntityId");
 
-                    b.HasOne("Core.Entities.RestaurantEntity", null)
+                    b.HasOne("Core.Entities.RestaurantEntity", "Restaurant")
                         .WithMany("MenuItems")
-                        .HasForeignKey("RestaurantEntityId");
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("Core.Entities.OrderEntity", b =>

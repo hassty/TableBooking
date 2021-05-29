@@ -32,7 +32,10 @@
                 <DataGridTextColumn Binding="{Binding ReservationDuration, StringFormat=hh\\:mm}" Header="Reservation duration" />
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
             <Button Command="{Binding CancelSelectedOrderCommand}" Content="Cancel selected order" />
             <Button
                 Command="{Binding NavigateHomeCommand}"

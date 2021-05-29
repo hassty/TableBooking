@@ -23,7 +23,20 @@ namespace DataAccess.Database
         {
             return _tableBookingContext.Restaurants
                 .Include(r => r.OrderOptions)
+                .Include(r => r.MenuItems)
                 .FirstOrDefault(r => r.Name == name && r.Address == address);
+        }
+
+        public void UpdateMenuItems(RestaurantEntity restaurant)
+        {
+            var parent = _tableBookingContext.Restaurants
+                .Where(p => p.Id == restaurant.Id)
+                .Include(p => p.MenuItems)
+                .FirstOrDefault();
+
+            parent.MenuItems = _tableBookingContext.MenuItems.Where(c => c.Id == restaurant.Id).ToList();
+
+            _tableBookingContext.Entry(parent).State = EntityState.Modified;
         }
     }
 }

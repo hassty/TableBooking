@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccess.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class AddRestaurantToMenuItem : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,6 @@ namespace DataAccess.Migrations
                     LatestOrderDate = table.Column<int>(type: "int", nullable: false),
                     LongestReservationDuration = table.Column<TimeSpan>(type: "time", nullable: false),
                     MaxPartySize = table.Column<int>(type: "int", nullable: false),
-                    OffDays = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ShortestReservationDuration = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
@@ -99,42 +98,42 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MenuItemEntity",
+                name: "MenuItems",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OrderEntityId = table.Column<int>(type: "int", nullable: true),
-                    RestaurantEntityId = table.Column<int>(type: "int", nullable: true)
+                    RestaurantId = table.Column<int>(type: "int", nullable: false),
+                    OrderEntityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MenuItemEntity", x => x.Id);
+                    table.PrimaryKey("PK_MenuItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MenuItemEntity_Orders_OrderEntityId",
+                        name: "FK_MenuItems_Orders_OrderEntityId",
                         column: x => x.OrderEntityId,
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_MenuItemEntity_Restaurants_RestaurantEntityId",
-                        column: x => x.RestaurantEntityId,
+                        name: "FK_MenuItems_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MenuItemEntity_OrderEntityId",
-                table: "MenuItemEntity",
+                name: "IX_MenuItems_OrderEntityId",
+                table: "MenuItems",
                 column: "OrderEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MenuItemEntity_RestaurantEntityId",
-                table: "MenuItemEntity",
-                column: "RestaurantEntityId");
+                name: "IX_MenuItems_RestaurantId",
+                table: "MenuItems",
+                column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_CustomerId",
@@ -155,7 +154,7 @@ namespace DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MenuItemEntity");
+                name: "MenuItems");
 
             migrationBuilder.DropTable(
                 name: "Orders");

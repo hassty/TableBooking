@@ -7,5 +7,7 @@ namespace Core.Contracts.DataAccess
         bool ContainsRestaurant(string name, string address);
 
         RestaurantEntity GetRestaurantByNameAndAddress(string name, string address);
+
+        void UpdateMenuItems(RestaurantEntity restaurant);
     }
 }
