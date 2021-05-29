@@ -1,6 +1,7 @@
 ﻿using Core.Entities.Users;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Entities
 {
@@ -16,6 +17,19 @@ namespace Core.Entities
         public TimeSpan ReservationDuration { get; set; }
         public RestaurantEntity Restaurant { get; set; }
         public string Status { get => ConfirmedByAdmin ? "Confirmed" : "Waiting"; }
+
+        public decimal TotalPrice
+        {
+            get
+            {
+                if (MenuItems == null)
+                {
+                    return 0;
+                }
+
+                return MenuItems.Select(o => o.Price).Sum();
+            }
+        }
 
         public OrderEntity(
             RestaurantEntity restaurant,

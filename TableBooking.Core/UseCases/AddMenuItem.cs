@@ -17,6 +17,7 @@ namespace Core.UseCases
 
         public void Add(RestaurantEntity restaurant, MenuItemEntity menuItem)
         {
+            menuItem.Restaurant = restaurant;
             _restaurantRepository.Get(restaurant.Id).MenuItems.Add(menuItem);
             _restaurantRepository.SaveChanges();
         }

@@ -88,6 +88,7 @@ namespace WpfUI
                 s.GetRequiredService<CurrentUserStore>(),
                 s.GetRequiredService<AddOrder>(),
                 s.GetRequiredService<GetRestaurants>(),
+                s.GetRequiredService<GetRestaurantMenuItems>(),
                 CreateLayoutNavigationService<AccountViewModel>(s)
                 ));
 

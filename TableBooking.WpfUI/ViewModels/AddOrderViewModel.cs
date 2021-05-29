@@ -16,11 +16,15 @@ namespace WpfUI.ViewModels
     {
         private readonly INavigationService _accountNavigationService;
         private readonly AddOrder _addOrder;
+        private readonly GetRestaurantMenuItems _getRestaurantMenuItems;
         private readonly GetRestaurants _getRestaurants;
         private readonly OrderEntity _order;
         private readonly CurrentUserStore _userStore;
         private RestaurantEntity _currentRestaurant { get; set; }
+
+        public ICommand AddItemCommand { get; }
         public ICommand AddOrderCommand { get; }
+
         public string Address => _currentRestaurant.Address;
 
         public int HoursDuration
@@ -52,7 +56,10 @@ namespace WpfUI.ViewModels
         }
 
         public string Name => _currentRestaurant.Name;
+
         public List<int> PartySizes { get; private set; }
+
+        public ICommand RemoveItemCommand { get; }
 
         public DateTime ReservationDate
         {
@@ -93,11 +100,14 @@ namespace WpfUI.ViewModels
             }
         }
 
+        public decimal TotalPrice => _order.TotalPrice;
+
         public AddOrderViewModel(
             CurrentRestaurantStore restaurantStore,
             CurrentUserStore userStore,
             AddOrder addOrder,
             GetRestaurants getRestaurants,
+            GetRestaurantMenuItems getRestaurantMenuItems,
             INavigationService accountNavigationService
         )
         {
@@ -105,12 +115,21 @@ namespace WpfUI.ViewModels
             _userStore = userStore;
             _addOrder = addOrder;
             _getRestaurants = getRestaurants;
+            _getRestaurantMenuItems = getRestaurantMenuItems;
             _accountNavigationService = accountNavigationService;
 
             _order = new OrderEntity();
             GetRestaurantPartySizes();
+            LoadMenuItems();
 
+            AddItemCommand = new DelegateCommand(AddItem);
+            RemoveItemCommand = new DelegateCommand(RemoveItem, CanRemoveItem);
             AddOrderCommand = new DelegateCommand(AddOrder, CanAddOrder);
+        }
+
+        private void AddItem(object obj)
+        {
+            throw new NotImplementedException();
         }
 
         private void AddOrder(object parameter)
@@ -138,6 +157,22 @@ namespace WpfUI.ViewModels
         private bool CanAddOrder(object parameter)
         {
             return true;
+        }
+
+        private bool CanRemoveItem(object arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void LoadMenuItems()
+        {
+            MenuItems = _getRestaurantMenuItems.GetMenuItems(_currentRestaurant);
+            OnPropertyChanged(nameof(MenuItems));
+        }
+
+        private void RemoveItem(object obj)
+        {
+            throw new NotImplementedException();
         }
 
         public void GetRestaurantPartySizes()
