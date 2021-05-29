@@ -50,6 +50,7 @@ namespace Core.Entities
 
         public OrderEntity()
         {
+            MenuItems = new List<MenuItemEntity>();
         }
 
         public override bool Equals(object obj)

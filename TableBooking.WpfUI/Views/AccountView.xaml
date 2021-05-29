@@ -30,6 +30,7 @@
                 <DataGridTextColumn Binding="{Binding Status}" Header="Confirmed" />
                 <DataGridTextColumn Binding="{Binding ReservationDate, StringFormat='{}{0: dd/MMMM, HH:mm}'}" Header="Reservation date" />
                 <DataGridTextColumn Binding="{Binding ReservationDuration, StringFormat=hh\\:mm}" Header="Reservation duration" />
+                <DataGridTextColumn Binding="{Binding PartySize}" Header="Party size" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel
@@ -37,6 +38,7 @@
             HorizontalAlignment="Center"
             Orientation="Horizontal">
             <Button Command="{Binding CancelSelectedOrderCommand}" Content="Cancel selected order" />
+            <Button Command="{Binding SeeMenuItemsCommand}" Content="See menu of this order" />
             <Button
                 Command="{Binding NavigateHomeCommand}"
                 Content="Make new order"

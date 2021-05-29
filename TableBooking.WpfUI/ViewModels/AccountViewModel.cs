@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.Exceptions;
 using Core.UseCases;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
@@ -15,12 +16,15 @@ namespace WpfUI.ViewModels
         private readonly CurrentUserStore _accountStore;
         private readonly CancelOrder _cancelOrder;
         private readonly GetCustomerOrders _getOrders;
+        private readonly INavigationService _orderReportNavigator;
+        private readonly CurrentRestaurantStore _restaurantStore;
         private OrderEntity _selectedOrder;
         public ICommand CancelSelectedOrderCommand { get; }
         public ICommand ConfirmOrderCommand { get; }
         public bool IsCustomer => _accountStore.IsCustomer;
         public ICommand NavigateHomeCommand { get; }
         public List<OrderEntity> Orders { get; set; }
+        public ICommand SeeMenuItemsCommand { get; }
 
         public OrderEntity SelectedOrder
         {
@@ -39,26 +43,26 @@ namespace WpfUI.ViewModels
 
         public AccountViewModel(
             CurrentUserStore accountStore,
+            CurrentRestaurantStore restaurantStore,
             INavigationService homeNavigationService,
+            INavigationService orderReportNavigator,
             GetCustomerOrders getOrders,
             CancelOrder cancelOrder
         )
         {
             _accountStore = accountStore;
+            _restaurantStore = restaurantStore;
+            _orderReportNavigator = orderReportNavigator;
             _getOrders = getOrders;
             _cancelOrder = cancelOrder;
 
             _accountStore.CurrentAccountChanged += OnCurrentAccountChanged;
 
             NavigateHomeCommand = new NavigateCommand(homeNavigationService);
-            CancelSelectedOrderCommand = new DelegateCommand(CancelOrder, CanCancelOrder);
+            CancelSelectedOrderCommand = new DelegateCommand(CancelOrder, OrderSelected);
+            SeeMenuItemsCommand = new DelegateCommand(SeeMenu, OrderSelected);
 
             LoadAllOrders();
-        }
-
-        private bool CanCancelOrder(object parameter)
-        {
-            return _selectedOrder != null && Orders.Count != 0;
         }
 
         private void CancelOrder(object parameter)
@@ -93,6 +97,17 @@ namespace WpfUI.ViewModels
         private void OnCurrentAccountChanged()
         {
             OnPropertyChanged(nameof(Username));
+        }
+
+        private bool OrderSelected(object parameter)
+        {
+            return _selectedOrder != null && Orders.Count != 0;
+        }
+
+        private void SeeMenu(object obj)
+        {
+            _restaurantStore.CurrentRestaurant = _selectedOrder.Restaurant;
+            _orderReportNavigator.Navigate();
         }
 
         public override void Dispose()

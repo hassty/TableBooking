@@ -17,7 +17,9 @@ namespace DataAccess.Database
 
         public IEnumerable<OrderEntity> GetAllOrdersOfCustomer(string username)
         {
-            return _tableBookingContext.Orders.Where(o => o.Customer.Username.Equals(username));
+            return _tableBookingContext.Orders
+                .Include(o => o.MenuItems)
+                .Where(o => o.Customer.Username.Equals(username));
         }
 
         public IEnumerable<OrderEntity> GetAllUnconfirmedOrders()

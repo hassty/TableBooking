@@ -20,6 +20,7 @@ namespace WpfUI.ViewModels
         private readonly GetRestaurants _getRestaurants;
         private readonly OrderEntity _order;
         private readonly CurrentUserStore _userStore;
+        private MenuItemEntity _selectedMenuItem;
         private RestaurantEntity _currentRestaurant { get; set; }
 
         public ICommand AddItemCommand { get; }
@@ -100,6 +101,19 @@ namespace WpfUI.ViewModels
             }
         }
 
+        public MenuItemEntity SelectedMenuItem
+        {
+            get => _selectedMenuItem;
+            set
+            {
+                if (_selectedMenuItem != value)
+                {
+                    _selectedMenuItem = value;
+                    OnPropertyChanged(nameof(SelectedMenuItem));
+                }
+            }
+        }
+
         public decimal TotalPrice => _order.TotalPrice;
 
         public AddOrderViewModel(
@@ -122,14 +136,15 @@ namespace WpfUI.ViewModels
             GetRestaurantPartySizes();
             LoadMenuItems();
 
-            AddItemCommand = new DelegateCommand(AddItem);
+            AddItemCommand = new DelegateCommand(AddItem, CanAddItem);
             RemoveItemCommand = new DelegateCommand(RemoveItem, CanRemoveItem);
-            AddOrderCommand = new DelegateCommand(AddOrder, CanAddOrder);
+            AddOrderCommand = new DelegateCommand(AddOrder);
         }
 
         private void AddItem(object obj)
         {
-            throw new NotImplementedException();
+            _order.MenuItems.Add(_selectedMenuItem);
+            OnPropertyChanged(nameof(TotalPrice));
         }
 
         private void AddOrder(object parameter)
@@ -154,14 +169,14 @@ namespace WpfUI.ViewModels
             }
         }
 
-        private bool CanAddOrder(object parameter)
+        private bool CanAddItem(object arg)
         {
-            return true;
+            return _selectedMenuItem != null;
         }
 
         private bool CanRemoveItem(object arg)
         {
-            throw new NotImplementedException();
+            return _order.MenuItems != null && _order.MenuItems.Count > 0;
         }
 
         private void LoadMenuItems()
@@ -172,7 +187,8 @@ namespace WpfUI.ViewModels
 
         private void RemoveItem(object obj)
         {
-            throw new NotImplementedException();
+            _order.MenuItems.Remove(_selectedMenuItem);
+            OnPropertyChanged(nameof(TotalPrice));
         }
 
         public void GetRestaurantPartySizes()

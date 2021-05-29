@@ -23,12 +23,14 @@
             AutoGenerateColumns="False"
             CanUserAddRows="False"
             CanUserReorderColumns="False"
-            ColumnWidth="*"
             IsReadOnly="True"
-            ItemsSource="{Binding MenuItems}">
+            ItemsSource="{Binding MenuItems}"
+            SelectedItem="{Binding SelectedMenuItem}"
+            SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" />
-                <DataGridTextColumn Header="Price" />
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+                <DataGridTextColumn Binding="{Binding Price}" Header="Price" />
+                <DataGridTextColumn Binding="{Binding Amount}" Header="Amount" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel

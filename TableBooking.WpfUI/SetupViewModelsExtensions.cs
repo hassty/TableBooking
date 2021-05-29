@@ -63,7 +63,9 @@ namespace WpfUI
 
             services.AddTransient(s => new AccountViewModel(
                 s.GetRequiredService<CurrentUserStore>(),
+                s.GetRequiredService<CurrentRestaurantStore>(),
                 CreateLayoutNavigationService<HomeViewModel>(s),
+                CreateNavigationService<MenuItemsReportViewModel>(s),
                 s.GetRequiredService<GetCustomerOrders>(),
                 s.GetRequiredService<CancelOrder>()
                 ));
@@ -126,6 +128,12 @@ namespace WpfUI
                 s.GetRequiredService<CurrentRestaurantStore>(),
                 s.GetRequiredService<AddMenuItem>(),
                 CreateNavigationService<RestaurantsViewModel>(s)
+                ));
+
+            services.AddTransient(s => new MenuItemsReportViewModel(
+                s.GetRequiredService<GetRestaurantMenuItems>(),
+                s.GetRequiredService<CurrentRestaurantStore>(),
+                CreateNavigationService<AccountViewModel>(s)
                 ));
 
             services.AddTransient(CreateNavigationBarViewModel);
