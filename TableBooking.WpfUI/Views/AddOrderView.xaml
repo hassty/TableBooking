@@ -86,12 +86,20 @@
                     SelectedIndex="0" />
             </Grid>
         </StackPanel>
-        <Button
+        <StackPanel
             Grid.Row="1"
             Grid.Column="1"
-            Width="100"
             HorizontalAlignment="Center"
-            Command="{Binding AddOrderCommand}"
-            Content="Submit order" />
+            Orientation="Horizontal">
+            <Button
+                Width="100"
+                Margin="20,0"
+                Command="{Binding GoBackCommand}"
+                Content="Back" />
+            <Button
+                Width="100"
+                Command="{Binding AddOrderCommand}"
+                Content="Submit order" />
+        </StackPanel>
     </Grid>
 </UserControl>

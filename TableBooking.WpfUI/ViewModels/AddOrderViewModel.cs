@@ -25,8 +25,8 @@ namespace WpfUI.ViewModels
 
         public ICommand AddItemCommand { get; }
         public ICommand AddOrderCommand { get; }
-
         public string Address => _currentRestaurant.Address;
+        public ICommand GoBackCommand { get; }
 
         public int HoursDuration
         {
@@ -122,7 +122,8 @@ namespace WpfUI.ViewModels
             AddOrder addOrder,
             GetRestaurants getRestaurants,
             GetRestaurantMenuItems getRestaurantMenuItems,
-            INavigationService accountNavigationService
+            INavigationService accountNavigationService,
+            INavigationService goBackNavigationService
         )
         {
             _currentRestaurant = restaurantStore.CurrentRestaurant;
@@ -133,9 +134,11 @@ namespace WpfUI.ViewModels
             _accountNavigationService = accountNavigationService;
 
             _order = new OrderEntity();
+
             GetRestaurantPartySizes();
             LoadMenuItems();
 
+            GoBackCommand = new DelegateCommand(_ => goBackNavigationService.Navigate());
             AddItemCommand = new DelegateCommand(AddItem, CanAddItem);
             RemoveItemCommand = new DelegateCommand(RemoveItem, CanRemoveItem);
             AddOrderCommand = new DelegateCommand(AddOrder);

@@ -91,7 +91,8 @@ namespace WpfUI
                 s.GetRequiredService<AddOrder>(),
                 s.GetRequiredService<GetRestaurants>(),
                 s.GetRequiredService<GetRestaurantMenuItems>(),
-                CreateLayoutNavigationService<AccountViewModel>(s)
+                CreateLayoutNavigationService<AccountViewModel>(s),
+                CreateLayoutNavigationService<HomeViewModel>(s)
                 ));
 
             services.AddTransient(s => new UnconfirmedOrdersViewModel(
