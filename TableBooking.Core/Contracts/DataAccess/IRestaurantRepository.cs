@@ -4,6 +4,10 @@ namespace Core.Contracts.DataAccess
 {
     public interface IRestaurantRepository : IRepository<RestaurantEntity>
     {
-        public RestaurantEntity GetRestaurantByName(string name);
+        bool ContainsRestaurant(string name, string address);
+
+        RestaurantEntity GetRestaurantByNameAndAddress(string name, string address);
+
+        void UpdateMenuItems(RestaurantEntity restaurant);
     }
 }

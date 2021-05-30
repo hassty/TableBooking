@@ -1,18 +1,19 @@
 ﻿using Core.Contracts;
 using Core.Contracts.DataAccess;
 using Core.Exceptions;
+using Core.Strategies;
 using Core.UseCases;
 using System.Linq;
-using WpfUI.Models;
+using WpfUI.Dto;
 using Xunit;
 
 namespace Core.Tests
 {
     public class RegisterCustomerTests
     {
-        private readonly RegisterCustomer _registerCustomer;
         private readonly ICustomerRepository _customerRepository;
         private readonly IPasswordProtectionStrategy _passwordProtectionStrategy;
+        private readonly RegisterCustomer _registerCustomer;
 
         public RegisterCustomerTests()
         {
@@ -27,7 +28,7 @@ namespace Core.Tests
         [Fact]
         public void Register_ShouldRegisterNewUniqueUser()
         {
-            var customer = new CustomerModel
+            var customer = new CustomerDto
             {
                 Username = "unique customer",
                 Password = "1488",
@@ -41,19 +42,19 @@ namespace Core.Tests
         [Fact]
         public void Register_ShouldThrowExceptionIfUsernameAlreadyExists()
         {
-            var customer1 = new CustomerModel
+            var customer1 = new CustomerDto
             {
                 Username = "existing username",
                 Password = "1337"
             };
-            var customer2 = new CustomerModel
+            var customer2 = new CustomerDto
             {
                 Username = "existing username",
                 Password = "420"
             };
             var initialCount = _customerRepository.GetAll().ToList().Count;
 
-            Assert.Throws<UserAlreadyExistsException>(() =>
+            Assert.Throws<ItemAlreadyExistsException>(() =>
             {
                 _registerCustomer.Register(customer1);
                 _registerCustomer.Register(customer2);

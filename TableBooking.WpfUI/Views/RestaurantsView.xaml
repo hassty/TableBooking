@@ -9,48 +9,39 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="0.8*" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="0.2*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListBox
-            Grid.Column="0"
+        <DataGrid
+            Grid.Row="0"
+            Margin="5"
+            AutoGenerateColumns="False"
+            CanUserAddRows="False"
+            CanUserReorderColumns="False"
+            ColumnWidth="*"
+            IsReadOnly="True"
             ItemsSource="{Binding Restaurants}"
-            SelectedItem="{Binding SelectedRestaurant}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Margin="5">
-                        <TextBlock Text="{Binding Name}" />
-                        <TextBlock Text="{Binding City}" />
-                        <TextBlock Text="{Binding Address}" />
-                        <TextBlock Text="{Binding OpenedFrom}" />
-                        <TextBlock Text="{Binding OpenedTill}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <StackPanel Grid.Row="1">
-            <Button Command="{Binding AddCommand}" Content="+" />
-            <Button Command="{Binding RemoveCommand}" Content="-" />
-        </StackPanel>
-
-        <StackPanel Grid.Column="1" DataContext="{Binding SelectedRestaurant}">
-            <TextBlock Text="Selected item" />
-            <Label Content="Name" />
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-            <Label Content="City" />
-            <TextBox Text="{Binding City, UpdateSourceTrigger=PropertyChanged}" />
-            <Label Content="Address" />
-            <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" />
-            <Label Content="Opened From" />
-            <TextBox Text="{Binding OpenedFrom, UpdateSourceTrigger=PropertyChanged}" />
-            <Label Content="Opened Till" />
-            <TextBox Text="{Binding OpenedTill, UpdateSourceTrigger=PropertyChanged}" />
+            SelectedItem="{Binding SelectedRestaurant}"
+            SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+                <DataGridTextColumn Binding="{Binding City}" Header="City" />
+                <DataGridTextColumn Binding="{Binding Address}" Header="Address" />
+                <DataGridTextColumn Binding="{Binding OpenedFrom}" Header="Opened from" />
+                <DataGridTextColumn Binding="{Binding OpenedTill}" Header="Opened till" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Button Command="{Binding GoBackCommand}" Content="Back" />
+            <Button Command="{Binding RemoveCommand}" Content="Remove" />
+            <Button Command="{Binding EditCommand}" Content="Edit info" />
+            <Button Command="{Binding GoToMenuItemsCommand}" Content="Edit menu items" />
+            <Button Command="{Binding AddCommand}" Content="Add" />
         </StackPanel>
     </Grid>
 </UserControl>

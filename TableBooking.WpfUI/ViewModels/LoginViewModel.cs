@@ -1,53 +1,103 @@
-﻿using Core.Exceptions;
+﻿using Core.Entities.Users;
+using Core.Exceptions;
 using Core.UseCases;
+using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using TableBooking.Commands;
-using WpfUI.Models;
+using WpfUI.Commands;
+using WpfUI.Services;
+using WpfUI.Stores;
 
-namespace TableBooking.ViewModels
+namespace WpfUI.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    public class LoginViewModel : ViewModelBase
     {
+        private readonly CurrentUserStore _accountStore;
+        private readonly INavigationService _adminNavigationService;
+        private readonly INavigationService _customerNavigationService;
         private readonly LoginUser _loginUser;
-        private DelegateCommand _loginCommand;
-        private CustomerModel _customer;
-        public ICommand LoginCommand => _loginCommand ??= new DelegateCommand(Login);
+        private readonly INavigationService _registerNavigationService;
+        private string _password;
+        private string _username;
+        public ICommand GoToRegisterCommand { get; }
+        public ICommand LoginCommand { get; }
+
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                if (_password != value)
+                {
+                    _password = value;
+                    OnPropertyChanged(nameof(Password));
+                }
+            }
+        }
 
         public string Username
         {
-            get => _customer.Username;
+            get => _username;
             set
             {
-                if (_customer.Username != value)
+                if (_username != value)
                 {
-                    _customer.Username = value;
+                    _username = value;
                     OnPropertyChanged(nameof(Username));
                 }
             }
         }
 
-        public LoginViewModel(LoginUser loginUser)
+        public LoginViewModel(
+            CurrentUserStore accountStore,
+            INavigationService customerNavigationService,
+            INavigationService adminNavigationService,
+            INavigationService registerNavigationService,
+            LoginUser loginUser
+        )
         {
+            _accountStore = accountStore;
+            _customerNavigationService = customerNavigationService;
+            _adminNavigationService = adminNavigationService;
+            _registerNavigationService = registerNavigationService;
             _loginUser = loginUser;
-            _customer = new CustomerModel();
+
+            LoginCommand = new DelegateCommand(Login, CanLogin);
+            GoToRegisterCommand = new DelegateCommand(GoToRegister);
         }
 
-        private void Login(object obj)
+        private bool CanLogin(object parameter)
         {
-            if (obj is PasswordBox passwordBox)
+            return !String.IsNullOrWhiteSpace(_username) && !String.IsNullOrWhiteSpace(_password);
+        }
+
+        private void GoToRegister(object parameter)
+        {
+            _registerNavigationService.Navigate();
+        }
+
+        private void Login(object parameter)
+        {
+            try
             {
-                _customer.Password = passwordBox.Password;
-                try
+                var loggedInUser = _loginUser.Login(_username, _password);
+                _accountStore.CurrentUser = loggedInUser;
+                if (loggedInUser is CustomerEntity)
                 {
-                    var user = _loginUser.Login(_customer.Username, _customer.Password);
-                    MessageBox.Show("success");
+                    _customerNavigationService.Navigate();
                 }
-                catch (InvalidCredentialsException ex)
+                else if (loggedInUser is AdminEntity)
                 {
-                    MessageBox.Show(ex.Message);
+                    _adminNavigationService.Navigate();
                 }
+                else
+                {
+                    throw new InvalidCredentialsException("Unknown user");
+                }
+            }
+            catch (InvalidCredentialsException ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

@@ -1,0 +1,49 @@
+﻿<UserControl
+    x:Class="WpfUI.Views.RestaurantAdditionalOptionsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WpfUI.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid HorizontalAlignment="Center">
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="MinWidth" Value="50" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <Label Content="Latest order date" />
+            <TextBox Text="{Binding LatestOrderDate, UpdateSourceTrigger=PropertyChanged}" />
+            <Label Content="Longest reservation duration" />
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBox MinWidth="40" Text="{Binding LongestHours, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox MinWidth="40" Text="{Binding LongestMinutes, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <Label Content="Shortest reservation duration" />
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBox MinWidth="40" Text="{Binding ShortestHours, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox MinWidth="40" Text="{Binding ShortestMinutes, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <Label Content="Max party size" />
+            <TextBox Text="{Binding MaxPartySize}" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="1"
+            Margin="0,10"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Button
+                Margin="0,0,20,0"
+                Command="{Binding GoBackCommand}"
+                Content="Back" />
+            <Button Command="{Binding SaveCommand}" Content="Save" />
+        </StackPanel>
+    </Grid>
+</UserControl>

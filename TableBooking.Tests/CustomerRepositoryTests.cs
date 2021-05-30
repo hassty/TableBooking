@@ -1,8 +1,6 @@
 ﻿using Core.Contracts.DataAccess;
 using Core.Entities.Users;
-using DataAccess.Database;
-using DataAccess.Entities;
-using Microsoft.EntityFrameworkCore;
+using Core.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +33,7 @@ namespace Core.Tests
         }
 
         [Fact]
-        public void Add_ShouldFailAddingUsersWithSameUsername()
+        public void Add_ShouldThrowIfAddingUsersWithSameUsername()
         {
             var customer1 = new CustomerEntity { Username = "customer" };
             var customer2 = new CustomerEntity { Username = "customer" };
@@ -54,7 +52,6 @@ namespace Core.Tests
             var customer2 = new CustomerEntity { Username = "multiple2" };
             var customer3 = new CustomerEntity { Username = "multiple3" };
             var customer4 = new CustomerEntity { Username = "multiple4" };
-            var initialCount = (_customerRepository.GetAll().ToList()).Count;
 
             _customerRepository.Add(customer1);
             _customerRepository.SaveChanges();
@@ -113,20 +110,6 @@ namespace Core.Tests
         }
 
         [Fact]
-        public void Remove_ShouldNotRemoveUserIfUsernameNotFound()
-        {
-            var customer = new CustomerEntity { Username = "fake" };
-            var initialCount = (_customerRepository.GetAll().ToList()).Count;
-
-            _customerRepository.Remove(customer);
-            _customerRepository.SaveChanges();
-
-            var allUsers = _customerRepository.GetAll().ToList();
-            Assert.True(allUsers.Count == initialCount);
-            Assert.DoesNotContain(customer, allUsers);
-        }
-
-        [Fact]
         public void Remove_ShouldRemoveSingleUser()
         {
             var customer = new CustomerEntity { Username = "delet this" };
@@ -140,6 +123,17 @@ namespace Core.Tests
             var allUsers = _customerRepository.GetAll().ToList();
             Assert.True(allUsers.Count == initialCount);
             Assert.DoesNotContain(customer, allUsers);
+        }
+
+        [Fact]
+        public void Remove_ShouldThrowIfUsernameNotFound()
+        {
+            var fake = new CustomerEntity { Username = "not added" };
+
+            Assert.Throws<ItemNotFoundException>(() =>
+            {
+                _customerRepository.Remove(fake);
+            });
         }
 
         [Fact]

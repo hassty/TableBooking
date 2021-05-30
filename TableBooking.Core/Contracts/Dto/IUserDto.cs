@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Core.Contracts.Dto
+﻿namespace Core.Contracts.Dto
 {
     public interface IUserDto
     {

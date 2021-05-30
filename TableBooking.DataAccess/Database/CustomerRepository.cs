@@ -1,7 +1,8 @@
 ﻿using Core.Contracts.DataAccess;
+using Core.Entities;
 using Core.Entities.Users;
-using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DataAccess.Database
@@ -18,6 +19,13 @@ namespace DataAccess.Database
         public bool ContainsUserWithUsername(string username)
         {
             return GetUserWithUsername(username) != null;
+        }
+
+        public IEnumerable<OrderEntity> GetCustomerOrders(string username)
+        {
+            return _tableBookingContext.Orders
+                .Include(o => o.Customer)
+                .Where(o => o.Customer.Username == username);
         }
 
         public CustomerEntity GetUserWithUsername(string username)

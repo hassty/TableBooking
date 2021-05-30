@@ -1,25 +1,15 @@
-﻿using System;
-using System.Windows.Controls;
-using WpfUI.ViewModels;
+﻿using System.Windows.Controls;
 
 namespace WpfUI.Views
 {
     /// <summary>
     /// Interaction logic for RegisterView.xaml
     /// </summary>
-    public partial class RegisterView : UserControl, IView
+    public partial class RegisterView : UserControl
     {
-        public RegisterView(RegisterViewModel registerViewModel)
+        public RegisterView()
         {
             InitializeComponent();
-            DataContext = registerViewModel;
-        }
-
-        private void Content_TextChanged(object sender, System.Windows.RoutedEventArgs e)
-        {
-            Register.IsEnabled = !String.IsNullOrWhiteSpace(Username.Text)
-                && !String.IsNullOrWhiteSpace(PasswordBox.Password)
-                && PasswordBox.Password.Equals(ConfirmPasswordBox.Password);
         }
     }
 }

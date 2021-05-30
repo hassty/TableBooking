@@ -20,6 +20,7 @@ namespace Core.UseCases
             _customerRepository = customerRespository;
             _passwordProtectionStrategy = passwordProtectionStrategy;
         }
+
         public (int, string) HashAndSaltPassword(string password)
         {
             var rng = new Random();
@@ -31,12 +32,12 @@ namespace Core.UseCases
             return (salt, passwordHash);
         }
 
-        /// <exception cref="UserAlreadyExistsException"></exception>
-        public void Register(ICustomerDto customer)
+        /// <exception cref="ItemAlreadyExistsException"></exception>
+        public CustomerEntity Register(ICustomerDto customer)
         {
             if (_customerRepository.ContainsUserWithUsername(customer.Username))
             {
-                throw new UserAlreadyExistsException("User with this username already exists");
+                throw new ItemAlreadyExistsException("User with this username already exists");
             }
 
             var newCustomer = customer.ToEntity();
@@ -44,6 +45,7 @@ namespace Core.UseCases
 
             _customerRepository.Add(newCustomer);
             _customerRepository.SaveChanges();
+            return newCustomer;
         }
     }
 }

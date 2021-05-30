@@ -1,56 +1,128 @@
 ﻿using Core.Exceptions;
 using Core.UseCases;
+using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using TableBooking.Commands;
-using TableBooking.ViewModels;
-using WpfUI.Models;
+using WpfUI.Commands;
+using WpfUI.Dto;
+using WpfUI.Services;
+using WpfUI.Stores;
 
 namespace WpfUI.ViewModels
 {
-    public class RegisterViewModel : BaseViewModel
+    public class RegisterViewModel : ViewModelBase
     {
+        private readonly CurrentUserStore _accountStore;
+        private readonly INavigationService _homeNavigationService;
+        private readonly INavigationService _loginNavigationService;
         private readonly RegisterCustomer _registerCustomer;
-        private DelegateCommand _registerCommand;
-        private CustomerModel _user;
-        public ICommand RegisterCommand => _registerCommand ??= new DelegateCommand(Register);
+        private string _confirmPassword;
+        private string _email;
+        private string _password;
+        private string _username;
+
+        public string ConfirmPassword
+        {
+            get => _confirmPassword;
+            set
+            {
+                if (_confirmPassword != value)
+                {
+                    _confirmPassword = value;
+                    OnPropertyChanged(nameof(ConfirmPassword));
+                }
+            }
+        }
+
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                if (_email != value)
+                {
+                    _email = value;
+                    OnPropertyChanged(nameof(Email));
+                }
+            }
+        }
+
+        public ICommand GoToLoginCommand { get; }
+
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                if (_password != value)
+                {
+                    _password = value;
+                    OnPropertyChanged(nameof(Password));
+                }
+            }
+        }
+
+        public ICommand RegisterCommand { get; }
 
         public string Username
         {
-            get => _user.Username;
+            get => _username;
             set
             {
-                if (_user.Username != value)
+                if (_username != value)
                 {
-                    _user.Username = value;
+                    _username = value;
                     OnPropertyChanged(nameof(Username));
                 }
             }
         }
 
-        public RegisterViewModel(RegisterCustomer registerCustomer)
+        public RegisterViewModel(
+            CurrentUserStore accountStore,
+            INavigationService homeNavigationService,
+            INavigationService loginNavigationService,
+            RegisterCustomer registerCustomer
+        )
         {
+            _accountStore = accountStore;
+            _homeNavigationService = homeNavigationService;
+            _loginNavigationService = loginNavigationService;
             _registerCustomer = registerCustomer;
-            _user = new CustomerModel();
+
+            RegisterCommand = new DelegateCommand(Register, CanRegister);
+            GoToLoginCommand = new DelegateCommand(GoToLogin);
+        }
+
+        private bool CanRegister(object arg)
+        {
+            return !String.IsNullOrWhiteSpace(_username)
+                && !String.IsNullOrWhiteSpace(_email)
+                && !String.IsNullOrWhiteSpace(_password) && !String.IsNullOrWhiteSpace(_confirmPassword)
+                && _password == _confirmPassword;
+        }
+
+        private void GoToLogin(object parameter)
+        {
+            _loginNavigationService.Navigate();
         }
 
         private void Register(object obj)
         {
-            if (obj is PasswordBox passwordBox)
+            var customer = new CustomerDto()
             {
-                _user.Password = passwordBox.Password;
-                try
-                {
+                Username = _username,
+                Password = _password,
+                Email = _email
+            };
 
-                    _registerCustomer.Register(_user);
-                    MessageBox.Show("success");
-                }
-                catch (UserAlreadyExistsException ex)
-                {
-
-                    MessageBox.Show(ex.Message);
-                }
+            try
+            {
+                _accountStore.CurrentUser = _registerCustomer.Register(customer);
+                _homeNavigationService.Navigate();
+            }
+            catch (ItemAlreadyExistsException ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

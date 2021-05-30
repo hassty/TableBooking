@@ -1,4 +1,5 @@
 ﻿using Core.Contracts.DataAccess;
+using Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,14 @@ namespace DataAccess.Database
     {
         protected DbContext _context;
 
-        private bool ContainsEntity(Entity entity)
-        {
-            return _context.Set<Entity>().Contains(entity);
-        }
-
         public GenericRepository(DbContext context)
         {
             _context = context;
+        }
+
+        private bool ContainsEntity(Entity entity)
+        {
+            return _context.Set<Entity>().Contains(entity);
         }
 
         public void Add(Entity entity)
@@ -39,11 +40,12 @@ namespace DataAccess.Database
             return _context.Set<Entity>().ToList();
         }
 
+        /// <exception cref="ItemNotFoundException"></exception>
         public void Remove(Entity entity)
         {
-            if (!ContainsEntity(entity))
+            if (_context.Set<Entity>().Contains(entity) == false)
             {
-                return;
+                throw new ItemNotFoundException("Item was not found or already deleted");
             }
             _context.Set<Entity>().Remove(entity);
         }
@@ -61,6 +63,31 @@ namespace DataAccess.Database
             _context.Set<Entity>().RemoveRange(entitiesToDelete);
         }
 
+        public void Rollback()
+        {
+            var changedEntires = _context.ChangeTracker.Entries()
+                .Where(e => e.State != EntityState.Unchanged).ToList();
+
+            foreach (var entry in changedEntires)
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Unchanged;
+                        break;
+
+                    case EntityState.Modified:
+                        entry.CurrentValues.SetValues(entry.OriginalValues);
+                        entry.State = EntityState.Unchanged;
+                        break;
+
+                    case EntityState.Added:
+                        entry.State = EntityState.Detached;
+                        break;
+                }
+            }
+        }
+
         public void SaveChanges()
         {
             _context.SaveChanges();
@@ -70,7 +97,5 @@ namespace DataAccess.Database
         {
             _context.Set<Entity>().Update(entity);
         }
-
-
     }
 }

@@ -3,8 +3,6 @@ using Core.Contracts.DataAccess;
 using Core.Contracts.Dto;
 using Core.Exceptions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Core.UseCases
 {
@@ -32,12 +30,12 @@ namespace Core.UseCases
             return (salt, passwordHash);
         }
 
-        /// <exception cref="UserAlreadyExistsException"></exception>
+        /// <exception cref="ItemAlreadyExistsException"></exception>
         public void Register(IAdminDto admin)
         {
             if (_adminRepository.ContainsUserWithUsername(admin.Username))
             {
-                throw new UserAlreadyExistsException("User with this username already exists");
+                throw new ItemAlreadyExistsException("User with this username already exists");
             }
 
             var newAdmin = admin.ToEntity();

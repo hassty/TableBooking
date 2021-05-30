@@ -1,28 +1,25 @@
-﻿<Window x:Class="TableBooking.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TableBooking"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+﻿<Window
+    x:Class="TableBooking.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:WpfUI.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TableBooking"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:WpfUI.ViewModels"
+    xmlns:views="clr-namespace:WpfUI.Views"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Grid x:Name="Grid">
 
-        <Menu Grid.Row="0">
-            <MenuItem Header="Login" Command="{Binding ChangeViewCommand}"
-            CommandParameter="Login" />
-            <MenuItem Header="Register" Command="{Binding ChangeViewCommand}"
-            CommandParameter="Register" />
-            <MenuItem Header="Users" Command="{Binding ChangeViewCommand}"
-            CommandParameter="Users" />
-            <MenuItem Header="Restaurants" Command="{Binding ChangeViewCommand}"
-            CommandParameter="Restaurants" />
-        </Menu>
-
-        <ContentControl Grid.Row="1" Content="{Binding SelectedView}" />
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type viewmodels:LayoutViewModel}">
+                <components:Layout />
+            </DataTemplate>
+        </Grid.Resources>
+        <ContentControl Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>
