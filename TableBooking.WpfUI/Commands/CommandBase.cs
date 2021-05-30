@@ -12,7 +12,10 @@ namespace WpfUI.Commands
             CanExecuteChanged?.Invoke(this, new EventArgs());
         }
 
-        public virtual bool CanExecute(object parameter) => true;
+        public virtual bool CanExecute(object parameter)
+        {
+            return true;
+        }
 
         public abstract void Execute(object parameter);
     }

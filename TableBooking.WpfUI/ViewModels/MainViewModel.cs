@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using WpfUI.Stores;
-using WpfUI.Views;
 
 namespace WpfUI.ViewModels
 {

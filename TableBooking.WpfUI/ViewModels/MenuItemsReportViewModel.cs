@@ -1,8 +1,6 @@
 ﻿using Core.Entities;
 using Core.UseCases;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 using WpfUI.Commands;
 using WpfUI.Services;

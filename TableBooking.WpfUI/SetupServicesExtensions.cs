@@ -7,10 +7,7 @@ using DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using WpfUI.Stores;
 
 namespace WpfUI
@@ -60,13 +57,7 @@ namespace WpfUI
 
         public static IServiceCollection SetupDatabase(this IServiceCollection services)
         {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-            services.AddDbContext<DbContext, TableBookingContext>(o => o.UseSqlServer(
-                configuration.GetConnectionString("SqlServerDB")
-            ));
+            services.AddDbContext<DbContext, TableBookingContext>(o => o.UseInMemoryDatabase("Wpf"));
 
             return services;
         }

@@ -1,9 +1,6 @@
 ﻿using Core.Entities;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Text;
 using System.Windows.Input;
 using WpfUI.Commands;
 using WpfUI.Services;

@@ -2,7 +2,6 @@
 using Core.Entities;
 using Core.Exceptions;
 using System;
-using System.Linq;
 
 namespace Core.UseCases
 {
